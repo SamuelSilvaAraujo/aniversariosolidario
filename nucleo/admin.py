@@ -1,3 +1,7 @@
 from django.contrib import admin
+from nucleo.models import Missao
 
-# Register your models here.
+
+@admin.register(Missao)
+class MissaoAdmin(admin.ModelAdmin):
+    pass

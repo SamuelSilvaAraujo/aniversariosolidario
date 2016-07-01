@@ -1,5 +1,5 @@
 env/
 .idea/
 activate
-
+db.sqlite3
 *.pyc
