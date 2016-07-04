@@ -14,11 +14,11 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
-@brand-primary:         darken(#428bca, 6.5%); // #337ab7
-@brand-success:         #5cb85c;
-@brand-info:            #5bc0de;
-@brand-warning:         #f0ad4e;
-@brand-danger:          #d9534f;
+@brand-primary:         #e67e22;
+@brand-success:         #27ae60;
+@brand-info:            #2980b9;
+@brand-warning:         #f1c40f;
+@brand-danger:          #c0392b;
 
 
 //== Scaffolding
@@ -26,7 +26,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #fff;
+@body-bg:               #ecf0f1;
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -42,10 +42,10 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
-@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
-@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+@font-family-sans-serif:  "Roboto", sans-serif;;
+@font-family-serif:       "Roboto Slab", serif;;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
-@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+@font-family-monospace:   "Roboto Mono", monospace;
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          14px;
@@ -102,7 +102,7 @@
 @line-height-large:         1.3333333; // extra decimals for Win 8.1 Chrome
 @line-height-small:         1.5;
 
-@border-radius-base:        4px;
+@border-radius-base:        0;
 @border-radius-large:       6px;
 @border-radius-small:       3px;
 
@@ -357,24 +357,24 @@
 //##
 
 // Basics of a navbar
-@navbar-height:                    50px;
+@navbar-height:                    60px;
 @navbar-margin-bottom:             @line-height-computed;
 @navbar-border-radius:             @border-radius-base;
 @navbar-padding-horizontal:        floor((@grid-gutter-width / 2));
 @navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
 @navbar-collapse-max-height:       340px;
 
-@navbar-default-color:             #777;
-@navbar-default-bg:                #f8f8f8;
+@navbar-default-color:             #FFF;
+@navbar-default-bg:                #2c3e50;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
-@navbar-default-link-color:                #777;
-@navbar-default-link-hover-color:          #333;
+@navbar-default-link-color:                @body-bg;
+@navbar-default-link-hover-color:          darken(@navbar-default-link-color, 20%);
 @navbar-default-link-hover-bg:             transparent;
-@navbar-default-link-active-color:         #555;
+@navbar-default-link-active-color:         darken(@navbar-default-link-color, 20%);
 @navbar-default-link-active-bg:            darken(@navbar-default-bg, 6.5%);
-@navbar-default-link-disabled-color:       #ccc;
+@navbar-default-link-disabled-color:       darken(@navbar-default-link-color, 50%);
 @navbar-default-link-disabled-bg:          transparent;
 
 // Navbar brand label
@@ -383,9 +383,10 @@
 @navbar-default-brand-hover-bg:            transparent;
 
 // Navbar toggle
-@navbar-default-toggle-hover-bg:           #ddd;
-@navbar-default-toggle-icon-bar-bg:        #888;
-@navbar-default-toggle-border-color:       #ddd;
+@navbar-default-toggle-bg:                 darken(@navbar-default-bg, 6.5%);
+@navbar-default-toggle-hover-bg:           darken(@navbar-default-bg, 13%);
+@navbar-default-toggle-icon-bar-bg:        darken(@navbar-default-link-color, 20%);
+@navbar-default-toggle-border-color:       transparent;
 
 
 //=== Inverted navbar

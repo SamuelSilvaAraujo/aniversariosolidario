@@ -10,7 +10,7 @@
 
 .navbar {
   position: relative;
-  min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+  min-height: @navbar-height;
   margin-bottom: @navbar-margin-bottom;
   border: 1px solid transparent;
 
@@ -163,9 +163,11 @@
 .navbar-brand {
   float: left;
   padding: @navbar-padding-vertical @navbar-padding-horizontal;
-  font-size: @font-size-large;
+  font-size: @font-size-small;
+  font-weight: bold;
   line-height: @line-height-computed;
   height: @navbar-height;
+  text-transform: uppercase;
 
   &:hover,
   &:focus {
@@ -192,11 +194,13 @@
 
 .navbar-toggle {
   position: relative;
+  display: inline-block;
   float: right;
-  margin-right: @navbar-padding-horizontal;
+  margin: 0;
+  width: @navbar-height;
+  height: @navbar-height;
   padding: 9px 10px;
-  .navbar-vertical-align(34px);
-  background-color: transparent;
+  background-color: @navbar-default-toggle-bg;
   background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
   border: 1px solid transparent;
   border-radius: @border-radius-base;
@@ -207,15 +211,8 @@
     outline: 0;
   }
 
-  // Bars
-  .icon-bar {
-    display: block;
-    width: 22px;
-    height: 2px;
-    border-radius: 1px;
-  }
-  .icon-bar + .icon-bar {
-    margin-top: 4px;
+  .fa {
+    font-size: (@navbar-height * 0.5);
   }
 
   @media (min-width: @grid-float-breakpoint) {
@@ -438,13 +435,14 @@
   }
 
   .navbar-toggle {
-    border-color: @navbar-default-toggle-border-color;
+    border-color: transparent;
+
     &:hover,
     &:focus {
       background-color: @navbar-default-toggle-hover-bg;
     }
-    .icon-bar {
-      background-color: @navbar-default-toggle-icon-bar-bg;
+    .fa {
+      color: @navbar-default-toggle-icon-bar-bg
     }
   }
 
@@ -574,12 +572,10 @@
   // Darken the responsive nav toggle
   .navbar-toggle {
     border-color: @navbar-inverse-toggle-border-color;
+
     &:hover,
     &:focus {
       background-color: @navbar-inverse-toggle-hover-bg;
-    }
-    .icon-bar {
-      background-color: @navbar-inverse-toggle-icon-bar-bg;
     }
   }
 
