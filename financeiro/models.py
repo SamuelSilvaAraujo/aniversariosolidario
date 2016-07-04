@@ -13,3 +13,6 @@ class Pagamento(models.Model):
 
     valor = models.FloatField()
     status = models.IntegerField(choices=STATUS_CHOICES)
+
+    def __unicode__(self):
+        return self.valor
