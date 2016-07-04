@@ -10,8 +10,10 @@
         {%  csrf_token %}
         {% bootstrap_form form %}
 
-    <button type="submit"> Login </button>
+        <button type="submit"> Login </button>
 
     </form>
+
+    <a href="{% url 'usuarios:cadastro' %}">cadastro</a>
 
 {% endblock %}
