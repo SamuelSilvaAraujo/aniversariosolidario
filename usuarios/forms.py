@@ -1,3 +1,4 @@
+# coding=utf-8
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Usuario
@@ -13,7 +14,8 @@ class CadastroFrom(forms.ModelForm):
     def clean(self):
         cleaned_data = super(CadastroFrom, self).clean()
         if cleaned_data.get('password') != cleaned_data.get('c_password'):
-            raise ValidationError("Senhas diferentes!")
+            self.add_error('password', 'Senhas não conferem')
+            self.add_error('c_password', '')
         return cleaned_data
 
 class LoginForm(forms.Form):

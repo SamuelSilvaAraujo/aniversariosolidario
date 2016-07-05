@@ -2,18 +2,23 @@
 
 {% load bootstrap3 %}
 
-{% block title %} Login {% endblock %}
+{% block title %}Entre na sua conta do Aniversário Solidário{% endblock %}
 
 {% block content %}
-
-    <form method="post">
-        {%  csrf_token %}
-        {% bootstrap_form form %}
-
-        <button type="submit"> Login </button>
-
-    </form>
-
-    <a href="{% url 'usuarios:cadastro' %}">cadastro</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>Entre na sua conta</h2>
+                <form method="post">
+                    {%  csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-block btn-lg btn-primary">Entrar <i class="fa fa-fw fa-check"></i></button>
+                    {% endbuttons %}
+                </form>
+                <p class="text-center"><a href="{% url 'usuarios:cadastro' %}">Não tenho uma conta..</a></p>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

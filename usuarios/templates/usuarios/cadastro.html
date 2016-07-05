@@ -2,20 +2,22 @@
 
 {% load bootstrap3 %}
 
-{% block title %}Cadastro{% endblock %}
+{% block title %}Crie uma conta no Aniverário Soliário{% endblock %}
 
 {% block content %}
-
-    <form method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-
-    <button type="submit">
-        Cadastrar
-    </button>
-
-    </form>
-
-
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>Criar conta</h2>
+                <p>Preencha correntamente os campos abaixo e inicie sua jornada.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-block btn-lg btn-primary">Confirmar <i class="fa fa-fw fa-check"></i></button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
