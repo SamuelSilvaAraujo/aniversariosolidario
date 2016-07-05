@@ -21,3 +21,8 @@ class CadastroFrom(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.CharField(label='E-mail', widget=forms.EmailInput())
     password = forms.CharField(label='Senha', widget=forms.PasswordInput())
+
+class AlterarFotoForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['foto']
