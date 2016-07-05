@@ -1,6 +1,9 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import random
+import string
+
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -91,3 +94,27 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 def pre_save_Usuario(instance, **kwargs):
     if not instance.slug:
         instance.gerar_slug()
+
+class ConfirmacaoDeEmail(models.Model):
+    class Meta:
+        ordering = ['data_solicitacao']
+
+    usuario = models.ForeignKey(Usuario, related_name='confirmacoes_de_email')
+    chave = models.CharField('chave', max_length=16, blank=True, unique=True)
+    data_solicitacao = models.DateTimeField('data de solicitação', auto_now_add=True)
+
+    def __unicode__(self):
+        return 'Chave de ativação de {}'.format(self.usuario)
+
+    def gerar_chave(self):
+        while True:
+            self.chave = ''.join(map(lambda x: random.choice(string.ascii_uppercase), range(16)))
+            if not ConfirmacaoDeEmail.objects.filter(chave=self.chave):
+                break
+        return True
+
+@receiver(pre_save, sender=ConfirmacaoDeEmail)
+def pre_save_ConfirmacaoDeEmail(instance, **kwargs):
+    if not instance.chave:
+        instance.gerar_chave()
+    #TODO: enviar e-mail

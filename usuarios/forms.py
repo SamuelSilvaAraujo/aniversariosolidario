@@ -1,5 +1,6 @@
 # coding=utf-8
 from django import forms
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from .models import Usuario
 
@@ -21,6 +22,21 @@ class CadastroFrom(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.CharField(label='E-mail', widget=forms.EmailInput())
     password = forms.CharField(label='Senha', widget=forms.PasswordInput())
+
+    _usuario = None
+
+    @property
+    def usuario(self):
+        return self._usuario
+
+    def clean(self):
+        cleaned_data = super(LoginForm, self).clean()
+        self._usuario = authenticate(email=cleaned_data.get('email'), password=cleaned_data.get('password'))
+        if not self._usuario:
+            self.add_error('email', '')
+            self.add_error('password', '')
+            raise ValidationError('E-mail e/ou senha incorretos')
+        return cleaned_data
 
 class AlterarFotoForm(forms.ModelForm):
     class Meta:
