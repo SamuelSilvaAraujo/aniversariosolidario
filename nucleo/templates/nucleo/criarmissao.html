@@ -2,20 +2,14 @@
 
 {% load bootstrap3 %}
 
-{% block title %}Cadastro{% endblock %}
+{% block title %} Missao {% endblock %}
 
 {% block content %}
-
     <form method="post">
         {% csrf_token %}
+
         {% bootstrap_form form %}
 
-    <button type="submit">
-        Cadastrar
-    </button>
-
+    <button type="submit"> Criar </button>
     </form>
-
-
-
 {% endblock %}

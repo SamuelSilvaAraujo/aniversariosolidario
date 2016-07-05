@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
     'usuarios',
     'nucleo',
     'financeiro',
+    'webapp',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -125,3 +127,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL='/usuario/entrar/'
+LOGIN_REDIRECT_URL='/'
