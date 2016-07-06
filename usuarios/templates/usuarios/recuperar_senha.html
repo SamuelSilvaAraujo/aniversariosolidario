@@ -14,12 +14,12 @@
 
                 <form method="post">
                     {% csrf_token %}
-                    <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Enviar</button>
-                    </span>
-                    <input type="email" class="form-control" placeholder="E-mail" name="email">
-                </div>
+
+                    {% bootstrap_form form %}
+
+                    {% buttons %}
+                        <button type="submit">Enviar</button>
+                    {% endbuttons %}
                 </form>
             </div>
 

@@ -10,7 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import ConfirmacaoDeEmail
 
-from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm
+from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm
+
+from .models import RecuperarSenha
 
 @login_required
 def index(request):
@@ -121,6 +123,17 @@ def editar_senha(request):
     })
 
 def recuperar_senha(request):
-    if request.method == 'POST':
-        email = request.POST.get('email',None)
-    return render(request, 'usuarios/recuperar_senha.html')
+    form = RecuperarSenhaForm(request.POST or None)
+    if form.is_valid():
+        RecuperarSenha.objects.create(usuario=form.usuario)
+        messages.success(request, 'E-mail enviado com sucesso!')
+        return redirect(reverse('usuarios:login'))
+    return render(request, 'usuarios/recuperar_senha.html', {
+        'form': form
+    })
+
+def confimar_recuperar_senha(request, chave):
+    usuario = RecuperarSenha.objects.get(chave = chave).usuario
+    usuario.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, usuario)
+    return redirect(reverse('usuarios:editar_senha'))

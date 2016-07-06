@@ -189,3 +189,20 @@ def pre_save_ConfirmacaoDeEmail(instance, **kwargs):
 def post_save_ConfirmacaoDeEmail(instance, **kwargs):
     if not instance.email:
         instance.enviar_email()
+
+class RecuperarSenha(models.Model):
+    chave = models.CharField('chave', max_length=16, blank=True, unique=True)
+    usuario = models.ForeignKey(Usuario)
+    email = models.ForeignKey(Email, related_name='recuperacaoes_de_senha', null=True, blank=True, on_delete=models.SET_NULL)
+
+    def gerar_chave(self):
+        while True:
+            self.chave = ''.join(map(lambda x: random.choice(string.ascii_uppercase), range(16)))
+            if not RecuperarSenha.objects.filter(chave=self.chave):
+                break
+        return True
+
+@receiver(pre_save, sender=RecuperarSenha)
+def pre_save_RecuperarSenha(instance, **Kwargs):
+    if not instance.chave:
+        instance.gerar_chave()
