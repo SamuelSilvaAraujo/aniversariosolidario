@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^redefinirsenha/', include([
         url(r'^$', views.recuperar_senha, name='index'),
         url(r'^(?P<chave>[A-Z]+)/$', views.confimar_recuperar_senha, name='confirmar')
-    ], namespace='recuperarsenha'))
+    ], namespace='recuperarsenha')),
+    url(r'^entraroucadastro/$', views.login_ou_cadastro, name='login_ou_cadastro'),
 ]

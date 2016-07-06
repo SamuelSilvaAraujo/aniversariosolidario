@@ -11,30 +11,24 @@ from financeiro.models import Pagamento
 from usuarios.models import Usuario
 
 class Missao(models.Model):
-    titulo = models.CharField('Titulo',max_length=255)
-    descricao = models.TextField('Descrição')
-    slug = models.SlugField('Slug do titulo',blank=True,max_length=255)
+    titulo = models.CharField('título',max_length=255)
+    descricao = models.TextField('descrição')
+    slug = models.SlugField('slug',blank=True,max_length=255)
+    meta = models.FloatField('meta em Reais (R$)')
 
     def __unicode__(self):
         return self.titulo
-
-    @property
-    def titulo_curto(self):
-        titulo_split = self.titulo.split(' ')
-        if(len(titulo_split) == 1):
-            return titulo_split[0]
-        return ' '.join([titulo_split[0], titulo_split[-1]])
 
     def gerar_slug(self):
         tentativa = 0
         while not self.slug or Missao.objects.filter(slug=self.slug):
             if tentativa > 0:
                 self.slug = '{}-{}'.format(
-                    slugify(self.titulo_curto),
+                    slugify(self.titulo),
                     tentativa
                 )
             else:
-                self.slug = slugify(self.titulo_curto)
+                self.slug = slugify(self.titulo)
             tentativa += 1
         return True
 

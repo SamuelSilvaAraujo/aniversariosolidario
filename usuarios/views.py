@@ -8,9 +8,10 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import ConfirmacaoDeEmail
+from .models import ConfirmacaoDeEmail, Usuario
 
-from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm
+from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm, \
+    LoginOuCadastroForm
 
 from .models import RecuperarSenha
 
@@ -19,7 +20,7 @@ def index(request):
     return render(request, 'usuarios/index.html')
 
 def cadastro(request):
-    form = CadastroFrom(request.POST or None)
+    form = CadastroFrom(request.POST or None, initial={'email': request.GET.get('email', '')})
     if form.is_valid():
         usuario = form.save()
         usuario.set_password(form.cleaned_data.get('password'))
@@ -32,7 +33,7 @@ def cadastro(request):
     })
 
 def entrar(request):
-    form = LoginForm(request.POST or None)
+    form = LoginForm(request.POST or None, initial={'email': request.GET.get('email', '')})
     if form.is_valid():
         login(request, form.usuario)
         return redirect(request.GET.get('next', reverse('usuarios:index')))
@@ -135,4 +136,18 @@ def confimar_recuperar_senha(request, chave):
     recuperar_senha_instance = get_object_or_404(RecuperarSenha, chave=chave)
     recuperar_senha_instance.usuario.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, recuperar_senha_instance.usuario)
+    recuperar_senha_instance.delete()
     return redirect(reverse('usuarios:editar_senha'))
+
+def login_ou_cadastro(request):
+    form = LoginOuCadastroForm(request.POST or None)
+    if form.is_valid():
+        email = form.cleaned_data.get('email')
+        if Usuario.objects.filter(email=email).exists():
+            r = reverse('usuarios:login')
+        else:
+            r = reverse('usuarios:cadastro')
+        return redirect('{}?next={}&email={}'.format(r, request.GET.get('next', '/'), email))
+    return render(request, 'usuarios/login_ou_cadastro.html', {
+        'form': form
+    })

@@ -9,7 +9,7 @@ import magic
 class MissaoForm(forms.ModelForm):
     class Meta:
         model = Missao
-        fields = ['titulo','descricao']
+        fields = ['titulo', 'descricao', 'meta']
 
 
 class MediaForm(forms.ModelForm):

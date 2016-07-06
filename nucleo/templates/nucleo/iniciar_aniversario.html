@@ -1,1 +1,58 @@
 {% extends 'webapp/bootstrap_base.html' %}
+
+{% block iniciar-aniversario %}{% endblock %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="container">
+        <h2>Inicie seu Aniversário Solidário</h2>
+        <p>Seu próximo aniversário é dia {{ user.proximo_aniversario|date:'d/m/Y' }}, você tem {{ user.dias_restantes_proximo_aniversario }} dias para mobilizar seus amigos e arrecadar a meta da sua missão.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-7">
+                    <h3>Sobre a missão</h3>
+                    <p>Preencha os dados da missão do seu Aniversário Solidário. Mas não se preocupe, você pode alterá-los ao longo da campanha.</p>
+                    {% bootstrap_form missao_form %}
+                </div>
+                <div class="col-md-5">
+                    <h3>Sobre a arrecadação</h3>
+                    <p>Você receberá o valor arrecadado mesmo que as doações não atinjam a meta indicada. Lembre-se que 17% do valor arrecadado será utilizado para custear as despesas do site.</p>
+                    <h4>Simulação caso seja arrecadado R$<span></span>:</h4>
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                        <tr>
+                            <td>Sua meta</td>
+                            <td width="100">R$<span></span></td>
+                        </tr>
+                        <tr>
+                            <td>Taxa em porcentagem para custear despesas do site</td>
+                            <td>17%</td>
+                        </tr>
+                        <tr>
+                            <td>Taxa em real para custear despesas do site</td>
+                            <td>R$<span></span></td>
+                        </tr>
+                        <tr>
+                            <td>Você irá receber</td>
+                            <td>R$<span></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% buttons %}
+                <div class="text-right"><button type="submit" class="btn btn-lg btn-primary">Iniciar Aniversário Solidário <i class="fa fa-fw fa-check"></i></button></div>
+            {% endbuttons %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+    <script type="text/javascript">
+        $(document).ready(function (){
+            
+        });
+    </script>
+{% endblock %}

@@ -7,7 +7,7 @@ from .models import Missao,Media
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
-        return redirect('{}?next={}'.format(reverse('usuarios:cadastro'), reverse('nucleo:iniciar_aniversario')))
+        return redirect('{}?next={}'.format(reverse('usuarios:login_ou_cadastro'), reverse('nucleo:iniciar_aniversario')))
     if not request.user.data_de_nascimento:
         return redirect('{}?next={}&just_fields=data_de_nascimento'.format(reverse('usuarios:completar_perfil'), reverse('nucleo:iniciar_aniversario')))
     missao_form = MissaoForm(request.POST or None)
@@ -40,6 +40,6 @@ def gerenciar_medias(request,slug):
         arquivo.save()
     arquivos = Media.objects.filter(missao=missao)
     return render(request, 'nucleo/gerenciar_medias.html', {
-        'form':media_form,
-        'arquivos':arquivos
+        'form': media_form,
+        'arquivos': arquivos
     })

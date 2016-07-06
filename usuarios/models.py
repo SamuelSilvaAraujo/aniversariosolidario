@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import random
 import string
+import datetime
 
 from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
@@ -131,6 +132,17 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         if not self.data_de_nascimento:
             r += ['data_de_nascimento']
         return r
+
+    @property
+    def proximo_aniversario(self):
+        proximo = self.data_de_nascimento.replace(year=datetime.date.today().year)
+        if proximo < datetime.date.today():
+            proximo = proximo.replace(year=datetime.date.today().year+1)
+        return proximo
+
+    @property
+    def dias_restantes_proximo_aniversario(self):
+        return (self.proximo_aniversario - datetime.date.today()).days
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):

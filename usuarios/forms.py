@@ -90,3 +90,6 @@ class RecuperarSenhaForm(forms.Form):
         if not self._usuario:
             self.add_error('email', 'Não existe nenhum usuário cadastrado com esse e-mail!')
         return cleaned_data
+
+class LoginOuCadastroForm(forms.Form):
+    email = forms.CharField(label='Qual o seu e-mail?', widget=forms.EmailInput())

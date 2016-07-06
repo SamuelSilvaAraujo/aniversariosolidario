@@ -64,7 +64,7 @@
         </div>
     </nav>
 {% endblock %}
-<div class="container"><a class="btn btn-block btn-lg btn-primary hidden-md hidden-lg" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a></div>
+{% block iniciar-aniversario %}<div class="container"><p><a class="btn btn-block btn-lg btn-info hidden-md hidden-lg" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a></p></div>{% endblock %}
 {% block extra-messages %}
     <div class="container">
         {% if user.is_authenticated and not user.data_ativacao_email %}
