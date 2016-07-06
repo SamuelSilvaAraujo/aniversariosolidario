@@ -1,0 +1,4 @@
+Falta muito pouco para o seu cadastro ficar completo.
+
+Precisamos que você confirme seu e-mail visitando o link abaixo.
+{{ url_de_confirmacao }}

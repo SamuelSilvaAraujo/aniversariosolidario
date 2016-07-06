@@ -4,14 +4,21 @@ from __future__ import unicode_literals
 import random
 import string
 
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.template import loader
 from django.utils import timezone
 from mailer import Mailer, Message
 
 
 class ContaDeEmail(models.Model):
+    @staticmethod
+    def get_naoresponda():
+        return ContaDeEmail.objects.filter(responsabilidade=ContaDeEmail.NAO_RESPONDA).order_by('?').first()
+
     class Meta:
         verbose_name = 'conta de e-mail'
         verbose_name_plural = 'contas de e-mail'
@@ -99,11 +106,11 @@ class ContaDeEmail(models.Model):
 class ConfiguracaoDeEmail(models.Model):
     chave = models.CharField('chave', max_length=4)
     email = models.EmailField('e-mail')
-    cancelado_as = models.DateTimeField('cancelado às..', null=True)
+    cancelado_as = models.DateTimeField('cancelado às..', null=True, blank=True)
 
     def gerar_chave(self):
         while not self.chave or ConfiguracaoDeEmail.objects.filter(chave=self.chave):
-            self.chave = ''.join(map(lambda x: random.choice(string.uppercase), range(0, 4)))
+            self.chave = ''.join(map(lambda x: random.choice(string.uppercase), range(4)))
         return self.chave
 
 @receiver(pre_save, sender=ConfiguracaoDeEmail)
@@ -154,11 +161,23 @@ class Email(models.Model):
         return get
 
     def processar(self):
-        if self.enviar_as < timezone.now():
+        if self.enviar_as and self.enviar_as < timezone.now():
             self.processado = timezone.now()
             self.save(update_fields=['processado'])
             if not self.para.cancelado_as:
                 self.de.enviar(self)
+
+    def carregar_corpo(self, template_txt, template_html=None, save=True, **kwargs):
+        unsubscribe_url = '{}{}'.format(settings.FULL_URL, reverse('cancelar_envio_de_emails', kwargs={'chave': self.para.chave}))
+        self.corpo = loader.render_to_string(template_txt, kwargs)
+        self.corpo += loader.render_to_string('emails/txt_footer.txt', {
+            'unsubscribe_url': unsubscribe_url
+        })
+        if template_html:
+            self.corpo_html = loader.render_to_string(template_html, kwargs)
+        if save:
+            self.save(update_fields=['corpo', 'corpo_html'])
+        return
 
 @receiver(pre_save, sender=Email)
 def pre_save_Email(instance, **kwargs):

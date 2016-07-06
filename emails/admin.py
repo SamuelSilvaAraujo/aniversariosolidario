@@ -1,7 +1,8 @@
 # coding=utf-8
 from django.contrib import admin
 from django.core.checks import messages
-from .models import Email, ContaDeEmail
+from .models import Email, ContaDeEmail, ConfiguracaoDeEmail
+
 
 @admin.register(ContaDeEmail)
 class ContaDeEmailAdmin(admin.ModelAdmin):
@@ -34,3 +35,7 @@ class EmailAdmin(admin.ModelAdmin):
             else:
                 e.processar()
     processar_email.short_description = 'Processar'
+
+@admin.register(ConfiguracaoDeEmail)
+class ConfiguracaoDeEmailAdmin(admin.ModelAdmin):
+    pass

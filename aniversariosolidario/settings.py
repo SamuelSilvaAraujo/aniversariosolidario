@@ -134,3 +134,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# SITE INFO
+
+PROTOCOL = 'http'
+SITE_DOMAIN = 'localhost:8000'
+
+try:
+    from local_settings import *
+except:
+    pass
+
+FULL_URL = '{}://{}'.format(PROTOCOL, SITE_DOMAIN)

@@ -4,15 +4,18 @@ from __future__ import unicode_literals
 import random
 import string
 
+from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
 from easy_thumbnails.files import get_thumbnailer
+from emails.models import Email, ContaDeEmail
 
 
 class UsuarioManager(BaseUserManager):
@@ -135,6 +138,7 @@ class ConfirmacaoDeEmail(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='confirmacoes_de_email')
     chave = models.CharField('chave', max_length=16, blank=True, unique=True)
     data_solicitacao = models.DateTimeField('data de solicitação', auto_now_add=True)
+    email = models.ForeignKey(Email, null=True, blank=True, related_name='confirmacoes_de_email', on_delete=models.SET_NULL)
 
     def __unicode__(self):
         return 'Chave de ativação de {}'.format(self.usuario)
@@ -146,8 +150,31 @@ class ConfirmacaoDeEmail(models.Model):
                 break
         return True
 
+    def enviar_email(self):
+        email = Email.objects.create(
+            de=ContaDeEmail.get_naoresponda(),
+            para_email=self.usuario.email,
+            assunto='Confirme seu e-mail'
+        )
+        email.carregar_corpo(
+            'usuarios/emails/confirmar_email.txt',
+            'usuarios/emails/confirmar_email.html',
+            url_de_confirmacao='{}{}'.format(
+                settings.FULL_URL,
+                reverse('usuarios:confirmar_email', kwargs={'chave': self.chave})
+            )
+        )
+        email.enviar_as = timezone.now()
+        email.save(update_fields=['enviar_as'])
+        self.email = email
+        self.save(update_fields=['email'])
+
 @receiver(pre_save, sender=ConfirmacaoDeEmail)
 def pre_save_ConfirmacaoDeEmail(instance, **kwargs):
     if not instance.chave:
         instance.gerar_chave()
-    #TODO: enviar e-mail
+
+@receiver(post_save, sender=ConfirmacaoDeEmail)
+def post_save_ConfirmacaoDeEmail(instance, **kwargs):
+    if not instance.email:
+        instance.enviar_email()

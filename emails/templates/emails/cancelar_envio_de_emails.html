@@ -1,0 +1,14 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% block extra-messages %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h2>Cancelar envio de e-mails</h2>
+    <p>Você tem certeza que quer cancelar o envio de e-mails para <strong>{{ config_de_email.email }}</strong>? Lembrando que essa ação só pode ser revertida entrando em contato com a nossa equipe.</p>
+    <form method="post">
+        {% csrf_token %}
+        <p><button type="submit" class="btn btn-danger">Sim tenho certeza!</button></p>
+    </form>
+    </div>
+{% endblock %}
