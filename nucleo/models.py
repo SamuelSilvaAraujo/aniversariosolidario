@@ -65,5 +65,9 @@ class Media(OrderedModel):
     class Meta(OrderedModel.Meta):
         pass
 
+    descricao = models.CharField('Descrição', max_length=140)
     missao = models.ForeignKey(Missao)
     arquivo = models.FileField()
+
+    def __unicode__(self):
+        return self.descricao

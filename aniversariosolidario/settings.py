@@ -140,9 +140,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 PROTOCOL = 'http'
 SITE_DOMAIN = 'localhost:8000'
 
+# ARQUIVOS PERMITIDOS EM MEDIAS
+
+MEDIA_IMAGENS_TYPES = [
+    'image/jpeg',
+    'image/png'
+]
+
+MEDIA_VIDEOS_TYPES = [
+    'video/mpeg',
+]
+
 try:
     from local_settings import *
 except:
     pass
 
 FULL_URL = '{}://{}'.format(PROTOCOL, SITE_DOMAIN)
+
+MEDIA_TYPES = MEDIA_IMAGENS_TYPES + MEDIA_VIDEOS_TYPES
