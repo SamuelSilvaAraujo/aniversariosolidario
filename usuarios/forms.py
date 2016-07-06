@@ -65,8 +65,8 @@ class CompletarPerfilForm(forms.ModelForm):
 
 
 class EditarSenhaForm(forms.Form):
-    password = forms.CharField(label='Nova Senha', widget=forms.PasswordInput())
-    c_password = forms.CharField(label='Confirme Nova senha', widget=forms.PasswordInput())
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput())
+    c_password = forms.CharField(label='Confirme a senha', widget=forms.PasswordInput())
 
     def clean(self):
         cleaned_data = super(EditarSenhaForm, self).clean()

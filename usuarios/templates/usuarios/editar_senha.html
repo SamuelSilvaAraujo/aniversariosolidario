@@ -3,22 +3,18 @@
 {% load bootstrap3 %}
 
 {% block content %}
-
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <h2>Digite sua nova senha!</h2>
                 <form method="post">
                     {% csrf_token %}
-
                     {% bootstrap_form form %}
-
                     {% buttons %}
-                        <button type="submit" class="btn btn-block btn-lg btn-primary"> salvar </button>
+                        <button type="submit" class="btn btn-block btn-lg btn-primary">Confirmar <i class="fa fa-fw fa-check"></i></button>
                     {% endbuttons %}
                 </form>
             </div>
         </div>
     </div>
-
 {% endblock %}
