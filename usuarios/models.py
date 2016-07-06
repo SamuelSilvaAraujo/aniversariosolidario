@@ -131,6 +131,11 @@ def pre_save_Usuario(instance, **kwargs):
     if not instance.slug:
         instance.gerar_slug()
 
+@receiver(post_save, sender=Usuario)
+def post_save_Usuario(instance, created, **kwargs):
+    if created:
+        ConfirmacaoDeEmail.objects.create(usuario=instance)
+
 class ConfirmacaoDeEmail(models.Model):
     class Meta:
         ordering = ['data_solicitacao']
