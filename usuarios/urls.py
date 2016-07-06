@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^completarperfil/$', views.completar_perfil, name='completar_perfil'),
     url(r'^editarsenha/$', views.editar_senha, name='editar_senha'),
     url(r'^recuperarsenha/', include([
-        url(r'^$', views.recuperar_senha, name='recuperar_senha'),
-        url(r'^(?P<chave>[A-Z]+)/$', views.confimar_recuperar_senha, name='confirmar_recuperar_senha')
+        url(r'^$', views.recuperar_senha, name='index'),
+        url(r'^(?P<chave>[A-Z]+)/$', views.confimar_recuperar_senha, name='confirmar')
     ], namespace='recuperarsenha'))
 ]
