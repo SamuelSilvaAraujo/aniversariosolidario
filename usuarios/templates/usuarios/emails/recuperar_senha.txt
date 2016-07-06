@@ -1,0 +1,2 @@
+Para redefinir sua senha visite o link abaixo:
+{{ url_para_redefinir }}

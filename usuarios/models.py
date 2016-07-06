@@ -202,7 +202,31 @@ class RecuperarSenha(models.Model):
                 break
         return True
 
+    def enviar_email(self):
+        email = Email.objects.create(
+            de=ContaDeEmail.get_naoresponda(),
+            para_email=self.usuario.email,
+            assunto='Redefina sua senha'
+        )
+        email.carregar_corpo(
+            'usuarios/emails/recuperar_senha.txt',
+            'usuarios/emails/recuperar_senha.html',
+            url_para_redefinir='{}{}'.format(
+                settings.FULL_URL,
+                reverse('usuarios:recuperarsenha:confirmar', kwargs={'chave': self.chave})
+            )
+        )
+        email.enviar_as = timezone.now()
+        email.save(update_fields=['enviar_as'])
+        self.email = email
+        self.save(update_fields=['email'])
+
 @receiver(pre_save, sender=RecuperarSenha)
 def pre_save_RecuperarSenha(instance, **Kwargs):
     if not instance.chave:
         instance.gerar_chave()
+
+@receiver(post_save, sender=RecuperarSenha)
+def post_save_RecuperarSenha(instance, **kwargs):
+    if not instance.email:
+        instance.enviar_email()
