@@ -44,3 +44,15 @@ class AlterarFotoForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ['foto']
+
+class CompletarPerfilForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = []
+
+    def __init__(self, fields, *args, **kwargs):
+        super(CompletarPerfilForm, self).__init__(*args, **kwargs)
+        for field in fields:
+            if field == 'data_de_nascimento':
+                self.fields[field] = forms.DateTimeField(label='Qual a data do seu aniversário?', widget=forms.TextInput(attrs={'placeholder': '31/12/19XX'}))
+                self.Meta.fields.append(field)

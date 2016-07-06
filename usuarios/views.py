@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import ConfirmacaoDeEmail
 
-from .forms import CadastroFrom, LoginForm, AlterarFotoForm
+from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm
+
 
 @login_required
 def index(request):
@@ -33,7 +34,7 @@ def entrar(request):
     form = LoginForm(request.POST or None)
     if form.is_valid():
         login(request, form.usuario)
-        return redirect(reverse('usuarios:index'))
+        return redirect(request.GET.get('next', reverse('usuarios:index')))
     return render(request, 'usuarios/login.html', {
         'form': form
     })
@@ -72,5 +73,24 @@ def alterar_foto(request):
     if form.is_valid():
         form.save()
     return render(request, 'usuarios/alterar_foto.html', {
+        'form': form
+    })
+
+@login_required
+def completar_perfil(request):
+    empty_fields = request.user.empty_fields
+    fields = request.GET.get('just_fields', '')
+    if fields:
+        fields = filter(lambda x: x in empty_fields, fields.split(','))
+    else:
+        fields = empty_fields
+    if not fields:
+        messages.warning(request, 'Seu perfil está completo.')
+        return redirect(reverse('usuarios:index'))
+    form = CompletarPerfilForm(fields, request.POST or None, instance=request.user)
+    if form.is_valid():
+        form.save()
+        return redirect(request.GET.get('next', reverse('usuarios:index')))
+    return render(request, 'usuarios/completar_perfil.html', {
         'form': form
     })

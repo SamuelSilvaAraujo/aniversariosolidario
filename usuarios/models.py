@@ -49,9 +49,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('e-mail', unique=True)
     nome = models.CharField('nome', max_length=128)
     slug = models.SlugField('slug do nome', max_length=255, blank=True)
-    data_de_nascimento = models.DateTimeField('data de nascimento', null=True, blank=True)
+    data_de_nascimento = models.DateField('data de nascimento', null=True, blank=True)
     foto = models.ImageField('foto', null=True, blank=True)
-    e_senha_randomica = models.BooleanField('a senha ainda é randomica?', default=False)
     e_equipe = models.BooleanField('é da equipe?', default=False)
     data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
@@ -125,6 +124,13 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     @property
     def foto_xs_url(self):
         return self.get_foto_url('xs')
+
+    @property
+    def empty_fields(self):
+        r = []
+        if not self.data_de_nascimento:
+            r += ['data_de_nascimento']
+        return r
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):

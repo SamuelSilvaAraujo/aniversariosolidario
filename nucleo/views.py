@@ -5,13 +5,14 @@ from django.contrib.auth.decorators import login_required
 from .forms import MissaoForm,MediaForm
 from .models import Missao,Media
 
-@login_required
-def criar_missao(request):
-    form = MissaoForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-    return render(request, 'nucleo/criarmissao.html', {
-        'form':form
+def iniciar_aniversario(request):
+    if not request.user.is_authenticated():
+        return redirect('{}?next={}'.format(reverse('usuarios:cadastro'), reverse('nucleo:iniciar_aniversario')))
+    if not request.user.data_de_nascimento:
+        return redirect('{}?next={}&just_fields=data_de_nascimento'.format(reverse('usuarios:completar_perfil'), reverse('nucleo:iniciar_aniversario')))
+    missao_form = MissaoForm(request.POST or None)
+    return render(request, 'nucleo/iniciar_aniversario.html', {
+        'missao_form': missao_form
     })
 
 @login_required

@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^sair/$', views.sair, name='sair'),
     url(r'^reenviaremaildeconfirmacao/$', views.reenviar_email_de_confirmacao, name='reenviar_email_de_confirmacao'),
     url(r'^confirmaremail/(?P<chave>[A-Z]+)/$', views.confirmar_email, name='confirmar_email'),
-    url(r'^alterarfoto/$', views.alterar_foto, name='alterar_foto')
+    url(r'^alterarfoto/$', views.alterar_foto, name='alterar_foto'),
+    url(r'^completarperfil/$', views.completar_perfil, name='completar_perfil')
 ]
