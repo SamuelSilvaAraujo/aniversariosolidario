@@ -62,3 +62,15 @@ class CompletarPerfilForm(forms.ModelForm):
             if field == 'data_de_nascimento':
                 self.fields[field] = forms.DateTimeField(label='Qual a data do seu aniversário?', widget=forms.TextInput(attrs={'placeholder': '31/12/19XX'}))
                 self.Meta.fields.append(field)
+
+
+class EditarSenhaForm(forms.Form):
+    password = forms.CharField(label='Nova Senha', widget=forms.PasswordInput())
+    c_password = forms.CharField(label='Confirme Nova senha', widget=forms.PasswordInput())
+
+    def clean(self):
+        cleaned_data = super(EditarSenhaForm, self).clean()
+        if cleaned_data.get('password') != cleaned_data.get('c_password'):
+            self.add_error('password', 'Senhas não conferem')
+            self.add_error('c_password', '')
+        return cleaned_data

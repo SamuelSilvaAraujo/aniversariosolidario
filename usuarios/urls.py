@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^confirmaremail/(?P<chave>[A-Z]+)/$', views.confirmar_email, name='confirmar_email'),
     url(r'^alterarfoto/$', views.alterar_foto, name='alterar_foto'),
     url(r'^alterarperfil/$', views.alterar_perfil, name='alterar_perfil'),
-    url(r'^completarperfil/$', views.completar_perfil, name='completar_perfil')
+    url(r'^completarperfil/$', views.completar_perfil, name='completar_perfil'),
+    url(r'^editarsenha/$', views.editar_senha, name='editar_senha'),
+    url(r'^recuperarsenha/$', views.recuperar_senha, name='recuperar_senha'),
 ]

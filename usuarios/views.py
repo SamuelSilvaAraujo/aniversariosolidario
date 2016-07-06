@@ -10,8 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import ConfirmacaoDeEmail
 
-from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm
-
+from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm
 
 @login_required
 def index(request):
@@ -104,3 +103,24 @@ def completar_perfil(request):
     return render(request, 'usuarios/completar_perfil.html', {
         'form': form
     })
+
+@login_required
+def editar_senha(request):
+    usuario = request.user
+    editar_form = EditarSenhaForm(request.POST or None)
+    if editar_form.is_valid():
+        password = editar_form.cleaned_data.get('password')
+        usuario.set_password(password)
+        usuario.save(update_fields=['password'])
+        messages.success(request, 'Senha Alterada com sucesso!')
+        usuario.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, usuario)
+        return redirect(reverse('usuarios:alterar_perfil'))
+    return render(request, 'usuarios/editar_senha.html', {
+        'form':editar_form
+    })
+
+def recuperar_senha(request):
+    if request.method == 'POST':
+        email = request.POST.get('email',None)
+    return render(request, 'usuarios/recuperar_senha.html')
