@@ -70,7 +70,7 @@
         {% if user.is_authenticated and not user.data_ativacao_email %}
             <div class="well">
                 <h3>Confirme seu e-mail!</h3>
-                <p>Enviamos um e-mail para <strong>{{ user.email }}</strong> com um link de confirmação. Caso queira receber outro e-mail: <a href="{% url 'usuarios:reenviar_email_de_confirmacao' %}">clique aqui</a>.</p>
+                <p>Enviamos um e-mail para <strong>{{ user.email }}</strong> com um link de confirmação.<br>Caso queira receber outro e-mail: <a href="{% url 'usuarios:reenviar_email_de_confirmacao' %}">clique aqui</a>.</p>
             </div>
         {% endif %}
     </div>

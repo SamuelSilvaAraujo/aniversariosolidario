@@ -4440,6 +4440,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-btn {
   margin-top: 13px;
   margin-bottom: 13px;
+  padding: 0 10px;
 }
 .navbar-btn.btn-sm {
   margin-top: 15px;

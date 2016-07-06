@@ -76,7 +76,7 @@ class EditarSenhaForm(forms.Form):
         return cleaned_data
 
 class RecuperarSenhaForm(forms.Form):
-    email = forms.CharField(label='E-mail', widget=forms.EmailInput())
+    email = forms.CharField(label='Qual o e-mail vinculado a sua conta?', widget=forms.EmailInput())
 
     _usuario = None
 
@@ -88,5 +88,5 @@ class RecuperarSenhaForm(forms.Form):
         cleaned_data = super(RecuperarSenhaForm, self).clean()
         self._usuario = Usuario.objects.filter(email = cleaned_data.get('email')).first()
         if not self._usuario:
-            self.add_error('email', 'Não existe nenhum usuario cadastrada com esse e-mail!')
+            self.add_error('email', 'Não existe nenhum usuário cadastrado com esse e-mail!')
         return cleaned_data

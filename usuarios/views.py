@@ -82,7 +82,6 @@ def alterar_perfil(request):
     perfil_form = AlterarPerfilForm(request.POST or None, instance=request.user)
     if perfil_form.is_valid():
         perfil_form.save()
-        return redirect(reverse('usuarios:index'))
     return render(request, 'usuarios/alterar_perfil.html', {
         'perfil_form': perfil_form,
     })
@@ -126,14 +125,14 @@ def recuperar_senha(request):
     form = RecuperarSenhaForm(request.POST or None)
     if form.is_valid():
         RecuperarSenha.objects.create(usuario=form.usuario)
-        messages.success(request, 'E-mail enviado com sucesso!')
+        messages.success(request, 'Um e-mail foi enviado para {} com um link para redefinir sua senha.'.format(form.usuario.email))
         return redirect(reverse('usuarios:login'))
     return render(request, 'usuarios/recuperar_senha.html', {
         'form': form
     })
 
 def confimar_recuperar_senha(request, chave):
-    usuario = RecuperarSenha.objects.get(chave = chave).usuario
-    usuario.backend = 'django.contrib.auth.backends.ModelBackend'
-    login(request, usuario)
+    recuperar_senha_instance = get_object_or_404(RecuperarSenha, chave=chave)
+    recuperar_senha_instance.usuario.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, recuperar_senha_instance.usuario)
     return redirect(reverse('usuarios:editar_senha'))

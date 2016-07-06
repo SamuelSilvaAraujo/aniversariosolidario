@@ -139,7 +139,7 @@ def pre_save_Usuario(instance, **kwargs):
 
 @receiver(post_save, sender=Usuario)
 def post_save_Usuario(instance, created, **kwargs):
-    if created:
+    if created and not instance.data_ativacao_email:
         ConfirmacaoDeEmail.objects.create(usuario=instance)
 
 class ConfirmacaoDeEmail(models.Model):
@@ -192,7 +192,7 @@ def post_save_ConfirmacaoDeEmail(instance, **kwargs):
 
 class RecuperarSenha(models.Model):
     chave = models.CharField('chave', max_length=16, blank=True, unique=True)
-    usuario = models.ForeignKey(Usuario)
+    usuario = models.ForeignKey(Usuario, related_name='recuperacoes_de_senha')
     email = models.ForeignKey(Email, related_name='recuperacaoes_de_senha', null=True, blank=True, on_delete=models.SET_NULL)
 
     def gerar_chave(self):
