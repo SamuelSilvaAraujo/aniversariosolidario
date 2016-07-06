@@ -50,7 +50,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     foto = models.ImageField('foto', null=True, blank=True)
     e_senha_randomica = models.BooleanField('a senha ainda é randomica?', default=False)
     e_equipe = models.BooleanField('é da equipe?', default=False)
-    data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True)
+    data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
 
     objects = UsuarioManager()

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'nucleo',
     'financeiro',
     'webapp',
+    'emails',
     'easy_thumbnails',
 ]
 
