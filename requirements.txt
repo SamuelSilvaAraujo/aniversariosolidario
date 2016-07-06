@@ -1,4 +1,7 @@
 Django==1.9.7
+Pillow==3.3.0
+argparse==1.2.1
 django-bootstrap3==7.0.1
 django-ordered-model==1.1.0
-Pillow==3.3.0
+easy-thumbnails==2.3
+wsgiref==0.1.2

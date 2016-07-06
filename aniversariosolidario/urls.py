@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf.urls.static import static
 from usuarios import urls as usuarios_urls
 from nucleo import urls as nucleo_urls
 from webapp import views as webapp_views
@@ -12,3 +14,6 @@ urlpatterns = [
     url(r'^', include(nucleo_urls, namespace='nucleo')),
     url(r'^admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

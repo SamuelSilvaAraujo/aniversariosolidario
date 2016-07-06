@@ -39,6 +39,8 @@ class LoginForm(forms.Form):
         return cleaned_data
 
 class AlterarFotoForm(forms.ModelForm):
+    foto = forms.ImageField(label='Selecione um arquivo')
+
     class Meta:
         model = Usuario
         fields = ['foto']

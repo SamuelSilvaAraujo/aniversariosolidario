@@ -1,5 +1,6 @@
 env/
 .idea/
+media/
 activate
 db.sqlite3
 *.pyc

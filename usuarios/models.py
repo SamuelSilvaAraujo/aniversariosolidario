@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import random
 import string
 
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
@@ -11,6 +12,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.text import slugify
+from easy_thumbnails.files import get_thumbnailer
 
 
 class UsuarioManager(BaseUserManager):
@@ -89,6 +91,37 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
                 self.slug = slugify(self.nome_curto)
             tentativa += 1
         return True
+
+    DM_DICT = {
+        'lg': (480, 480),
+        'md': (240, 240),
+        'sm': (120, 120),
+        'xs': (60, 60)
+    }
+
+    def get_foto_url(self, dm):
+        if not self.foto:
+            return static('imgs/avatar-{}.png'.format(dm))
+        return get_thumbnailer(self.foto).get_thumbnail({
+            'size': Usuario.DM_DICT.get(dm),
+            'crop': True
+        }).url
+
+    @property
+    def foto_lg_url(self):
+        return self.get_foto_url('lg')
+
+    @property
+    def foto_md_url(self):
+        return self.get_foto_url('md')
+
+    @property
+    def foto_sm_url(self):
+        return self.get_foto_url('sm')
+
+    @property
+    def foto_xs_url(self):
+        return self.get_foto_url('xs')
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):
