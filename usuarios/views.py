@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import ConfirmacaoDeEmail
 
-from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm
+from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm
 
 
 @login_required
@@ -74,6 +74,16 @@ def alterar_foto(request):
         form.save()
     return render(request, 'usuarios/alterar_foto.html', {
         'form': form
+    })
+
+@login_required
+def alterar_perfil(request):
+    perfil_form = AlterarPerfilForm(request.POST or None, instance=request.user)
+    if perfil_form.is_valid():
+        perfil_form.save()
+        return redirect(reverse('usuarios:index'))
+    return render(request, 'usuarios/alterar_perfil.html', {
+        'perfil_form': perfil_form,
     })
 
 @login_required

@@ -45,6 +45,12 @@ class AlterarFotoForm(forms.ModelForm):
         model = Usuario
         fields = ['foto']
 
+class AlterarPerfilForm(forms.ModelForm):
+
+    class Meta:
+        model = Usuario
+        fields = ['nome', 'data_de_nascimento']
+
 class CompletarPerfilForm(forms.ModelForm):
     class Meta:
         model = Usuario

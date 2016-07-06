@@ -30,6 +30,7 @@ def missao(request,slug):
     missao = Missao.objects.get(slug=slug)
     return render(request, 'nucleo/missao.html',{'missao':missao})
 
+@login_required
 def gerenciar_medias(request,slug):
     missao = Missao.objects.get(slug=slug)
     media_form = MediaForm(request.POST or None, request.FILES or None)
