@@ -50,7 +50,7 @@ def sair(request):
 @login_required
 def reenviar_email_de_confirmacao(request):
     ultimo_pedido = request.user.confirmacoes_de_email.all().last()
-    if not ultimo_pedido or ultimo_pedido.data_solicitacao - datetime.timedelta(minutes=40) > timezone.now():
+    if not ultimo_pedido or ultimo_pedido.data_solicitacao + datetime.timedelta(minutes=40) < timezone.now():
         ConfirmacaoDeEmail.objects.create(usuario=request.user)
         messages.success(request, 'E-mail de confirmação reenviado com sucesso!')
     else:
