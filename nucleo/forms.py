@@ -7,9 +7,12 @@ from aniversariosolidario import settings
 import magic
 
 class MissaoForm(forms.ModelForm):
+    titulo = forms.CharField(label='Qual a causa social?')
+    beneficiado = forms.CharField(label='Nome do Beneficiado', help_text='Nome da instituição, grupo ou nome da pessoa que será beneficiada')
+
     class Meta:
         model = Missao
-        fields = ['titulo', 'descricao', 'meta']
+        fields = ['titulo', 'beneficiado', 'descricao', 'meta']
 
 
 class MediaForm(forms.ModelForm):

@@ -141,6 +141,11 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return proximo
 
     @property
+    def aniversario_solidario(self):
+        from nucleo.models import Aniversario
+        return Aniversario.objects.filter(usuario=self, ano=self.proximo_aniversario.year).first()
+
+    @property
     def dias_restantes_proximo_aniversario(self):
         return (self.proximo_aniversario - datetime.date.today()).days
 

@@ -1,16 +1,31 @@
+# coding=utf-8
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .forms import MissaoForm,MediaForm
-from .models import Missao,Media
+from .models import Missao,Media, Aniversario
+
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
         return redirect('{}?next={}'.format(reverse('usuarios:login_ou_cadastro'), reverse('nucleo:iniciar_aniversario')))
     if not request.user.data_de_nascimento:
         return redirect('{}?next={}&just_fields=data_de_nascimento'.format(reverse('usuarios:completar_perfil'), reverse('nucleo:iniciar_aniversario')))
+    if request.user.aniversario_solidario:
+        messages.error(request, 'Você já tem Aniversário Solidário acontecendo!')
+        return redirect(reverse('usuarios:index'))
+
     missao_form = MissaoForm(request.POST or None)
+    if missao_form.is_valid():
+        missao = missao_form.save()
+        Aniversario.objects.create(
+            usuario=request.user,
+            missao=missao,
+            ano=request.user.proximo_aniversario.year
+        )
+        return redirect(reverse('usuarios:index'))
     return render(request, 'nucleo/iniciar_aniversario.html', {
         'missao_form': missao_form
     })

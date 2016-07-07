@@ -11,9 +11,10 @@ from financeiro.models import Pagamento
 from usuarios.models import Usuario
 
 class Missao(models.Model):
-    titulo = models.CharField('título',max_length=255)
+    titulo = models.CharField('título', max_length=255)
+    beneficiado = models.CharField('beneficiado', max_length=255)
     descricao = models.TextField('descrição')
-    slug = models.SlugField('slug',blank=True,max_length=255)
+    slug = models.SlugField('slug', blank=True, max_length=255)
     meta = models.FloatField('meta em Reais (R$)')
 
     def __unicode__(self):
@@ -39,6 +40,9 @@ def pre_save_Missao(instance, **kwargs):
         instance.gerar_slug()
 
 class Aniversario(models.Model):
+    class Meta:
+        unique_together = ('usuario', 'ano')
+
     usuario = models.ForeignKey(Usuario, related_name='aniversarios')
     missao = models.ForeignKey(Missao)
     ano = models.IntegerField('Ano')
