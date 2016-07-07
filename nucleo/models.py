@@ -63,9 +63,21 @@ class Media(OrderedModel):
     class Meta(OrderedModel.Meta):
         pass
 
-    descricao = models.CharField('Descrição', max_length=140)
-    missao = models.ForeignKey(Missao)
+    order_with_respect_to = 'missao'
+
+    descricao = models.CharField('Descrição', max_length=140, blank=True)
+    missao = models.ForeignKey(Missao, related_name='medias')
     arquivo = models.FileField()
 
     def __unicode__(self):
         return self.descricao
+
+    _editar_form = None
+    def editar_form(self, *args, **kwargs):
+        from nucleo.forms import MediaEditarForm
+        self._editar_form = MediaEditarForm(*args, instance=self, prefix='media_{}'.format(self.id), **kwargs)
+        return self._editar_form
+
+    @property
+    def get_editar_form(self):
+        return self._editar_form if self._editar_form else self.editar_form()

@@ -1,24 +1,49 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
 {% load bootstrap3 %}
 
 {% block content %}
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form form %}
+    <div class="container">
 
-    <button type="submit"> Salvar </button>
+        <div class="row">
 
-    </form>
+            <div class="col-md-7">
+                <h2>Mídias</h2>
+                {% for media in missao.medias.all %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-right"><a href="{% url 'nucleo:missao:medias_up_down' slug=missao.slug media_id=media.id position='up' %}"><i class="fa fa-fw fa-chevron-up"></i></a> <a href="{% url 'nucleo:missao:medias_up_down' slug=missao.slug media_id=media.id position='down' %}"><i class="fa fa-fw fa-chevron-down"></i></a></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-4"><img src="{{ media.arquivo.url }}" class="img-responsive"></div>
+                                <div class="col-md-8">
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        {% bootstrap_form media.get_editar_form %}
+                                        <input type="hidden" name="act" value="editar_{{ media.id }}">
+                                        {% buttons %}
+                                            <div class="text-right"><button type="submit" class="btn btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button></div>
+                                        {% endbuttons %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
 
-    {% for arquivo in arquivos %}
+            </div>
 
-        <ul>
-        <li>{{ arquivo.descricao }}</li>
-        </ul>
+            <div class="col-md-5">
+                <h2>Adicinonar arquivo</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    <input type="hidden" name="act" value="add_novo">
+                    <button type="submit" class="btn btn-lg btn-primary"> Enviar </button>
+                </form>
+            </div>
+        </div>
 
-    {% endfor %}
-
-
-
+    </div>
 
 {% endblock %}

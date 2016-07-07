@@ -1,9 +1,18 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% block title %}Missão{% endblock %}
-
 {% block content %}
 
-    <h2>{{ missao.titulo }}</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>{{ missao.titulo }}</h2>
+                <p>{{ missao.descricao }}</p>
+            </div>
+
+            <a href="{% url 'nucleo:missao:editar_missao' missao.slug %}">Editar Missao</a>
+            <a href="{% url 'nucleo:missao:medias' missao.slug %}">Gerenciar arquivo</a>
+
+        </div>
+    </div>
 
 {% endblock %}
