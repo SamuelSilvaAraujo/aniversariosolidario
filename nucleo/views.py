@@ -30,6 +30,12 @@ def iniciar_aniversario(request):
         'missao_form': missao_form
     })
 
+def aniversario(request, slug_usuario, slug_missao):
+    missao = get_object_or_404(Missao, slug = slug_missao)
+    return render(request, 'nucleo/aniversario.html', {
+        'missao':missao
+    })
+
 @login_required
 def editar_missao(request, slug):
     missao = get_object_or_404(Missao, slug=slug)
