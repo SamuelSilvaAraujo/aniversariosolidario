@@ -3,8 +3,82 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-9">aqui</div>
-            <div class="col-md-3">a</div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                30 Dias
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                20%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <label for="basic-url">Compartilhe</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">Url</span>
+                                    <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" value="www.com.br">
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="btn-group btn-group-lg" role="group">
+                                        <button type="button" class="btn btn-info"><i class="fa fa-fw fa-facebook"></i></button>
+                                    </div>
+                                    <div class="btn-group btn-group-lg" role="group">
+                                        <button type="button" class="btn btn-info"><i class="fa fa-fw fa-twitter-square"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <ul class="nav nav-pills">
+                            <li><a href="#"><i class="fa fa-fw fa-pencil"></i>Editar</a></li>
+                            <li><a href="#"><i class="fa fa-fw fa-cog"></i>Gerenciar medias</a></li>
+                        </ul>
+                        <h2>Titulo</h2>
+                        <p>descrição</p>
+                    </div>
+                </div>
+
+                <h2>Doações</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                teste
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                teste1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <img src="{{ user.foto_lg_url }}" class="img-responsive">
+                    <div class="list-group">
+                        <a class="list-group-item" href="{% url 'usuarios:alterar_foto' %}">Alterar foto do meu perfil</a>
+                        <a class="list-group-item" href="{% url 'usuarios:alterar_perfil' %}">Editar meu perfil</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
