@@ -1,15 +1,26 @@
+{% extends 'webapp/bootstrap_base.html' %}
 
 {%  load bootstrap3 %}
 
 {% block content %}
 
-    <form method="post">
-        {% csrf_token %}
+    <div class="container">
 
-        {% bootstrap_form form %}
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
 
-    <button type="submit">Salvar</button>
+                <h2>Editar Missão</h2>
 
-    </form>
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% bootstrap_form form %}
+
+                    <button type="submit" class="btn btn-block btn-lg btn-primary">Salvar</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

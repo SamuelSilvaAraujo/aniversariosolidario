@@ -20,6 +20,14 @@ class MediaForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(MediaForm,self).clean()
         f = magic.Magic(mime=True, uncompress=True)
-        if not f.from_buffer(cleaned_data.get('arquivo').read()) in settings.MEDIA_TYPES:
-            self.add_error('arquivo', 'Arquivo não permitido!')
+        if not cleaned_data.get('arquivo'):
+            self.add_error('arquivo', 'Escolha um arquivo antes de enviar!')
+        else:
+            if not f.from_buffer(cleaned_data.get('arquivo').read()) in settings.MEDIA_TYPES:
+                self.add_error('arquivo', 'Arquivo não permitido!')
         return cleaned_data
+
+class MediaEditarForm(forms.ModelForm):
+    class Meta:
+        model = Media
+        fields = ['descricao']

@@ -1,8 +1,9 @@
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from .forms import MissaoForm,MediaForm
+from .forms import MissaoForm,MediaForm, MediaEditarForm
 from .models import Missao,Media
 
 def iniciar_aniversario(request):
@@ -31,15 +32,40 @@ def missao(request,slug):
     return render(request, 'nucleo/missao.html',{'missao':missao})
 
 @login_required
-def gerenciar_medias(request,slug):
+def gerenciar_medias(request, slug):
     missao = Missao.objects.get(slug=slug)
-    media_form = MediaForm(request.POST or None, request.FILES or None)
-    if media_form.is_valid():
-        arquivo = media_form.save(commit=False)
-        arquivo.missao = missao
-        arquivo.save()
-    arquivos = Media.objects.filter(missao=missao)
+    act = request.POST.get('act')
+    media_form = MediaForm(
+        request.POST or None if act == 'add_novo' else None,
+        request.FILES or None if act == 'add_novo' else None,
+        prefix='add_novo'
+    )
+
+    if act:
+        if act == 'add_novo' and media_form.is_valid():
+            arquivo = media_form.save(commit=False)
+            arquivo.missao = missao
+            arquivo.save()
+            messages.success(request, 'Arquivo adicionado com sucesso!')
+            return redirect(reverse('nucleo:missao:medias', kwargs={'slug': missao.slug}))
+
+        if 'editar_' in act:
+            media_id = int(act.split('_')[-1])
+            for media in missao.medias.all():
+                if media.id == media_id:
+                    media.editar_form(request.POST or None)
+                    if media.get_editar_form.is_valid():
+                        media.get_editar_form.save()
+
     return render(request, 'nucleo/gerenciar_medias.html', {
         'form': media_form,
-        'arquivos': arquivos
+        'missao': missao
     })
+
+def gerenciar_medias_up_down(request, slug, media_id, position):
+    media = get_object_or_404(Media, missao__slug=slug, id=media_id)
+    if position == 'up':
+        media.up()
+    if position == 'down':
+        media.down()
+    return redirect(reverse('nucleo:missao:medias', kwargs={'slug': slug}))

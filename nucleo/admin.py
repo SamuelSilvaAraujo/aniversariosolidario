@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Missao,Aniversario,Doacao,Media
+from .models import Missao, Aniversario, Doacao, Media
+from ordered_model.admin import OrderedModelAdmin
 
 
 @admin.register(Missao)
@@ -15,5 +16,5 @@ class DoacaoAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Media)
-class MediaAdmin(admin.ModelAdmin):
-    pass
+class MediaAdmin(OrderedModelAdmin):
+    list_display = ['__str__', 'move_up_down_links']
