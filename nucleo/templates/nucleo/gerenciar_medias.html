@@ -12,7 +12,7 @@
                 <h2>Mídias</h2>
                 {% for media in missao.medias.all %}
                     <div class="panel panel-default">
-                        <div class="panel-heading text-right"><a href="{% url 'nucleo:missao:medias_up_down' slug=missao.slug media_id=media.id position='up' %}"><i class="fa fa-fw fa-chevron-up"></i></a> <a href="{% url 'nucleo:missao:medias_up_down' slug=missao.slug media_id=media.id position='down' %}"><i class="fa fa-fw fa-chevron-down"></i></a></div>
+                        <div class="panel-heading text-right"><a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='up' %}"><i class="fa fa-fw fa-chevron-up"></i></a> <a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='down' %}"><i class="fa fa-fw fa-chevron-down"></i></a></div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-4"><img src="{{ media.arquivo.url }}" class="img-responsive"></div>
@@ -22,7 +22,10 @@
                                         {% bootstrap_form media.get_editar_form %}
                                         <input type="hidden" name="act" value="editar_{{ media.id }}">
                                         {% buttons %}
-                                            <div class="text-right"><button type="submit" class="btn btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button></div>
+                                            <div class="text-right">
+                                                <button type="submit" class="btn btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
+                                                <a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='delete' %}"  class="btn btn-danger">Delete <i class="fa fa-trash-o fa-lg"></i></a>
+                                            </div>
                                         {% endbuttons %}
                                     </form>
                                 </div>
@@ -34,7 +37,7 @@
             </div>
 
             <div class="col-md-5">
-                <h2>Adicinonar arquivo</h2>
+                <h2>Adicionar medias</h2>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% bootstrap_form form %}

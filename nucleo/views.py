@@ -32,7 +32,7 @@ def iniciar_aniversario(request):
 
 @login_required
 def editar_missao(request, slug):
-    missao = Missao.objects.get(slug=slug)
+    missao = get_object_or_404(Missao, slug=slug)
     form = MissaoForm(request.POST or None, instance=missao)
     if form.is_valid():
         form.save()
@@ -41,13 +41,8 @@ def editar_missao(request, slug):
     })
 
 @login_required
-def missao(request,slug):
-    missao = Missao.objects.get(slug=slug)
-    return render(request, 'nucleo/missao.html',{'missao':missao})
-
-@login_required
 def gerenciar_medias(request, slug):
-    missao = Missao.objects.get(slug=slug)
+    missao = get_object_or_404(Missao, slug=slug)
     act = request.POST.get('act')
     media_form = MediaForm(
         request.POST or None if act == 'add_novo' else None,
@@ -76,10 +71,13 @@ def gerenciar_medias(request, slug):
         'missao': missao
     })
 
-def gerenciar_medias_up_down(request, slug, media_id, position):
+@login_required
+def gerenciar_medias_action(request, slug, media_id, action):
     media = get_object_or_404(Media, missao__slug=slug, id=media_id)
-    if position == 'up':
+    if action == 'up':
         media.up()
-    if position == 'down':
+    if action == 'down':
         media.down()
+    if action == 'delete':
+        media.delete()
     return redirect(reverse('nucleo:missao:medias', kwargs={'slug': slug}))

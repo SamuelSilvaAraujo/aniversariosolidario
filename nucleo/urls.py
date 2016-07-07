@@ -4,9 +4,8 @@ from . import views
 urlpatterns = [
     url(r'^iniciaraniversario/$', views.iniciar_aniversario, name='iniciar_aniversario'),
     url(r'^missao/(?P<slug>[\w-]+)/', include([
-        url(r'^$', views.missao, name='missao'),
-        url(r'^editar/$', views.editar_missao, name='editar_missao'),
+        url(r'^$', views.editar_missao, name='editar_missao'),
         url(r'^medias/$', views.gerenciar_medias, name='medias'),
-        url(r'^(?P<media_id>[\d-]+)/(?P<position>[\w]+)/$', views.gerenciar_medias_up_down, name='medias_up_down')
+        url(r'^(?P<media_id>[\d-]+)/(?P<action>[\w]+)/$', views.gerenciar_medias_up_down, name='medias_action')
     ], namespace='missao')),
 ]
