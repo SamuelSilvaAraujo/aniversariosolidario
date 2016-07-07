@@ -1,14 +1,59 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% block title %}Aniverssario{% endblock %}
+{% block title %}{% endblock %}
 
 
 {% block content %}
-
     <div class="container">
         <div class="row">
-            {{ missao }}
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="hidden-xs hidden-sm"><img src="{{ aniversario.usuario.foto_lg_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-responsive" /></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left hidden-md hidden-lg"><img src="{{ aniversario.usuario.foto_xs_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-circle" /></div>
+                            <div class="media-body"><h4>{{ aniversario.usuario.nome }}<br><small>faz aniversário dia {{ aniversario.usuario_proximo_aniversario|date:'d/m/Y' }}</small></h4></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3 class="no-margin-top"><p><small>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</small></p>{{ aniversario.missao.titulo }}</h3>
+                        {% if aniversario.apelo %}
+                            <div class="media">
+                                <div class="media-body">
+                                    <p class="large depoimento">{{ aniversario.apelo }} <i class="fa fa-fw fa-quote-right"></i><span class="depoimento-por">{{ aniversario.usuario.nome }}</span></p>
+                                </div>
+                                <div class="media-right"><i class="fa fa-fw fa-5x fa-commenting-o"></i></div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <h4 class="text-center">Compartilhe e ajude {{ aniversario.usuario.get_short_name }} <span class="hidden-sm hidden-xs">a atingir a sua meta</span></h4>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">Statisticas</div>
+                </div>
+            </div>
         </div>
     </div>
-
+    <div class="footer-floating">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div><button type="submit" class="btn btn-primary btn-lg btn-block">Fazer uma Doação</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

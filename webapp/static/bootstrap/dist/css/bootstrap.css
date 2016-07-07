@@ -1162,6 +1162,43 @@ hr {
 [role="button"] {
   cursor: pointer;
 }
+.footer-floating {
+  position: fixed;
+  display: block;
+  z-index: 1000;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.no-margin-top {
+  margin-top: 0;
+}
+.large {
+  font-size: 18px;
+}
+.depoimento {
+  position: relative;
+  padding-left: 30px;
+  text-align: justify;
+}
+.depoimento:before {
+  content: '\f10d';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 24px;
+  font-family: 'FontAwesome';
+  color: #666;
+  line-height: 24px;
+}
+.depoimento i.fa {
+  color: #666;
+}
+.depoimento-por {
+  display: block;
+  font-size: 14px;
+  color: #666;
+}
 h1,
 h2,
 h3,

@@ -31,9 +31,9 @@ def iniciar_aniversario(request):
     })
 
 def aniversario(request, slug_usuario, slug_missao):
-    missao = get_object_or_404(Missao, slug = slug_missao)
+    aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
     return render(request, 'nucleo/aniversario.html', {
-        'missao':missao
+        'aniversario': aniversario_instance
     })
 
 @login_required

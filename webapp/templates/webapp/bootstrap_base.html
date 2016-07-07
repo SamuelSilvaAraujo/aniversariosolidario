@@ -41,6 +41,7 @@
                             <li><p class="navbar-btn hidden-xs hidden-sm"><a class="btn btn-primary" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a></p></li>
                         {% else %}
                             {% if user.is_authenticated and user.aniversario_solidario %}
+                                <li><p class="navbar-btn"><a class="btn btn-info" href="{% url 'nucleo:aniverssario' slug_usuario=user.aniversario_solidario.usuario.slug slug_missao=user.aniversario_solidario.missao.slug %}">Ir para o meu Aniverário</a></p></li>
                                 <li><p class="navbar-btn"><a class="btn btn-primary" href="{% url 'usuarios:index' %}">Gerenciar meu Anivesário</a></p></li>
                             {% endif %}
                         {% endif %}

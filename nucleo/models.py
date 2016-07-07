@@ -46,9 +46,14 @@ class Aniversario(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='aniversarios')
     missao = models.ForeignKey(Missao)
     ano = models.IntegerField('Ano')
+    apelo = models.TextField('apelo', blank=True)
 
     def __unicode__(self):
         return self.usuario.nome
+
+    @property
+    def usuario_proximo_aniversario(self):
+        return self.usuario.proximo_aniversario.replace(year=self.ano)
 
 class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes')

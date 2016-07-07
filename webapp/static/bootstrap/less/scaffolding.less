@@ -160,3 +160,48 @@ hr {
 [role="button"] {
   cursor: pointer;
 }
+
+.footer-floating {
+  position: fixed;
+  display: block;
+  z-index: 1000;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+
+.no-margin-top {
+  margin-top: 0;
+}
+
+.large {
+  font-size: @font-size-large;
+}
+
+.depoimento {
+  position: relative;
+  padding-left: 30px;
+  text-align: justify;
+
+  &:before {
+    content: '\f10d';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: @font-size-h3;
+    font-family: 'FontAwesome';
+    color: #666;
+    line-height: @font-size-h3;
+  }
+
+  i.fa {
+    color: #666;
+  }
+
+  &-por {
+    display: block;
+    font-size: @font-size-base;
+    color: #666;
+  }
+}
