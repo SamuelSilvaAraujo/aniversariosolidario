@@ -59,6 +59,7 @@ class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes')
     aniversario = models.ForeignKey(Aniversario)
     pagamento = models.ForeignKey(Pagamento)
+    data = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.usuario.nome

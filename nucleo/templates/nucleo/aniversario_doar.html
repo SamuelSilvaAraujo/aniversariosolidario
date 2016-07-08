@@ -1,0 +1,76 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well well-sm">
+                    <h2 class="no-margin-top">Escolha um valor</h2>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="25">R$25</button>
+                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="50">R$50</button>
+                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="100">R$100</button>
+                            </span>
+                            <span class="input-group-addon">R$</span>
+                            <input type="text" class="form-control input-lg outro-valor" placeholder="Outro Valor">
+                        </div>
+                    </div>
+                    <form method="get">
+                        <input class="valor-doacao" type="hidden" name="valor">
+                        <p class="text-center"><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var
+                    $input_valor_doacao = $('.valor-doacao'),
+                    $input_outro_valor = $('.outro-valor'),
+                    numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
+
+            function valorDoacao(valor){
+                $input_valor_doacao.val(valor);
+                $('[data-btn-valor-docao]').each(function (){
+                    var $this = $(this);
+                    if(valor == $this.data('btn-valor-docao')){
+                        $this
+                                .addClass('btn-info')
+                                .removeClass('btn-default');
+                    } else {
+                        $this
+                                .addClass('btn-default')
+                                .removeClass('btn-info');
+                    }
+                });
+            }
+
+            $('[data-btn-valor-docao]').each(function (){
+                var $this = $(this);
+                $this.click(function (){
+                    valorDoacao($this.data('btn-valor-docao'));
+                });
+            });
+
+            function atualizaOutroValor(){
+                valorDoacao($input_outro_valor.val());
+            }
+
+            $input_outro_valor
+                    .keypress(function (e){
+                        var key = (e.code || e.keyCode || e.which);
+                        if(numbers_ascii.indexOf(key) == -1){
+                            return false;
+                        }
+                    })
+                    .keyup(atualizaOutroValor)
+                    .change(atualizaOutroValor);
+        });
+    </script>
+{% endblock %}

@@ -1,8 +1,11 @@
 # coding=utf-8
+import urllib
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from financeiro.models import Pagamento
 
 from .models import Aniversario
 from .forms import MissaoForm,MediaForm
@@ -88,3 +91,23 @@ def gerenciar_medias_action(request, slug, media_id, action):
     if action == 'delete':
         media.delete()
     return redirect(reverse('nucleo:missao:medias', kwargs={'slug': slug}))
+
+def aniversario_doar(request, slug_usuario, slug_missao):
+    aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
+    valor = request.GET.get('valor')
+    if valor:
+        if not request.user.is_authenticated():
+            return redirect('{}?{}'.format(
+                reverse('usuarios:login_ou_cadastro'),
+                urllib.urlencode({'next': '{}?valor={}'.format(
+                    reverse('nucleo:aniversario_doar', kwargs={
+                        'slug_usuario': slug_usuario,
+                        'slug_missao': slug_missao
+                    }),
+                    valor
+                )})
+            ))
+        # Pagamento
+    return render(request, 'nucleo/aniversario_doar.html', {
+        'aniversario': aniversario_instance
+    })
