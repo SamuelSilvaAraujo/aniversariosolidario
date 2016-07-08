@@ -23,8 +23,8 @@
                                         <input type="hidden" name="act" value="editar_{{ media.id }}">
                                         {% buttons %}
                                             <div class="text-right">
-                                                <button type="submit" class="btn btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
                                                 <a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='delete' %}"  class="btn btn-danger">Delete <i class="fa fa-trash-o fa-lg"></i></a>
+                                                <button type="submit" class="btn btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
                                             </div>
                                         {% endbuttons %}
                                     </form>

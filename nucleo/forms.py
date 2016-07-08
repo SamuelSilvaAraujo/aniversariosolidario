@@ -1,6 +1,6 @@
 # coding=utf-8
 from django import forms
-from .models import Missao,Media
+from .models import Missao,Media, Aniversario
 
 from aniversariosolidario import settings
 
@@ -34,3 +34,8 @@ class MediaEditarForm(forms.ModelForm):
     class Meta:
         model = Media
         fields = ['descricao']
+
+class AniversarioApeloForm(forms.ModelForm):
+    class Meta:
+        model = Aniversario
+        fields = ['apelo']
