@@ -1,5 +1,7 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
+{% load staticfiles %}
+
 {% block content %}
     {% if user.aniversario_solidario %}
         <div class="container">
@@ -8,6 +10,9 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label for="basic-url">Dias restantes</label>
+                                </div>
                                 <div class="panel-body">
                                     {{ user.aniversario_solidario.dias_restantes }} Dias
                                 </div>
@@ -15,6 +20,9 @@
                         </div>
                         <div class="col-md-3">
                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label for="basic-url">Valor alcançado</label>
+                                </div>
                                 <div class="panel-body">
                                     20%
                                 </div>
@@ -22,11 +30,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="panel panel-default">
-                                <div class="panel-body">
+                                <div class="panel-heading">
                                     <label for="basic-url">Compartilhe</label>
+                                </div>
+                                <div class="panel-body">
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon3">Url</span>
-                                        <input type="text" class="form-control" id="basic-url" value="www.com.br">
+                                        <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                                        <input type="text" value="{{ user.aniversario_solidario.full_url }}" class="form-control input-lg" id="link-compartilhar">
+                                        <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
                                     </div>
                                     <div class="panel-footer">
                                         <div class="btn-group btn-group-lg" role="group">
@@ -61,23 +72,23 @@
                             <p>{{ user.aniversario_solidario.missao.descricao }}</p>
                         </div>
                     </div>
-                        <h2>Doações</h2>
-                        <div class="row">
-                            {% if not user.aniversario_solidario.doacoes.all %}
-                                <P> Seu aniversario não recebeu nenhuma doação</P>
-                            {% else %}
-                                {% for doacao in user.aniversario_solidario.doacoes.all %}
-                                    <div class="col-md-3">
-                                        <div class="panel panel-default">
-                                            <div class="panel-body">
-                                                {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
-                                            </div>
+                    <h2>Doações</h2>
+                    <div class="row">
+                        {% if not user.aniversario_solidario.doacoes.all %}
+                            <P> Seu aniversario não recebeu nenhuma doação</P>
+                        {% else %}
+                            {% for doacao in user.aniversario_solidario.doacoes.all %}
+                                <div class="col-md-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
                                         </div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
+                </div>
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <img src="{{ user.foto_lg_url }}" class="img-responsive">
@@ -90,4 +101,9 @@
             </div>
         </div>
     {% endif %}
+{% endblock %}
+
+{% block extra-js %}
+    <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/link-compartilhar.js' %}"></script>
 {% endblock %}
