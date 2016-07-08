@@ -14,6 +14,3 @@ class Pagamento(models.Model):
 
     valor = models.IntegerField()
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_AGUARDANDO)
-
-    def __unicode__(self):
-        return self.valor

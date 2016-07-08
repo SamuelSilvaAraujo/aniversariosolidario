@@ -100,7 +100,7 @@ def aniversario_doar(request, slug_usuario, slug_missao):
             return redirect('{}?{}'.format(
                 reverse('usuarios:login_ou_cadastro'),
                 urllib.urlencode({'next': '{}?valor={}'.format(
-                    reverse('nucleo:aniversario_doar', kwargs={
+                    reverse('aniversario:aniversario_doar', kwargs={
                         'slug_usuario': slug_usuario,
                         'slug_missao': slug_missao
                     }),
