@@ -7,5 +7,6 @@ urlpatterns = [
         url(r'^$', views.editar_missao, name='editar_missao'),
         url(r'^medias/$', views.gerenciar_medias, name='medias'),
         url(r'^(?P<media_id>[\d-]+)/(?P<action>[\w]+)/$', views.gerenciar_medias_action, name='medias_action')
-    ], namespace='missao'))
+    ], namespace='missao')),
+    url(r'^naoencontrado/$', views.view_not_found, name='view_not_found')
 ]

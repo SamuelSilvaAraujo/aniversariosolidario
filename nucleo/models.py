@@ -15,6 +15,7 @@ from financeiro.models import Pagamento
 from usuarios.models import Usuario
 
 class Missao(models.Model):
+    usuario = models.ForeignKey(Usuario)
     titulo = models.CharField('título', max_length=255)
     beneficiado = models.CharField('beneficiado', max_length=255)
     descricao = models.TextField('descrição')

@@ -10,6 +10,7 @@ from financeiro.models import Pagamento
 from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm, AniversarioApeloForm
 from .models import Missao,Media
+from .decorators import acesso_view
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
@@ -22,7 +23,9 @@ def iniciar_aniversario(request):
 
     missao_form = MissaoForm(request.POST or None)
     if missao_form.is_valid():
-        missao = missao_form.save()
+        missao = missao_form.save(commit=False)
+        missao.usuario = request.user
+        missao.save()
         Aniversario.objects.create(
             usuario=request.user,
             missao=missao,
@@ -39,7 +42,10 @@ def aniversario(request, slug_usuario, slug_missao):
         'aniversario': aniversario_instance
     })
 
+
+
 @login_required
+@acesso_view
 def editar_missao(request, slug):
     missao = get_object_or_404(Missao, slug=slug)
     form = MissaoForm(request.POST or None, instance=missao)
@@ -51,6 +57,7 @@ def editar_missao(request, slug):
     })
 
 @login_required
+@acesso_view
 def gerenciar_medias(request, slug):
     missao = get_object_or_404(Missao, slug=slug)
     act = request.POST.get('act')
@@ -123,3 +130,7 @@ def aniversario_apelo(request):
     return render(request, 'nucleo/aniversario_apelo.html', {
         'form': apelo_form
     })
+
+@login_required
+def view_not_found(request):
+    return render(request, 'nucleo/view_not_found.html')
