@@ -135,6 +135,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     @property
     def proximo_aniversario(self):
+        if not self.data_de_nascimento:
+            return None
         proximo = self.data_de_nascimento.replace(year=datetime.date.today().year)
         if proximo < datetime.date.today():
             proximo = proximo.replace(year=datetime.date.today().year+1)
@@ -142,6 +144,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     @property
     def aniversario_solidario(self):
+        if not self.proximo_aniversario:
+            return None
         from nucleo.models import Aniversario
         return Aniversario.objects.filter(usuario=self, ano=self.proximo_aniversario.year).first()
 

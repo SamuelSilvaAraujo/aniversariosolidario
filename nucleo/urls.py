@@ -7,7 +7,5 @@ urlpatterns = [
         url(r'^$', views.editar_missao, name='editar_missao'),
         url(r'^medias/$', views.gerenciar_medias, name='medias'),
         url(r'^(?P<media_id>[\d-]+)/(?P<action>[\w]+)/$', views.gerenciar_medias_action, name='medias_action')
-    ], namespace='missao')),
-    url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/$', views.aniversario, name='aniversario'),
-    url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/doar/$', views.aniversario_doar, name='aniversario_doar')
+    ], namespace='missao'))
 ]

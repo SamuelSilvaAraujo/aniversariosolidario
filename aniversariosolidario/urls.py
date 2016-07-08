@@ -6,6 +6,7 @@ from usuarios import urls as usuarios_urls
 from nucleo import urls as nucleo_urls
 from webapp import views as webapp_views
 from emails import views as emails_views
+from nucleo import views as nucleo_views
 
 urlpatterns = [
     url(r'^$', webapp_views.index, name='index'),
@@ -15,6 +16,10 @@ urlpatterns = [
     url(r'^usuario/', include(usuarios_urls, namespace='usuarios')),
     url(r'^', include(nucleo_urls, namespace='nucleo')),
     url(r'^admin/', admin.site.urls),
+    url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/', include([
+        url(r'^$', nucleo_views.aniversario, name='index'),
+        url(r'^doar/$', nucleo_views.aniversario_doar, name='aniversario_doar')
+    ], namespace='aniversario')),
 ]
 
 if settings.DEBUG:

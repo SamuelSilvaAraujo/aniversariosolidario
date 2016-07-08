@@ -107,7 +107,7 @@ def aniversario_doar(request, slug_usuario, slug_missao):
                     valor
                 )})
             ))
-        # Pagamento
+        Pagamento.objects.create(valor=valor)
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
     })
