@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import urllib
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -63,7 +65,7 @@ class Aniversario(models.Model):
             'slug_usuario': self.usuario.slug,
             'slug_missao': self.missao.slug
         }))
-    
+
     def dias_restantes(self):
         return self.usuario.calcular_dias_restantes_proximo_aniversario(self.ano)
 
