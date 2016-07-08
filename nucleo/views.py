@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from financeiro.models import Pagamento
 
-from .models import Aniversario
+from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm
 from .models import Missao,Media
 
@@ -107,7 +107,8 @@ def aniversario_doar(request, slug_usuario, slug_missao):
                     valor
                 )})
             ))
-        Pagamento.objects.create(valor=valor)
+        pagamento = Pagamento.objects.create(valor=valor)
+        Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
     })

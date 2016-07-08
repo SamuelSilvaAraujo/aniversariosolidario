@@ -56,8 +56,8 @@ class Aniversario(models.Model):
         return self.usuario.proximo_aniversario.replace(year=self.ano)
 
 class Doacao(models.Model):
-    usuario = models.ForeignKey(Usuario, related_name='doacoes')
-    aniversario = models.ForeignKey(Aniversario)
+    usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')
+    aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
     pagamento = models.ForeignKey(Pagamento)
     data = models.DateTimeField(auto_now_add=True)
 

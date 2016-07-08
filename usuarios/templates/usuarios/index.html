@@ -67,20 +67,25 @@
 
                     <h2>Doações</h2>
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    teste
+                        {% if not user.aniversario_solidario.doacoes.all %}
+
+                            <P> Seu aniversario não recebeu nenhuma doação</P>
+
+                        {% else %}
+
+                            {% for doacao in user.aniversario_solidario.doacoes.all %}
+                                <div class="col-md-3">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    teste1
-                                </div>
-                            </div>
-                        </div>
+                            {% endfor %}
+
+                        {% endif %}
+
+
                     </div>
 
                 </div>
