@@ -8,7 +8,7 @@ from django.contrib import messages
 from financeiro.models import Pagamento
 
 from .models import Aniversario, Doacao
-from .forms import MissaoForm,MediaForm
+from .forms import MissaoForm,MediaForm, AniversarioApeloForm
 from .models import Missao,Media
 
 def iniciar_aniversario(request):
@@ -111,4 +111,15 @@ def aniversario_doar(request, slug_usuario, slug_missao):
         Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
+    })
+
+@login_required
+def aniversario_apelo(request):
+    aniversario_instance = request.user.aniversario.all()[0]
+    apelo_form = AniversarioApeloForm(request.POST or None, instance=aniversario_instance)
+    if apelo_form.is_valid():
+        apelo_form.save()
+        return redirect(reverse('usuarios:index'))
+    return render(request, 'nucleo/aniversario_apelo.html', {
+        'form': apelo_form
     })

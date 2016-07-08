@@ -1,5 +1,6 @@
 from django.conf.urls import url, include
 from . import views
+from nucleo import views as nucleo_views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -17,4 +18,5 @@ urlpatterns = [
         url(r'^(?P<chave>[A-Z]+)/$', views.confimar_recuperar_senha, name='confirmar')
     ], namespace='recuperarsenha')),
     url(r'^entraroucadastro/$', views.login_ou_cadastro, name='login_ou_cadastro'),
+    url(r'^editarapelo/$', nucleo_views.aniversario_apelo, name='aniversario_apelo'),
 ]

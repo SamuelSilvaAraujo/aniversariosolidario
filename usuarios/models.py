@@ -151,7 +151,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     @property
     def dias_restantes_proximo_aniversario(self):
-        return (self.proximo_aniversario - datetime.date.today()).days
+        return self.calcular_dias_restantes_proximo_aniversario()
+
+    def calcular_dias_restantes_proximo_aniversario(self, ano=datetime.date.today().year):
+        return (self.proximo_aniversario - datetime.date.today().replace(year=ano)).days
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):

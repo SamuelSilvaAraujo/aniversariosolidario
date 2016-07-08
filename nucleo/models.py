@@ -43,7 +43,7 @@ class Aniversario(models.Model):
     class Meta:
         unique_together = ('usuario', 'ano')
 
-    usuario = models.ForeignKey(Usuario, related_name='aniversarios')
+    usuario = models.ForeignKey(Usuario, related_name='aniversario')
     missao = models.ForeignKey(Missao)
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
@@ -54,6 +54,10 @@ class Aniversario(models.Model):
     @property
     def usuario_proximo_aniversario(self):
         return self.usuario.proximo_aniversario.replace(year=self.ano)
+
+    @property
+    def dias_restantes(self):
+        return self.usuario.calcular_dias_restantes_proximo_aniversario(self.ano)
 
 class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')

@@ -9,7 +9,7 @@
                         <div class="col-md-3">
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    30 Dias
+                                    {{ user.aniversario_solidario.dias_restantes }} Dias
                                 </div>
                             </div>
                         </div>
@@ -40,20 +40,17 @@
                             </div>
                         </div>
                     </div>
-
-                    {% if user.aniversario_solidario.apelo %}
-
-                        {{ user.aniversario_solidario.apelo }}
-
-                    {% else %}
-
-                        <div class="page-header">
-                            <p>Voce ainda não fez um apelo</p>
-                            <button class="btn btn-success">Apelo</button>
+                    <div class="panel">
+                        <div class="panel-body">
+                            {% if user.aniversario_solidario.apelo %}
+                                {{ user.aniversario_solidario.apelo }}
+                                <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Editar apelo</a>
+                            {% else %}
+                                Voce ainda não fez um apelo!
+                                <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Apelo</a>
+                            {% endif %}
                         </div>
-
-                    {% endif %}
-
+                    </div>
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <ul class="nav nav-pills">
@@ -64,31 +61,23 @@
                             <p>{{ user.aniversario_solidario.missao.descricao }}</p>
                         </div>
                     </div>
-
-                    <h2>Doações</h2>
-                    <div class="row">
-                        {% if not user.aniversario_solidario.doacoes.all %}
-
-                            <P> Seu aniversario não recebeu nenhuma doação</P>
-
-                        {% else %}
-
-                            {% for doacao in user.aniversario_solidario.doacoes.all %}
-                                <div class="col-md-3">
-                                    <div class="panel panel-default">
-                                        <div class="panel-body">
-                                            {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
+                        <h2>Doações</h2>
+                        <div class="row">
+                            {% if not user.aniversario_solidario.doacoes.all %}
+                                <P> Seu aniversario não recebeu nenhuma doação</P>
+                            {% else %}
+                                {% for doacao in user.aniversario_solidario.doacoes.all %}
+                                    <div class="col-md-3">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-
-                        {% endif %}
-
-
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
-
-                </div>
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <img src="{{ user.foto_lg_url }}" class="img-responsive">
