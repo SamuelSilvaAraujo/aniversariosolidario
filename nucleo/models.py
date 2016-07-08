@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -55,6 +57,13 @@ class Aniversario(models.Model):
     def usuario_proximo_aniversario(self):
         return self.usuario.proximo_aniversario.replace(year=self.ano)
 
+    @property
+    def full_url(self):
+        return '{}{}'.format(settings.FULL_URL, reverse('aniversario:index', kwargs={
+            'slug_usuario': self.usuario.slug,
+            'slug_missao': self.missao.slug
+        }))
+
 class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
@@ -64,8 +73,11 @@ class Doacao(models.Model):
     def __unicode__(self):
         return self.usuario.nome
 
-class Media(OrderedModel):
+class MediaManager(models.Manager):
+    def exceto_primeiro(self):
+        return self.all()[1:]
 
+class Media(OrderedModel):
     class Meta(OrderedModel.Meta):
         pass
 
@@ -74,6 +86,8 @@ class Media(OrderedModel):
     descricao = models.CharField('Descrição', max_length=140, blank=True)
     missao = models.ForeignKey(Missao, related_name='medias')
     arquivo = models.FileField()
+
+    objects = MediaManager()
 
     def __unicode__(self):
         return self.descricao

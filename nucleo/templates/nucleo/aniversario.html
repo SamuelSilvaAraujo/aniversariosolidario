@@ -1,7 +1,8 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% block title %}{% endblock %}
+{% load staticfiles %}
 
+{% block title %}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -32,7 +33,18 @@
                     </div>
                 </div>
                 <h4 class="text-center">Compartilhe e ajude {{ aniversario.usuario.get_short_name }} <span class="hidden-sm hidden-xs">a atingir a sua meta</span></h4>
-
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="input-group">
+                            <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                            <input type="text" value="{{ aniversario.full_url }}" class="form-control input-lg" id="link-compartilhar">
+                            <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p><a href=""></a></p>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -41,19 +53,70 @@
                     <div class="panel-body">Statisticas</div>
                 </div>
             </div>
+
+            <div class="col-md-9">
+                {% if aniversario.missao.medias.all.0 %}
+                    <div class="thumbnail">
+                        <img src="{{ aniversario.missao.medias.all.0.arquivo.url }}" alt="{{ aniversario.missao.medias.all.0.descricao|default:'Mídia 1' }}" class="img-responsive">
+                        {% if aniversario.missao.medias.all.0.descricao %}
+                            <div class="caption">{{ aniversario.missao.medias.all.0.descricao }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4>Descrição</h4></div>
+                    <div class="panel-body">{{ aniversario.missao.descricao }}</div>
+                </div>
+
+                {% with medias_restantes=aniversario.missao.medias.exceto_primeiro %}
+                    {% if medias_restantes %}
+                        <h2>Fotos</h2>
+                        <div class="row">
+                            {% for media in medias_restantes %}
+                                <div class="col-md-3 col-xs-6">
+                                    <div class="thumbnail">
+                                        <img src="{{ media.arquivo.url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive">
+                                        <div class="caption">{{ media.descricao }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
         </div>
     </div>
     <div class="footer-floating">
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div><button type="submit" class="btn btn-primary btn-lg btn-block">Fazer uma Doação</button></div>
+                    <div class="hidden-lg hidden-md"><p><a href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" class="btn btn-block btn-lg btn-primary">Fazer uma doação</a></p></div>
+                    <div class="well well-sm hidden-sm hidden-xs">
+                        <h3 class="no-margin-top text-center">Faça uma doação</h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-default" type="button" data-btn-valor-docao="25">R$25</button>
+                                    <button class="btn btn-sm btn-default hidden-md" type="button" data-btn-valor-docao="50">R$50</button>
+                                </div>
+                                <div class="input-group-addon">R$</div>
+                                <input type="text" class="form-control input-sm outro-valor" placeholder="Outro Valor">
+                            </div>
                         </div>
+                        <form action="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" method="get">
+                            <input class="valor-doacao" type="hidden" name="valor">
+                            <p class="text-center"><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra-js %}
+    <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/btn-doar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/link-compartilhar.js' %}"></script>
 {% endblock %}

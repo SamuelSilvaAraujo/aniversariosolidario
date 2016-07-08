@@ -17,7 +17,7 @@ def iniciar_aniversario(request):
     if not request.user.data_de_nascimento:
         return redirect('{}?next={}&just_fields=data_de_nascimento'.format(reverse('usuarios:completar_perfil'), reverse('nucleo:iniciar_aniversario')))
     if request.user.aniversario_solidario:
-        messages.error(request, 'Você já tem Aniversário Solidário acontecendo!')
+        messages.error(request, 'Você já tem um Aniversário Solidário!')
         return redirect(reverse('usuarios:index'))
 
     missao_form = MissaoForm(request.POST or None)

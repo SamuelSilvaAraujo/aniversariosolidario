@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/', include([
         url(r'^$', nucleo_views.aniversario, name='index'),
-        url(r'^doar/$', nucleo_views.aniversario_doar, name='aniversario_doar')
+        url(r'^doar/$', nucleo_views.aniversario_doar, name='doar')
     ], namespace='aniversario')),
 ]
 
