@@ -15,6 +15,8 @@ from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm
 
 from .models import RecuperarSenha
 
+from nucleo.models import Aniversario
+
 @login_required
 def index(request):
     return render(request, 'usuarios/index.html')

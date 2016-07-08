@@ -40,14 +40,27 @@
                     </div>
                 </div>
 
+                {% if user.aniversario_solidario.apelo %}
+
+                    {{ user.aniversario_solidario.apelo }}
+
+                {% else %}
+
+                    <div class="page-header">
+                        <p>Voce ainda não fez um apelo</p>
+                    <button class="btn btn-success">Apelo</button>
+                    </div>
+
+                {% endif %}
+
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <ul class="nav nav-pills">
-                            <li><a href="#"><i class="fa fa-fw fa-pencil"></i>Editar</a></li>
-                            <li><a href="#"><i class="fa fa-fw fa-cog"></i>Gerenciar medias</a></li>
+                            <li><a href="{% url 'nucleo:missao:editar_missao' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-pencil"></i>Editar</a></li>
+                            <li><a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-cog"></i>Gerenciar medias</a></li>
                         </ul>
-                        <h2>Titulo</h2>
-                        <p>descrição</p>
+                        <h2>{{ user.aniversario_solidario.missao.titulo }}</h2>
+                        <p>{{ user.aniversario_solidario.missao.descricao }}</p>
                     </div>
                 </div>
 

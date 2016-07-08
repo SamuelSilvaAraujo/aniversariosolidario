@@ -43,7 +43,8 @@ def editar_missao(request, slug):
     if form.is_valid():
         form.save()
     return render(request, 'nucleo/editar_missao.html', {
-        'form': form
+        'form': form,
+        'missao': missao
     })
 
 @login_required
