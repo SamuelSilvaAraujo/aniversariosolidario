@@ -21,7 +21,7 @@
             <div class="col-md-9">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h3 class="no-margin-top"><p><small>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</small></p>{{ aniversario.missao.titulo }}<p><small>e assim beneficiar {{ aniversario.missao.beneficiado }}</small></p></h3>
+                        <h3 class="no-margin-top"><p><small>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</small></p>{{ aniversario.missao.titulo }}<p><small>beneficiando {{ aniversario.missao.beneficiado }}</small></p></h3>
                         {% if aniversario.apelo %}
                             <div class="media">
                                 <div class="media-body">
@@ -36,7 +36,7 @@
                 <p class="text-center">
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
                     <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
-                    <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Tweet</a>
+                    <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Conte</a>
                 </p>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">

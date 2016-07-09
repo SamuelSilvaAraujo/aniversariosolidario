@@ -20,7 +20,7 @@ class Missao(models.Model):
     beneficiado = models.CharField('beneficiado', max_length=255)
     descricao = models.TextField('descrição')
     slug = models.SlugField('slug', blank=True, max_length=255)
-    meta = models.FloatField('meta em Reais (R$)')
+    meta = models.IntegerField('meta em Reais (R$)')
 
     def __unicode__(self):
         return self.titulo

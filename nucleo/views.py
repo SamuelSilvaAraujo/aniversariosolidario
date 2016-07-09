@@ -121,6 +121,9 @@ def aniversario_doar(request, slug_usuario, slug_missao):
 
 @login_required
 def aniversario_apelo(request):
+    if not request.user.aniversario_solidario:
+        messages.error(request, 'Você não tem nenhum Aniversário Solidário acontecendo.')
+        return redirect(reverse('usuarios:index'))
     apelo_form = AniversarioApeloForm(request.POST or None, instance=request.user.aniversario_solidario)
     if apelo_form.is_valid():
         apelo_form.save()

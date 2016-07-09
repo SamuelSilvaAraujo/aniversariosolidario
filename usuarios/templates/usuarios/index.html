@@ -9,22 +9,18 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <label for="basic-url">Dias restantes</label>
-                                </div>
+                            <div class="panel panel-default" data-panel-height-fixed="1">
                                 <div class="panel-body">
-                                    {{ user.aniversario_solidario.dias_restantes }} Dias
+                                    <h2 class="text-center no-margin-top"><small>Você tem...</small><br>{{ user.aniversario_solidario.dias_restantes }} <small>dias</small></h2>
+                                    <p class="text-center">Para finalizar sua missão!</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <label for="basic-url">Valor alcançado</label>
-                                </div>
+                            <div class="panel panel-default" data-panel-height-fixed="1">
                                 <div class="panel-body">
-                                    20%
+                                    <div class="progress"><div class="progress-bar progress-bar-success" style="width: 40%;"></div></div>
+                                    <p class="text-center">Você atingiu 40% da sua meta<br><small>R$400/R${{ user.aniversario_solidario.missao.meta }}</small></p>
                                 </div>
                             </div>
                         </div>
@@ -34,17 +30,17 @@
                                     <label for="basic-url">Compartilhe</label>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="input-group">
-                                        <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
-                                        <input type="text" value="{{ user.aniversario_solidario.full_url }}" class="form-control input-lg" id="link-compartilhar">
-                                        <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                                            <input type="text" value="{{ user.aniversario_solidario.full_url }}" class="form-control input-lg" id="link-compartilhar">
+                                            <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer">
                                     <p class="text-center">
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-info "><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
-                                        <a href="https://twitter.com/home?status={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-info "><span class="fa fa-twitter"></span></a>
-                                        <a href="https://plus.google.com/share?url={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-danger "><span class="fa fa-google-plus"></span></a>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
+                                        <a href="https://twitter.com/home?status={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
+                                        <a href="https://plus.google.com/share?url={{ user.aniversario_solidario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social-icon btn-google"><span class="fa fa-google-plus"></span></a>
                                     </p>
                                 </div>
                             </div>
