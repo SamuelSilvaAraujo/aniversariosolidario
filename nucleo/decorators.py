@@ -5,11 +5,9 @@ from django.core.urlresolvers import reverse
 
 from nucleo.models import Missao
 
-def acesso_view(view):
+def missao_acesso(view):
     @wraps(view)
     def inner(request, slug, *args, **kwargs):
-        missao = get_object_or_404(Missao, slug=slug)
-        if missao.usuario != request.user:
-            return redirect(reverse('nucleo:view_not_found'))
-        return view(request, slug, *args, **kwargs)
+        missao = get_object_or_404(Missao, slug=slug, usuario=request.user)
+        return view(request, missao, *args, **kwargs)
     return inner

@@ -9,8 +9,8 @@ from financeiro.models import Pagamento
 
 from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm, AniversarioApeloForm
-from .models import Missao,Media
-from .decorators import acesso_view
+from .models import Missao, Media
+from .decorators import missao_acesso
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
@@ -45,9 +45,8 @@ def aniversario(request, slug_usuario, slug_missao):
 
 
 @login_required
-@acesso_view
-def editar_missao(request, slug):
-    missao = get_object_or_404(Missao, slug=slug)
+@missao_acesso
+def editar_missao(request, missao):
     form = MissaoForm(request.POST or None, instance=missao)
     if form.is_valid():
         form.save()
@@ -57,9 +56,8 @@ def editar_missao(request, slug):
     })
 
 @login_required
-@acesso_view
-def gerenciar_medias(request, slug):
-    missao = get_object_or_404(Missao, slug=slug)
+@missao_acesso
+def gerenciar_medias(request, missao):
     act = request.POST.get('act')
     media_form = MediaForm(
         request.POST or None if act == 'add_novo' else None,
@@ -89,15 +87,16 @@ def gerenciar_medias(request, slug):
     })
 
 @login_required
-def gerenciar_medias_action(request, slug, media_id, action):
-    media = get_object_or_404(Media, missao__slug=slug, id=media_id)
+@missao_acesso
+def gerenciar_medias_action(request, missao, media_id, action):
+    media = get_object_or_404(Media, missao=missao, id=media_id)
     if action == 'up':
         media.up()
     if action == 'down':
         media.down()
     if action == 'delete':
         media.delete()
-    return redirect(reverse('nucleo:missao:medias', kwargs={'slug': slug}))
+    return redirect(reverse('nucleo:missao:medias', kwargs={'slug': missao.slug}))
 
 def aniversario_doar(request, slug_usuario, slug_missao):
     aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
@@ -122,15 +121,10 @@ def aniversario_doar(request, slug_usuario, slug_missao):
 
 @login_required
 def aniversario_apelo(request):
-    aniversario_instance = request.user.aniversario.all()[0]
-    apelo_form = AniversarioApeloForm(request.POST or None, instance=aniversario_instance)
+    apelo_form = AniversarioApeloForm(request.POST or None, instance=request.user.aniversario_solidario)
     if apelo_form.is_valid():
         apelo_form.save()
         return redirect(reverse('usuarios:index'))
     return render(request, 'nucleo/aniversario_apelo.html', {
         'form': apelo_form
     })
-
-@login_required
-def view_not_found(request):
-    return render(request, 'nucleo/view_not_found.html')
