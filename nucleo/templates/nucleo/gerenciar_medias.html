@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="col-md-7">
-                <h2>Mídias</h2>
+                <h2>Fotos</h2>
                 {% for media in missao.medias.all %}
                     <div class="panel panel-default">
                         <div class="panel-heading text-right"><a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='up' %}"><i class="fa fa-fw fa-chevron-up"></i></a> <a href="{% url 'nucleo:missao:medias_action' slug=missao.slug media_id=media.id action='down' %}"><i class="fa fa-fw fa-chevron-down"></i></a></div>
@@ -37,12 +37,12 @@
             </div>
 
             <div class="col-md-5">
-                <h2>Adicionar medias</h2>
+                <h2>Adicionar Foto</h2>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     <input type="hidden" name="act" value="add_novo">
-                    <button type="submit" class="btn btn-lg btn-primary"> Enviar </button>
+                    <button type="submit" class="btn btn-lg btn-primary"> Enviar <i class="fa fa-fw fa-upload"></i></button>
                 </form>
             </div>
         </div>

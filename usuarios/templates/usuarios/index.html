@@ -60,17 +60,17 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <ul class="nav nav-pills">
-                                <li><a href="{% url 'nucleo:missao:editar_missao' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-pencil"></i>Editar</a></li>
-                                <li><a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-cog"></i>Gerenciar mídias</a></li>
+                                <li><a href="{% url 'nucleo:missao:editar_missao' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-pencil"></i> Editar Missão</a></li>
+                                <li><a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-camera"></i> Gerenciar Fotos</a></li>
                             </ul>
                             <h2>{{ user.aniversario_solidario.missao.titulo }}</h2>
-                            <p>{{ user.aniversario_solidario.missao.descricao }}</p>
+                            <p><strong>DESCRIÇÃO:</strong><br>{{ user.aniversario_solidario.missao.descricao }}</p>
                         </div>
                     </div>
                     <h2>Doações</h2>
                     <div class="row">
                         {% if not user.aniversario_solidario.doacoes.all %}
-                            <P> Seu aniversario não recebeu nenhuma doação</P>
+                            <p>Seu Aniversário Solidário ainda não recebeu nenhuma doação!</p>
                         {% else %}
                             {% for doacao in user.aniversario_solidario.doacoes.all %}
                                 <div class="col-md-3">

@@ -16,9 +16,11 @@ class MissaoForm(forms.ModelForm):
 
 
 class MediaForm(forms.ModelForm):
+    arquivo = forms.FileField(label='Selecione uma imagem')
+
     class Meta:
         model = Media
-        fields = ['arquivo','descricao']
+        fields = ['arquivo', 'descricao']
 
     def clean(self):
         cleaned_data = super(MediaForm,self).clean()
