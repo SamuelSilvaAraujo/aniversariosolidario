@@ -7,6 +7,7 @@ import urllib
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Sum
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -94,6 +95,18 @@ class Aniversario(models.Model):
             restam[i]['col'] = 12/len(restam)
 
         return restam
+
+    @property
+    def meta_atingida(self):
+        return self.doacoes.filter(
+            pagamento__status__in=['pago', 'disponivel']
+        ).aggregate(
+            Sum('pagamento__valor')
+        ).get('pagamento__valor__sum') or 0
+
+    @property
+    def meta_atingida_por(self):
+        return int((float(self.meta_atingida) / self.missao.meta) * 100)
 
 class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')

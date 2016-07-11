@@ -19,8 +19,8 @@
                         <div class="col-md-3">
                             <div class="panel panel-default" data-panel-height-fixed="1">
                                 <div class="panel-body">
-                                    <div class="progress"><div class="progress-bar progress-bar-success" style="width: 40%;"></div></div>
-                                    <p class="text-center">Você atingiu 40% da sua meta<br><small>R$400/R${{ user.aniversario_solidario.missao.meta }}</small></p>
+                                    <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ user.aniversario_solidario.meta_atingida_por }}%;"></div></div>
+                                    <p class="text-center">Você atingiu {{ user.aniversario_solidario.meta_atingida_por }}% da sua meta<br><small>R${{ user.aniversario_solidario.meta_atingida }}/R${{ user.aniversario_solidario.missao.meta }}</small></p>
                                 </div>
                             </div>
                         </div>
