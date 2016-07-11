@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import urllib
@@ -70,6 +71,30 @@ class Aniversario(models.Model):
     def dias_restantes(self):
         return self.usuario.calcular_dias_restantes_proximo_aniversario(self.ano)
 
+    @property
+    def restam_para_aniversario_completo(self):
+        restam = []
+        if not self.apelo:
+            restam += [{
+                'field': 'apelo',
+                'col': -1
+            }]
+        if not self.missao.medias.all():
+            restam += [{
+                'field': 'medias',
+                'col': -1
+            }]
+        if not self.usuario.foto:
+            restam += [{
+                'field': 'usuario-foto',
+                'col': -1
+            }]
+
+        for i in range(len(restam)):
+            restam[i]['col'] = 12/len(restam)
+
+        return restam
+
 class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
@@ -77,7 +102,7 @@ class Doacao(models.Model):
     data = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.usuario.nome
+        return 'Doação para o Aniversário Solidário de {}: {}'.format(self.usuario.nome, self.aniversario.missao.titulo)
 
 class MediaManager(models.Manager):
     def exceto_primeiro(self):

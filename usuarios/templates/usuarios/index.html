@@ -6,13 +6,13 @@
     {% if user.aniversario_solidario %}
         <div class="container">
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="panel panel-default" data-panel-height-fixed="1">
                                 <div class="panel-body">
                                     <h2 class="text-center no-margin-top"><small>Você tem...</small><br>{{ user.aniversario_solidario.dias_restantes }} <small>dias</small></h2>
-                                    <p class="text-center">Para finalizar sua missão!</p>
+                                    <p class="text-center">Para atingir sua meta!</p>
                                 </div>
                             </div>
                         </div>
@@ -46,17 +46,36 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel">
-                        <div class="panel-body">
-                            {% if user.aniversario_solidario.apelo %}
+                    {% with restam_para_aniversario_completo=user.aniversario_solidario.restam_para_aniversario_completo %}
+                        {% if restam_para_aniversario_completo %}
+                            <h2>Melhore o impacto do seu Aniversário Solidário</h2>
+                            <div class="row">
+                                {% for f in restam_para_aniversario_completo %}
+                                    <div class="col-md-{{ f.col }}">
+                                        <div class="panel panel-default" data-panel-height-fixed="2">
+                                            <div class="panel-body">
+                                                {% if f.field == 'apelo' %}
+                                                    <h4 class="text-center">Você ainda não escreveu seu apelo!</h4>
+                                                {% else %}
+                                                    {{ f }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    {% if user.aniversario_solidario.apelo %}
+                        <div class="panel">
+                            <div class="panel-body">
                                 {{ user.aniversario_solidario.apelo }}
                                 <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Editar apelo</a>
-                            {% else %}
                                 Voce ainda não fez um apelo!
                                 <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Apelo</a>
-                            {% endif %}
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <ul class="nav nav-pills">
@@ -84,7 +103,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="panel panel-default">
                         <img src="{{ user.foto_lg_url }}" class="img-responsive">
                         <div class="list-group">

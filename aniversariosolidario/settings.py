@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap3',
     'ordered_model',
+    'pagseguro',
     'usuarios',
     'nucleo',
     'financeiro',
@@ -151,6 +152,13 @@ MEDIA_IMAGENS_TYPES = [
 MEDIA_VIDEOS_TYPES = [
     'video/mpeg',
 ]
+
+# PAGSEGURO
+
+PAGSEGURO_EMAIL = 'douglas.paz.net@gmail.com'
+PAGSEGURO_TOKEN = '5560FA1076914B6F98DBD3BC7FEC222E'
+PAGSEGURO_SANDBOX = True
+PAGSEGURO_LOG_IN_MODEL = True
 
 try:
     from local_settings import *

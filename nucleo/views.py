@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from financeiro.models import Pagamento
+from pagseguro.api import PagSeguroItem, PagSeguroApi
+from pagseguro.models import Checkout
 
 from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm, AniversarioApeloForm
@@ -114,7 +116,21 @@ def aniversario_doar(request, slug_usuario, slug_missao):
                 )})
             ))
         pagamento = Pagamento.objects.create(valor=valor)
-        Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
+        doacao = Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
+        pagseguro_item = PagSeguroItem(
+            id=str(doacao.aniversario.id),
+            description=str(doacao),
+            amount='%.2f' % float(doacao.pagamento.valor),
+            quantity=1
+        )
+        pagseguro_api = PagSeguroApi(
+            reference=str(doacao.id)
+        )
+        pagseguro_api.add_item(pagseguro_item)
+        pagseguro_data = pagseguro_api.checkout()
+        doacao.pagamento.checkout = Checkout.objects.get(code=pagseguro_data.get('code'))
+        doacao.pagamento.save(update_fields=['checkout'])
+        return redirect(pagseguro_data.get('redirect_url'))
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
     })
