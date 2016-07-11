@@ -87,10 +87,10 @@
                         </div>
                     </div>
                     <h2>Doações</h2>
-                    <div class="row">
-                        {% if not user.aniversario_solidario.doacoes.all %}
-                            <p>Seu Aniversário Solidário ainda não recebeu nenhuma doação!</p>
-                        {% else %}
+                    {% if not user.aniversario_solidario.doacoes.all %}
+                        <p>Seu Aniversário Solidário ainda não recebeu nenhuma doação!</p>
+                    {% else %}
+                        <div class="row">
                             {% for doacao in user.aniversario_solidario.doacoes.all %}
                                 <div class="col-md-3">
                                     <div class="panel panel-default">
@@ -100,8 +100,8 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% endif %}
-                    </div>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-3">
                     <div class="panel panel-default">
