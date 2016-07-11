@@ -12,6 +12,7 @@ from pagseguro import urls as pagseguro_urls
 urlpatterns = [
     url(r'^$', webapp_views.index, name='index'),
     url(r'^styleguide/$', webapp_views.styleguide, name='styleguide'),
+    url(r'^raise/$', webapp_views.raisee, name='raisee'),
     url(r'^cancelarenviodeemails/(?P<chave>[A-Z]+)/$', emails_views.cancelar_envio_de_emails, name='cancelar_envio_de_emails'),
 
     url(r'^usuario/', include(usuarios_urls, namespace='usuarios')),

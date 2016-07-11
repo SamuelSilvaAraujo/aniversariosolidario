@@ -5,3 +5,6 @@ def index(request):
 
 def styleguide(request):
     return render(request, 'webapp/styleguide.html')
+
+def raisee(request):
+    raise
