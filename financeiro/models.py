@@ -2,18 +2,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from pagseguro.models import Checkout
+from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
 
 
 class Pagamento(models.Model):
-    STATUS_AGUARDANDO = 0
-    STATUS_DISPONIVEL = 1
-
-    STATUS_CHOICES = [
-        (STATUS_AGUARDANDO, 'aguardando pagamento'),
-        (STATUS_DISPONIVEL, 'disponível'),
-    ]
-
     valor = models.IntegerField()
-    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_AGUARDANDO)
+    status = models.CharField(choices=TRANSACTION_STATUS_CHOICES, default='aguardando', max_length=32)
     checkout = models.ForeignKey(Checkout, related_name='pagamentos', null=True)
