@@ -17,7 +17,7 @@ class Pagamento(models.Model):
 
     @property
     def status_valido(self):
-        return self.status in ['pago', 'Disponível']
+        return self.status in ['pago', 'disponivel']
 
 
 def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
