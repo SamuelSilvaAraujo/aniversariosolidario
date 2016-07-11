@@ -92,10 +92,13 @@
                     {% else %}
                         <div class="row">
                             {% for doacao in user.aniversario_solidario.doacoes.all %}
-                                <div class="col-md-3">
-                                    <div class="panel panel-default">
+                                <div class="col-md-4">
+                                    <div class="panel panel-default" data-panel-height-fixed="3">
                                         <div class="panel-body">
-                                            {{ doacao.usuario.nome }} doou R$ {{ doacao.pagamento.valor }} para seu aniversario!
+                                            <p class="text-right"><small><i class="fa fa-fw fa-calendar"></i> {{ doacao.data }}</small></p>
+                                            <p><strong>{{ doacao.usuario.nome }}</strong> doou</p>
+                                            <h4>R${{ doacao.pagamento.valor }}<br><small>para seu aniversario!</small></h4>
+                                            <p><span class="label {% if doacao.pagamento.status_valido %}label-success{% else %}label-default{% endif %}">{{ doacao.pagamento.status_verbose }}</span></p>
                                         </div>
                                     </div>
                                 </div>

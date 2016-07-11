@@ -109,6 +109,9 @@ class Aniversario(models.Model):
         return int((float(self.meta_atingida) / self.missao.meta) * 100)
 
 class Doacao(models.Model):
+    class Meta:
+        ordering = ['-data']
+
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
     pagamento = models.ForeignKey(Pagamento)

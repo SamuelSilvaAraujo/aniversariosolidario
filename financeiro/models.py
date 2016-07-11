@@ -11,6 +11,14 @@ class Pagamento(models.Model):
     status = models.CharField(choices=TRANSACTION_STATUS_CHOICES, default='aguardando', max_length=32)
     checkout = models.ForeignKey(Checkout, related_name='pagamentos', null=True)
 
+    @property
+    def status_verbose(self):
+        return dict(TRANSACTION_STATUS_CHOICES).get(self.status)
+
+    @property
+    def status_valido(self):
+        return self.status in ['pago', 'Disponível']
+
 
 def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     from nucleo.models import Doacao
