@@ -17,7 +17,7 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     from pagseguro.models import Transaction
 
     transaction_instance = Transaction.objects.get(code=transaction.get('code'))
-    doacao = Doacao.objects.get(id=int(transaction.reference))
+    doacao = Doacao.objects.get(id=int(transaction_instance.reference))
     doacao.pagamento.status = transaction_instance.status
     doacao.pagamento.save(update_fields=['status'])
 
