@@ -52,6 +52,7 @@ def editar_missao(request, missao):
     form = MissaoForm(request.POST or None, instance=missao)
     if form.is_valid():
         form.save()
+        return redirect(reverse('usuarios:index'))
     return render(request, 'nucleo/editar_missao.html', {
         'form': form,
         'missao': missao
@@ -82,6 +83,7 @@ def gerenciar_medias(request, missao):
                     media.editar_form(request.POST or None)
                     if media.get_editar_form.is_valid():
                         media.get_editar_form.save()
+                        messages.success(request, 'Arquivo editado com sucesso!')
 
     return render(request, 'nucleo/gerenciar_medias.html', {
         'form': media_form,

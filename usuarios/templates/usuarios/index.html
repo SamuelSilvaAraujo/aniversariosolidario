@@ -56,6 +56,19 @@
                                             <div class="panel-body">
                                                 {% if f.field == 'apelo' %}
                                                     <h4 class="text-center">Você ainda não escreveu seu apelo!</h4>
+                                                    <div class="text-center">
+                                                        <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success">Adicionar apelo</a>
+                                                    </div>
+                                                {% elif f.field == 'medias' %}
+                                                    <h4 class="text-center">Adicione imagens ao seu aniversario!</h4>
+                                                    <div class="text-center">
+                                                        <a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}" class="btn btn-sm btn-success">Adicionar imagens!</a>
+                                                    </div>
+                                                {% elif f.field == 'usuario-foto' %}
+                                                    <h4 class="text-center">Mostre quem você é. coloque uma foto no seu perfil!</h4>
+                                                    <div class="text-center">
+                                                        <a href="{% url 'usuarios:alterar_foto' %}" class="btn btn-sm btn-success">Adicionar foto no perfil!</a>
+                                                    </div>
                                                 {% else %}
                                                     {{ f }}
                                                 {% endif %}
@@ -71,8 +84,6 @@
                             <div class="panel-body">
                                 {{ user.aniversario_solidario.apelo }}
                                 <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Editar apelo</a>
-                                Voce ainda não fez um apelo!
-                                <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Apelo</a>
                             </div>
                         </div>
                     {% endif %}
