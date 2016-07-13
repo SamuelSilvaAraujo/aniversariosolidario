@@ -70,6 +70,8 @@ class Aniversario(models.Model):
         }))
 
     def dias_restantes(self):
+        if self.usuario.proximo_aniversario.year > self.ano:
+            return 0
         return self.usuario.calcular_dias_restantes_proximo_aniversario(self.ano)
 
     @property
