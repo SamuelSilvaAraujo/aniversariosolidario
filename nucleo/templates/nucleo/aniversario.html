@@ -52,7 +52,11 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="panel panel-default">
-                    <div class="panel-body">Statisticas</div>
+                    <div class="panel-body">
+                        <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
+                        <p class="text-center">R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
+                        <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
+                    </div>
                 </div>
             </div>
 
