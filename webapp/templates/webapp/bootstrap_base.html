@@ -89,7 +89,40 @@
 
 {% block footer %}
     <footer>
-
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <h3>Links importantes:</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled">
+                                <li><a href="{% url 'index' %}">Pagina inicial</a></li>
+                                <li><a href="{% url 'termos_uso' %}">Termos de uso</a></li>
+                                <li><a href="">Sobre</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled">
+                                <li><a href="{% url 'usuarios:cadastro' %}">Cadastro</a></li>
+                                <li><a href="{% url 'usuarios:login' %}">Entrar</a></li>
+                                <li><a href="{% url 'usuarios:recuperarsenha:index' %}">Recuperar senha</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h3>Redes Sociais:</h3>
+                    <a href="https://www.facebook.com/2itsdev/" target="_blank" class="btn btn-lg btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
+                    <a href="https://twitter.com/2itsdev" target="_blank" class="btn btn-lg btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
+                </div>
+                <div class="col-md-4">
+                    <h3>Aniversário Solidário:</h3>
+                    <p>Av. Manoel Severino Barbosa(AL 115), S/N, Arapiraca-AL</p>
+                    <p>contato@2its.com.br</p>
+                    <p>&copy; Aniversário Solidário 2016, desenvolvido por <a href="https://www.2its.com.br/" target="blank">2it's</a></p>
+                </div>
+            </div>
+        </div>
     </footer>
 {% endblock %}
 

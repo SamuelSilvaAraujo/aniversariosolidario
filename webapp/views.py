@@ -8,3 +8,6 @@ def styleguide(request):
 
 def raisee(request):
     raise
+
+def termos_uso(request):
+    return render(request, 'webapp/termos_uso.html')

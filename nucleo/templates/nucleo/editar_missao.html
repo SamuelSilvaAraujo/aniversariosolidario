@@ -1,20 +1,18 @@
-{% extends 'webapp/bootstrap_base.html' %}
+{% extends 'usuarios/usuarios-base.html' %}
 
 {%  load bootstrap3 %}
 
-{% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <h2>Editar Missão</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    {% buttons %}
-                        <button type="submit" class="btn btn-block btn-lg btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
-                    {% endbuttons %}
-                </form>
-            </div>
+{% block in-content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2>Editar Missão</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-block btn-lg btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
+                {% endbuttons %}
+            </form>
         </div>
     </div>
 {% endblock %}

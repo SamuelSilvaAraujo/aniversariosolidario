@@ -80,10 +80,13 @@
             {% endif %}
         {% endwith %}
         {% if user.aniversario_solidario.apelo %}
-            <div class="panel">
+            <h2>Apelo</h2>
+            <div class="panel panel-default">
                 <div class="panel-body">
-                    {{ user.aniversario_solidario.apelo }}
-                    <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success pull-right">Editar apelo</a>
+                    <ul class="nav nav-pills">
+                        <li><a href="{% url 'usuarios:aniversario_apelo' %}"><i class="fa fa-fw fa-pencil"></i>Editar apelo</a></li>
+                    </ul>
+                    <p>{{ user.aniversario_solidario.apelo }}</p>
                 </div>
             </div>
         {% endif %}
