@@ -3,26 +3,18 @@
 {%  load bootstrap3 %}
 
 {% block content %}
-
     <div class="container">
-
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-
                 <h2>Editar Missão</h2>
-
                 <form method="post">
                     {% csrf_token %}
-
                     {% bootstrap_form form %}
-
                     {% buttons %}
-                        <button type="submit" class="btn btn-block btn-lg btn-primary">Salvar</button>
-                        <a href="{% url 'nucleo:missao:medias' slug=missao.slug %}">Gerenciar medias</a>
+                        <button type="submit" class="btn btn-block btn-lg btn-primary">Editar <i class="fa fa-fw fa-pencil"></i></button>
                     {% endbuttons %}
                 </form>
             </div>
         </div>
     </div>
-
 {% endblock %}
