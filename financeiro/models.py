@@ -5,8 +5,6 @@ from django.db import models
 from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
 from pagseguro.signals import notificacao_recebida
 
-# from nucleo.models import Aniversario
-
 class Pagamento(models.Model):
     valor = models.IntegerField()
     status = models.CharField(choices=TRANSACTION_STATUS_CHOICES, default='aguardando', max_length=32)
@@ -41,5 +39,5 @@ class Transacao(models.Model):
     )
 
     valor = models.IntegerField()
-    #aniversario = models.ForeignKey(Aniversario)
+    aniversario = models.ForeignKey('nucleo.Aniversario')
     status = models.IntegerField(choices = CHOICES)

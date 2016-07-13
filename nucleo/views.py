@@ -14,7 +14,7 @@ from pagseguro.models import Checkout
 from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm, AniversarioApeloForm
 from .models import Missao, Media
-from .decorators import missao_acesso
+from .decorators import missao_acesso, aniversario_finalizado
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
@@ -50,6 +50,7 @@ def aniversario(request, slug_usuario, slug_missao):
 
 @login_required
 @missao_acesso
+@aniversario_finalizado
 def editar_missao(request, missao):
     form = MissaoForm(request.POST or None, instance=missao)
     if form.is_valid():
@@ -62,6 +63,7 @@ def editar_missao(request, missao):
 
 @login_required
 @missao_acesso
+@aniversario_finalizado
 def gerenciar_medias(request, missao):
     act = request.POST.get('act')
     media_form = MediaForm(
@@ -94,6 +96,7 @@ def gerenciar_medias(request, missao):
 
 @login_required
 @missao_acesso
+@aniversario_finalizado
 def gerenciar_medias_action(request, missao, media_id, action):
     media = get_object_or_404(Media, missao=missao, id=media_id)
     if action == 'up':
@@ -104,6 +107,7 @@ def gerenciar_medias_action(request, missao, media_id, action):
         media.delete()
     return redirect(reverse('nucleo:missao:medias', kwargs={'slug': missao.slug}))
 
+@aniversario_finalizado
 def aniversario_doar(request, slug_usuario, slug_missao):
     aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
     valor = request.GET.get('valor')
@@ -140,6 +144,7 @@ def aniversario_doar(request, slug_usuario, slug_missao):
     })
 
 @login_required
+@aniversario_finalizado
 def aniversario_apelo(request):
     if not request.user.aniversario_solidario:
         messages.error(request, 'Você não tem nenhum Aniversário Solidário acontecendo.')
