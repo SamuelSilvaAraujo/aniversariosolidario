@@ -5,6 +5,7 @@ from django.db import models
 from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
 from pagseguro.signals import notificacao_recebida
 
+# from nucleo.models import Aniversario
 
 class Pagamento(models.Model):
     valor = models.IntegerField()
@@ -30,3 +31,15 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     doacao.pagamento.save(update_fields=['status'])
 
 notificacao_recebida.connect(pagseguro_notificacao_recebida)
+
+
+class Transacao(models.Model):
+
+    CHOICES = (
+        (0, 'Realizado'),
+        (1, 'Aguardando')
+    )
+
+    valor = models.IntegerField()
+    #aniversario = models.ForeignKey(Aniversario)
+    status = models.IntegerField(choices = CHOICES)
