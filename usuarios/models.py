@@ -147,7 +147,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         if not self.proximo_aniversario:
             return None
         from nucleo.models import Aniversario
-        return Aniversario.objects.filter(usuario=self, ano=self.proximo_aniversario.year).first()
+        return Aniversario.objects.filter(usuario=self, ano__in=[self.proximo_aniversario.year, self.proximo_aniversario.year-1]).first()
 
     @property
     def dias_restantes_proximo_aniversario(self):
