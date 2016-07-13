@@ -1,10 +1,12 @@
 # coding=utf-8
 import urllib
+import datetime
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils import timezone
 from financeiro.models import Pagamento
 from pagseguro.api import PagSeguroItem, PagSeguroApi
 from pagseguro.models import Checkout
@@ -149,3 +151,13 @@ def aniversario_apelo(request):
     return render(request, 'nucleo/aniversario_apelo.html', {
         'form': apelo_form
     })
+
+@login_required
+def aniversario_finalizado(request):
+    aniversario_f = get_object_or_404(Aniversario, usuario=request.user)
+    if aniversario_f.dias_restantes() > 0:
+        messages.error(request, 'O dia do seu aniversario ainda não chegou! tenha paciência.')
+    else:
+        aniversario_f.finalizado = timezone.now()
+        aniversario_f.save(update_fields=['finalizado'])
+    return redirect(reverse('usuarios:index'))

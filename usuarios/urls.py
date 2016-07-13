@@ -19,4 +19,5 @@ urlpatterns = [
     ], namespace='recuperarsenha')),
     url(r'^entraroucadastro/$', views.login_ou_cadastro, name='login_ou_cadastro'),
     url(r'^editarapelo/$', nucleo_views.aniversario_apelo, name='aniversario_apelo'),
+    url(r'^aniversariofinalizado/$', nucleo_views.aniversario_finalizado, name='aniversario_finalizado'),
 ]

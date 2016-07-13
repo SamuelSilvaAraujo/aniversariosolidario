@@ -54,6 +54,7 @@ class Aniversario(models.Model):
     missao = models.ForeignKey(Missao)
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
+    finalizado = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return self.usuario.nome

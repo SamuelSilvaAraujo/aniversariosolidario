@@ -2,8 +2,10 @@
 
 {% block extra-messages %}{% endblock %}
 
+{% load staticfiles %}
+
 {% block content %}
     <div class="container">
-        <p>olá</p>
+        <div><img src="{% static 'imgs/comofunciona.png' %}" class="img-responsive" alt="Como Funciona" /></div>
     </div>
 {% endblock %}
