@@ -1,25 +1,14 @@
-{% extends 'webapp/bootstrap_base.html' %}
+{% extends 'usuarios/usuarios-base.html' %}
 
 {% load bootstrap3 %}
 
-{% block content %}
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7">
-                <form method="post">
-                    {% csrf_token %}
-
-                    {% bootstrap_form form %}
-
-                    {% buttons %}
-
-                        <button type="submit" class="btn btn-lg btn-primary">Salvar</button>
-
-                    {% endbuttons %}
-                </form>
-            </div>
-        </div>
-    </div>
-
+{% block in-content %}
+    <h2>Deixe um apelo</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <p class="text-right"><button type="submit" class="btn btn-lg btn-primary">Salvar Apelo <i class="fa fa-fw fa-check"></i></button></p>
+        {% endbuttons %}
+    </form>
 {% endblock %}

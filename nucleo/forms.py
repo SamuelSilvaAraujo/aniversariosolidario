@@ -38,6 +38,8 @@ class MediaEditarForm(forms.ModelForm):
         fields = ['descricao']
 
 class AniversarioApeloForm(forms.ModelForm):
+    apelo = forms.CharField(label='Escreva uma mensagem para os seus amigos', widget=forms.Textarea())
+
     class Meta:
         model = Aniversario
         fields = ['apelo']
