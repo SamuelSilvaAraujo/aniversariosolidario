@@ -11,6 +11,8 @@ from django.db.models import Sum
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from django.contrib.staticfiles.templatetags.staticfiles import static
+from easy_thumbnails.files import get_thumbnailer
 from ordered_model.models import OrderedModel
 
 from financeiro.models import Pagamento
@@ -39,6 +41,17 @@ class Missao(models.Model):
                 self.slug = slugify(self.titulo)
             tentativa += 1
         return True
+
+    @property
+    def foto_divulgacao_quadrada_url(self):
+        medias = self.medias.all()
+        if not medias:
+            return static('imgs/no-photo-aniversario.png')
+        media = medias.first()
+        return get_thumbnailer(media.arquivo).get_thumbnail({
+            'size': (360, 270),
+            'crop': True
+        }).url
 
 
 @receiver(pre_save, sender=Missao)

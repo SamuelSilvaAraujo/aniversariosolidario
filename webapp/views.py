@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from nucleo.models import Aniversario
+
 
 def index(request):
-    return render(request, 'webapp/index.html')
+    aniversarios = Aniversario.objects.filter(finalizado__isnull=True)
+    return render(request, 'webapp/index.html', {
+        'aniversarios': aniversarios
+    })
 
 def styleguide(request):
     return render(request, 'webapp/styleguide.html')
