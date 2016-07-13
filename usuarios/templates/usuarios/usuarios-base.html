@@ -9,6 +9,13 @@
                 <div class="panel panel-default">
                     <img src="{{ user.foto_lg_url }}" class="img-responsive">
                     <div class="list-group">
+                        {% if not user.is_authenticated or not user.aniversario_solidario %}
+                            <a class="list-group-item" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a>
+                        {% else %}
+                            {% if user.is_authenticated and user.aniversario_solidario %}
+                                <a class="list-group-item" href="{% url 'usuarios:index' %}">Gerenciar meu Anivesário</a>
+                            {% endif %}
+                        {% endif %}
                         <a class="list-group-item" href="{% url 'usuarios:alterar_foto' %}">Alterar foto do meu perfil</a>
                         <a class="list-group-item" href="{% url 'usuarios:alterar_perfil' %}">Editar meu perfil</a>
                     </div>

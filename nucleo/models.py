@@ -124,6 +124,22 @@ class Aniversario(models.Model):
     def meta_atingida_por(self):
         return int((float(self.meta_atingida) / self.missao.meta) * 100)
 
+    @property
+    def meta_de_direito(self):
+        return (self.doacoes.filter(
+            pagamento__status__in=['pago', 'disponivel']
+        ).aggregate(
+            Sum('pagamento__valor')
+        ).get('pagamento__valor__sum', 0) or 0)*.87
+
+    @property
+    def meta_de_direito_disponivel(self):
+        return (self.doacoes.filter(
+            pagamento__status__in=['disponivel']
+        ).aggregate(
+            Sum('pagamento__valor')
+        ).get('pagamento__valor__sum') or 0)*.87
+
 class Doacao(models.Model):
     class Meta:
         ordering = ['-data']

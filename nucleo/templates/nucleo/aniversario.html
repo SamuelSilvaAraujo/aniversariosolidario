@@ -19,6 +19,9 @@
                 </div>
             </div>
             <div class="col-md-9">
+                {% if aniversario.finalizado %}
+                    <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
+                {% endif %}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h3 class="no-margin-top"><p><small>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</small></p>{{ aniversario.missao.titulo }}<p><small>beneficiando {{ aniversario.missao.beneficiado }}</small></p></h3>

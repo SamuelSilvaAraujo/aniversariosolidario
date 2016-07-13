@@ -10,9 +10,10 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <p>Parabéns! Feliz Aniversario.</p>
-                            <p>O dia do seu aniversario chegou agora você tem o direito de finaliza-lo. Você arrecadou R${{ user.aniversario_solidario.meta_atingida }}</p>
-                            <a href="{% url 'usuarios:aniversario_finalizado' %}" class="btn btn-info">Finalizar aniversario</a>
+                            <h3>Parabéns! Chegou a hora de comemorar seu aniversário.</h3>
+                            <p>O tempo de mobilização já acabou, temos que focar nos resultados.</p>
+                            <p>Você arrecadou <strong>R${{ user.aniversario_solidario.meta_atingida }}</strong> e tem direito a <strong>R${{ user.aniversario_solidario.meta_de_direito|floatformat:2 }}</strong> no qual está disponível para transferência <strong>R${{ user.aniversario_solidario.meta_de_direito_disponivel|floatformat:2 }}</strong>. Finalize seu Aniversário Solidário clicando no botão abaixo para receber os valores.</p>
+                            <a href="{% url 'usuarios:aniversario_finalizado' %}" class="btn btn-lg btn-info">Finalizar Aniversário Solidário</a>
                         </div>
                     </div>
                 </div>
@@ -73,7 +74,7 @@
                                 <div class="panel-body">
                                     {% if f.field == 'apelo' %}
                                         <h4 class="text-center">Você ainda não escreveu seu apelo!</h4>
-                                        <p>Deixe uma mensagem para quem visitar seu Aniverário Solidário.</p>
+                                        <p>Deixe uma mensagem para os visitantes do seu Aniverário Solidário.</p>
                                         <div class="text-center">
                                             <a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-sm btn-success">Escrever Apelo</a>
                                         </div>
@@ -104,7 +105,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     {% if not user.aniversario_solidario.finalizado %}
-                        <ul class="nav nav-pills">
+                        <ul class="nav nav-pills p">
                             <li><a href="{% url 'usuarios:aniversario_apelo' %}"><i class="fa fa-fw fa-pencil"></i>Editar apelo</a></li>
                         </ul>
                     {% endif %}
