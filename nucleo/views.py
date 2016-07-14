@@ -158,19 +158,29 @@ def aniversario_apelo(request):
     })
 
 @login_required
-def aniversario_finalizado(request):
-    aniversario_f = get_object_or_404(Aniversario, usuario=request.user)
-    if aniversario_f.dias_restantes() > 0:
-        messages.error(request, 'O dia do seu aniversario ainda não chegou! tenha paciência.')
+def aniversario_finalizar(request):
+    aniversario = request.user.aniversario_solidario
+    if not aniversario:
+        messages.error(request, 'Você não tem nenhum Aniversário Solidário acontecendo.')
+        return redirect(reverse('usuarios:index'))
+    if aniversario.dias_restantes() == 0:
+        if aniversario.usuario.email_pagseguro:
+            aniversario.finalizado = timezone.now()
+            aniversario.save(update_fields=['finalizado'])
+            return redirect(reverse('usuarios:index'))
+        else:
+            return redirect('{}?{}'.format(
+                reverse('usuarios:add_email_pagseguro'),
+                urllib.urlencode({'next': reverse('nucleo:aniversario_finalizar')})
+            ))
     else:
-        aniversario_f.finalizado = timezone.now()
-        aniversario_f.save(update_fields=['finalizado'])
-    return redirect(reverse('usuarios:index'))
+        messages.error(request, 'Ainda falta alguns dias para seu aniversario!')
+        return redirect(reverse('usuarios:index'))
 
 def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
-    aniversario_instance = get_object_or_404(Aniversario, usuario__slug = slug_usuario, missao__slug = slug_missao)
-    aniversarios = Aniversario.objects.filter(finalizado__isnull=True).exclude(pk = aniversario_instance.id)
+    aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
+    aniversarios = Aniversario.objects.filter(finalizado__isnull=True).exclude(id=aniversario_instance.id)
     return render(request, 'nucleo/aniversario_doacao_realizada.html', {
-        'aniversario':aniversario_instance,
+        'aniversario': aniversario_instance,
         'aniversarios': aniversarios
     })

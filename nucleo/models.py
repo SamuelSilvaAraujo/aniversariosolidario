@@ -70,7 +70,7 @@ class Aniversario(models.Model):
     finalizado = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.usuario.nome
+        return 'Aniversário de {} - {}'.format(self.usuario.nome, self.missao.titulo)
 
     @property
     def usuario_proximo_aniversario(self):

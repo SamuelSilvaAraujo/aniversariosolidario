@@ -49,7 +49,7 @@ class AlterarPerfilForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'data_de_nascimento']
+        fields = ['nome', 'data_de_nascimento', 'email_pagseguro']
 
 class CompletarPerfilForm(forms.ModelForm):
     class Meta:
@@ -93,3 +93,8 @@ class RecuperarSenhaForm(forms.Form):
 
 class LoginOuCadastroForm(forms.Form):
     email = forms.CharField(label='Qual o seu e-mail?', widget=forms.EmailInput())
+
+class AddEmailPagSeguro(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['email_pagseguro']

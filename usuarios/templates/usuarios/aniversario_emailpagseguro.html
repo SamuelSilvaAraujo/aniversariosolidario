@@ -1,0 +1,25 @@
+{% extends 'usuarios/usuarios-base.html' %}
+
+{% load bootstrap3 %}
+
+{% block in-content %}
+    <div class="row">
+        <div class="col-md-10">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3>Cadastre aqui seu email PagSeguro!</h3>
+                <p>O valor arrecadado em seu aniversario solidario sera transferido para você via pagseguro. Caso você não tenha uma conta pagseguro <a href="https://pagseguro.uol.com.br/" target="_blank"> click aqui.</a></p>
+            </div>
+        </div>
+
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

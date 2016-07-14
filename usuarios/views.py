@@ -11,7 +11,7 @@ from django.utils import timezone
 from .models import ConfirmacaoDeEmail, Usuario
 
 from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm, \
-    LoginOuCadastroForm
+    LoginOuCadastroForm, AddEmailPagSeguro
 
 from .models import RecuperarSenha
 
@@ -85,6 +85,7 @@ def alterar_perfil(request):
     perfil_form = AlterarPerfilForm(request.POST or None, instance=request.user)
     if perfil_form.is_valid():
         perfil_form.save()
+        messages.success(request, 'Dados atualizados com sucesso!')
     return render(request, 'usuarios/alterar_perfil.html', {
         'perfil_form': perfil_form,
     })
@@ -152,4 +153,14 @@ def login_ou_cadastro(request):
         return redirect('{}?next={}&email={}'.format(r, request.GET.get('next', '/'), email))
     return render(request, 'usuarios/login_ou_cadastro.html', {
         'form': form
+    })
+
+@login_required
+def add_email_pagseguro(request):
+    form_pagseguro = AddEmailPagSeguro(request.POST or None, instance = request.user)
+    if form_pagseguro.is_valid():
+        form_pagseguro.save()
+        return redirect(request.GET.get('next', reverse('usuarios:index')))
+    return render(request, 'usuarios/aniversario_emailpagseguro.html', {
+        'form':form_pagseguro
     })

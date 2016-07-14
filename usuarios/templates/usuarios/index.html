@@ -13,7 +13,7 @@
                             <h3>Parabéns! Chegou a hora de comemorar seu aniversário.</h3>
                             <p>O tempo de mobilização já acabou, temos que focar nos resultados.</p>
                             <p>Você arrecadou <strong>R${{ user.aniversario_solidario.meta_atingida }}</strong> e tem direito a <strong>R${{ user.aniversario_solidario.meta_de_direito|floatformat:2 }}</strong> no qual está disponível para transferência <strong>R${{ user.aniversario_solidario.meta_de_direito_disponivel|floatformat:2 }}</strong>. Finalize seu Aniversário Solidário clicando no botão abaixo para receber os valores.</p>
-                            <a href="{% url 'usuarios:aniversario_finalizado' %}" class="btn btn-lg btn-info">Finalizar Aniversário Solidário</a>
+                            <a href="{% url 'nucleo:aniversario_finalizar' %}" class="btn btn-lg btn-info">Finalizar Aniversário Solidário</a>
                         </div>
                     </div>
                 </div>

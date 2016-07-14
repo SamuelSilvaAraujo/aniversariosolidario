@@ -4,16 +4,10 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Obrigado por sua doação.</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <h4 class="text-center">Compartilhe <span class="hidden-sm hidden-xs">e ajude {{ aniversario.missao.beneficiado }}</span></h4>
+        <h1 class="text-center"><i class="fa fa-fw fa-5x fa-smile-o"></i></h1>
+        <h2 class="text-center">Obrigado pela sua doação!</h2>
+        <hr>
+        <h4 class="text-center">Continue essa corrente <span class="hidden-sm hidden-xs">e ajude {{ aniversario.missao.beneficiado }}</span></h4>
         <p class="text-center">
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
             <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
@@ -28,8 +22,8 @@
                 </p>
             </div>
         </div>
-
-        <h3>Aniversários acontecendo agora</h3>
+        <hr>
+        <h4>Outros Aniversários Solidários que você pode colaborar</h4>
         <div class="row">
             {% for aniversario in aniversarios %}
                 <div class="col-md-4">{% aniversario_panel aniversario %}</div>
