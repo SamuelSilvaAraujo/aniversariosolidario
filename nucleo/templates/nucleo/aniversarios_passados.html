@@ -1,0 +1,15 @@
+{% extends 'usuarios/usuarios-base.html' %}
+
+
+{% block in-content %}
+
+    {% for aniversario in aniversarios %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Aniversario de {{ aniversario.ano }} <small> <a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">{{ aniversario.missao.titulo }}</a></small></h4>
+            </div>
+        </div>
+    {% endfor %}
+
+
+{% endblock %}

@@ -184,3 +184,9 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
         'aniversario': aniversario_instance,
         'aniversarios': aniversarios
     })
+
+def aniversarios_passados(request):
+    aniversarios = Aniversario.objects.filter(usuario = request.user, finalizado__isnull=False)
+    return render(request, 'nucleo/aniversarios_passados.html', {
+        'aniversarios': aniversarios
+    })
