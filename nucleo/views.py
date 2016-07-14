@@ -166,3 +166,11 @@ def aniversario_finalizado(request):
         aniversario_f.finalizado = timezone.now()
         aniversario_f.save(update_fields=['finalizado'])
     return redirect(reverse('usuarios:index'))
+
+def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
+    aniversario_instance = get_object_or_404(Aniversario, usuario__slug = slug_usuario, missao__slug = slug_missao)
+    aniversarios = Aniversario.objects.filter(finalizado__isnull=True).exclude(pk = aniversario_instance.id)
+    return render(request, 'nucleo/aniversario_doacao_realizada.html', {
+        'aniversario':aniversario_instance,
+        'aniversarios': aniversarios
+    })

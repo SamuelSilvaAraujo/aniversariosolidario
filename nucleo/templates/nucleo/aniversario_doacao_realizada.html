@@ -1,0 +1,40 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% load staticfiles nucleo_widgets %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Obrigado por sua doação.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="text-center">Compartilhe <span class="hidden-sm hidden-xs">e ajude {{ aniversario.missao.beneficiado }}</span></h4>
+        <p class="text-center">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
+            <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
+            <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Conte</a>
+        </p>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <p class="input-group">
+                    <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                    <input type="text" value="{{ aniversario.full_url }}" class="form-control input-lg" id="link-compartilhar">
+                    <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                </p>
+            </div>
+        </div>
+
+        <h3>Aniversários acontecendo agora</h3>
+        <div class="row">
+            {% for aniversario in aniversarios %}
+                <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

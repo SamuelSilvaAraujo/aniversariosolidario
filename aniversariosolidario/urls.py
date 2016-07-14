@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^retorno/pagseguro/', include(pagseguro_urls)),
     url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/', include([
         url(r'^$', nucleo_views.aniversario, name='index'),
-        url(r'^doar/$', nucleo_views.aniversario_doar, name='doar')
+        url(r'^doar/$', nucleo_views.aniversario_doar, name='doar'),
+        url(r'^doacaorealizada/$', nucleo_views.aniversario_doacao_realizada, name='aniversario_doacao_realizada'),
     ], namespace='aniversario')),
 ]
 
