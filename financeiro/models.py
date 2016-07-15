@@ -33,11 +33,18 @@ notificacao_recebida.connect(pagseguro_notificacao_recebida)
 
 class Transacao(models.Model):
 
-    CHOICES = (
-        (0, 'Realizado'),
-        (1, 'Aguardando')
-    )
+    AGUARDANDO = 0
+    REALIZADO = 1
+
+    CHOICES = [
+        (AGUARDANDO, 'Aguardando'),
+        (REALIZADO, 'Realizado')
+    ]
 
     valor = models.IntegerField()
-    aniversario = models.ForeignKey('nucleo.Aniversario')
-    status = models.IntegerField(choices = CHOICES)
+    aniversario = models.ForeignKey('nucleo.Aniversario', related_name='aniversario_transacao')
+    status = models.IntegerField(choices=CHOICES, default=1)
+
+    @property
+    def status_verbose(self):
+        return dict(Transacao.CHOICES).get(self.status)
