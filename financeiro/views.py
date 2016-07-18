@@ -4,13 +4,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.db.models import Sum
-
-
-from financeiro.models import Transacao
-
-
-
 
 from financeiro.forms import TransacaoForm
 from nucleo.models import Aniversario
@@ -23,7 +16,7 @@ def transacao(request, ano):
         form = transacao_form.save(commit=False)
         form.aniversario = aniversario
         form.save()
-        messages.success(request, 'Slocitação de transação enviada com sucesso!')
+        messages.success(request, 'Solicitação de transação enviada com sucesso!')
         return redirect(reverse('usuarios:aniversarios_passados'))
     return render(request, 'financeiro/transacao.html', {
         'form':transacao_form

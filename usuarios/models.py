@@ -155,6 +155,12 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         ).first()
 
     @property
+    def aniversarios_passados(self):
+        if not self.aniversarios.filter(usuario=self, finalizado__isnull=False):
+            return False
+        return True
+
+    @property
     def dias_restantes_proximo_aniversario(self):
         return self.calcular_dias_restantes_proximo_aniversario()
 

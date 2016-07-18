@@ -4,6 +4,12 @@
 
 {% block in-content %}
 
+    <div class="panel panel-default">
+    <div class="panel-body">
+        <p>Agora que o dia do seu aniversario chegou e você finalizou seu aniversario solidario, esta na hora de pegar suas doações e concluir sua missão!</p>
+    </div>
+    </div>
+
     <form method="post">
         {% csrf_token %}
         {% bootstrap_form form %}

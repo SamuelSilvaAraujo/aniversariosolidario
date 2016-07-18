@@ -63,7 +63,7 @@ class Aniversario(models.Model):
     class Meta:
         unique_together = ('usuario', 'ano')
 
-    usuario = models.ForeignKey(Usuario, related_name='aniversario')
+    usuario = models.ForeignKey(Usuario, related_name='aniversarios')
     missao = models.ForeignKey(Missao)
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
