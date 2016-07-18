@@ -33,18 +33,10 @@ notificacao_recebida.connect(pagseguro_notificacao_recebida)
 
 class Transacao(models.Model):
 
-    AGUARDANDO = 0
-    REALIZADO = 1
-
-    CHOICES = [
-        (AGUARDANDO, 'Aguardando'),
-        (REALIZADO, 'Realizado')
-    ]
-
     valor = models.IntegerField()
     aniversario = models.ForeignKey('nucleo.Aniversario', related_name='aniversario_transacao')
-    status = models.IntegerField(choices=CHOICES, default=1)
+    data_solicitacao = models.DateTimeField('Data de solicitação',auto_now_add=True)
+    data_realizacao = models.DateTimeField('Data de realização' ,null=True, blank=True)
 
-    @property
-    def status_verbose(self):
-        return dict(Transacao.CHOICES).get(self.status)
+    def __unicode__(self):
+        return 'Transação solitada em {}'.format(self.data_solicitacao)

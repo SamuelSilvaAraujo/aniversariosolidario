@@ -1,3 +1,30 @@
-from django.shortcuts import render
+# coding=utf-8
 
-# Create your views here.
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.db.models import Sum
+
+
+from financeiro.models import Transacao
+
+
+
+
+from financeiro.forms import TransacaoForm
+from nucleo.models import Aniversario
+
+@login_required
+def transacao(request, ano):
+    aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
+    transacao_form = TransacaoForm(aniversario, request.POST or None)
+    if transacao_form.is_valid():
+        form = transacao_form.save(commit=False)
+        form.aniversario = aniversario
+        form.save()
+        messages.success(request, 'Slocitação de transação enviada com sucesso!')
+        return redirect(reverse('usuarios:aniversarios_passados'))
+    return render(request, 'financeiro/transacao.html', {
+        'form':transacao_form
+    })
