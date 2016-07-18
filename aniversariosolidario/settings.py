@@ -160,4 +160,3 @@ FULL_URL = '{}://{}'.format(PROTOCOL, SITE_DOMAIN)
 MEDIA_TYPES = MEDIA_IMAGENS_TYPES + MEDIA_VIDEOS_TYPES
 
 TAXA_VERBOSE = u'{}%'.format('%.0f' % (TAXA * 100))
-TAXA_VERBOSE = u'{}%'.format('%.0f' % (TAXA * 100))
