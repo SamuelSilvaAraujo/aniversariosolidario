@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from . import views
 from nucleo import views as nucleo_views
+from financeiro import views as financeiro_views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -20,4 +21,9 @@ urlpatterns = [
     url(r'^entraroucadastro/$', views.login_ou_cadastro, name='login_ou_cadastro'),
     url(r'^editarapelo/$', nucleo_views.aniversario_apelo, name='aniversario_apelo'),
     url(r'^cadastraremailpagseguro/$', views.add_email_pagseguro, name='add_email_pagseguro'),
+    url(r'^aniversario/(?P<ano>[\d]+)/', include([
+        url(r'^transacao/$', financeiro_views.transacao, name='transacao'),
+    ], namespace='detalhes_aniversario')),
+    url(r'^aniversariospassados/$', nucleo_views.aniversarios_passados, name='aniversarios_passados'),
+
 ]

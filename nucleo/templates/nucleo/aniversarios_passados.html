@@ -8,13 +8,32 @@
             <div class="panel-body">
                 <h4>Aniversario de {{ aniversario.ano }} <small> <a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">{{ aniversario.missao.titulo }}</a></small></h4>
                 <P>Valor arrecadado nesse aniversario solidario foi de R${{ aniversario.meta_atingida }}, sua meta era de R${{ aniversario.missao.meta }}</P>
-                {% with transacao=aniversario.aniversario_transacao.all.0 %}
-                    {% if transacao %}
-                        <P>Status de transação: <span class=" label {% if transacao.status_verbose == 'Realizado' %} label-success {% else %} label-danger {% endif %}">{{ transacao.status_verbose }}</span></P>
-                    {% else %}
-                        <P>Status de transação: <span class="label label-default">Nenhuma transacao para esse aniversario</span></P>
-                    {% endif %}
-                {% endwith %}
+
+                {% if not aniversario.aniversario_transacao.all %}
+                    <p>Nenhuma solitação de transação!</p>
+                    <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}">Solicite aqui!</a>
+                {% else %}
+                        <table class="table">
+                            <thead class="thead-default">
+                            <tr>
+                                <th>Data de solicitação</th>
+                                <th>Data de realização</th>
+                                <th>Valor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for transacao in aniversario.aniversario_transacao.all %}
+                            <tr>
+                                <td>{{ transacao.data_solicitacao }}</td>
+                                <td>{% if not transacao.data_realizacao %}<p>Aguardando transação!</p> {% else %}{{ transacao.data_realizacao }}{% endif %}</td>
+                                <td>{{ transacao.valor }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}">Nova transação</a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
