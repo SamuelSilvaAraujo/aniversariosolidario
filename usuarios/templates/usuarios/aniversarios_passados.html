@@ -1,0 +1,39 @@
+{% extends 'usuarios/usuarios-base.html' %}
+
+
+{% block in-content %}
+    {% for aniversario in user.aniversarios_passados %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Aniversário Solidário de {{ aniversario.ano }}<br><small><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" target="_blank">{{ aniversario.missao.titulo }}</a></small></h4>
+                <p><strong>Valor arrecadado:</strong> R${{ aniversario.meta_atingida }}</p>
+                <h3>Retiradas</h3>
+                {% with transacoes=aniversario.aniversario_transacao.all %}
+                    {% if transacoes %}
+                        <table class="table">
+                            <thead class="thead-default">
+                            <tr>
+                                <th>Data de solicitação</th>
+                                <th>Data de realização</th>
+                                <th>Valor</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for transacao in transacoes %}
+                                <tr>
+                                    <td>{{ transacao.data_solicitacao }}</td>
+                                    <td>{% if not transacao.data_realizacao %}<p>Aguardando transação!</p> {% else %}{{ transacao.data_realizacao }}{% endif %}</td>
+                                    <td>{{ transacao.valor }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>Nenhuma solicitação de retirada!</p>
+                    {% endif %}
+                {% endwith %}
+                <p class="text-right">Você pode retirar R${{ aniversario.meta_de_direito_disponivel|floatformat:2 }} <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}" class="btn btn-primary">Solicitar Retirada</a></p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

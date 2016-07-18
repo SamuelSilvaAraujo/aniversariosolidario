@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^aniversario/(?P<ano>[\d]+)/', include([
         url(r'^retirada/$', financeiro_views.transacao, name='transacao'),
     ], namespace='detalhes_aniversario')),
-    url(r'^aniversarios/$', nucleo_views.aniversarios_passados, name='aniversarios_passados'),
+    url(r'^aniversarios/$', views.aniversarios_passados, name='aniversarios_passados'),
 
 ]

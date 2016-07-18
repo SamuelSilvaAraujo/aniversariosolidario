@@ -184,7 +184,3 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
         'aniversario': aniversario_instance,
         'aniversarios': aniversarios
     })
-
-@login_required
-def aniversarios_passados(request):
-    return render(request, 'nucleo/aniversarios_passados.html')

@@ -11,7 +11,7 @@ from nucleo.models import Aniversario
 @login_required
 def transacao(request, ano):
     aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
-    transacao_form = TransacaoForm(aniversario, request.POST or None)
+    transacao_form = TransacaoForm(aniversario, request.POST or None, initial={'valor': aniversario.meta_de_direito_disponivel})
     if transacao_form.is_valid():
         form = transacao_form.save(commit=False)
         form.aniversario = aniversario
