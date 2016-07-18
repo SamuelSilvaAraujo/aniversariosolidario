@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'bootstrap3',
     'ordered_model',
     'pagseguro',
@@ -58,6 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'nucleo.context_processors.taxa',
             ],
         },
     },
@@ -144,6 +146,10 @@ PAGSEGURO_TOKEN = '5560FA1076914B6F98DBD3BC7FEC222E'
 PAGSEGURO_SANDBOX = True
 PAGSEGURO_LOG_IN_MODEL = True
 
+# CONFIG
+
+TAXA = .12
+
 try:
     from local_settings import *
 except:
@@ -152,3 +158,6 @@ except:
 FULL_URL = '{}://{}'.format(PROTOCOL, SITE_DOMAIN)
 
 MEDIA_TYPES = MEDIA_IMAGENS_TYPES + MEDIA_VIDEOS_TYPES
+
+TAXA_VERBOSE = u'{}%'.format('%.0f' % (TAXA * 100))
+TAXA_VERBOSE = u'{}%'.format('%.0f' % (TAXA * 100))

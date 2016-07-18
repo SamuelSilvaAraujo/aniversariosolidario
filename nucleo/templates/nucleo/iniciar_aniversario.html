@@ -2,7 +2,7 @@
 
 {% block iniciar-aniversario %}{% endblock %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 humanize %}
 
 {% block content %}
     <div class="container">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-5">
                     <h3>Sobre a arrecadação</h3>
-                    <p>Você receberá o valor arrecadado mesmo que as doações não atinjam a meta indicada. Lembre-se que 17% do valor arrecadado será utilizado para custear as despesas do site.</p>
+                    <p>Você receberá o valor arrecadado mesmo que as doações não atinjam a meta indicada. Lembre-se que {{ TAXA_VERBOSE }} do valor arrecadado será utilizado para custear as despesas do site.</p>
                     <h4>Simulação:</h4>
                     <table class="table table-bordered table-striped">
                         <tbody>
@@ -28,7 +28,7 @@
                         </tr>
                         <tr>
                             <td>Taxa em porcentagem para custear despesas do site</td>
-                            <td>17%</td>
+                            <td>{{ TAXA_VERBOSE }}</td>
                         </tr>
                         <tr>
                             <td>Taxa em Real (R$) para custear despesas do site</td>
@@ -60,7 +60,7 @@
             function atualizarSimulacao(){
                 var
                         valor_meta = parseFloat($meta_input.val().replace(',', '.')),
-                        valor_taxa = valor_meta*.17,
+                        valor_taxa = valor_meta*{{ TAXA|stringformat:'f' }},
                         valor_final = valor_meta-valor_taxa;
 
                 $('.valor-meta').html(numeroParaMoeda(valor_meta));

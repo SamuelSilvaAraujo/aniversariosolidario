@@ -130,7 +130,7 @@ class Aniversario(models.Model):
             pagamento__status__in=['pago', 'disponivel']
         ).aggregate(
             Sum('pagamento__valor')
-        ).get('pagamento__valor__sum', 0) or 0)*.87
+        ).get('pagamento__valor__sum', 0) or 0)*(1-settings.TAXA)
 
     @property
     def meta_de_direito_disponivel(self):
@@ -138,7 +138,7 @@ class Aniversario(models.Model):
             pagamento__status__in=['disponivel']
         ).aggregate(
             Sum('pagamento__valor')
-        ).get('pagamento__valor__sum') or 0)*.87
+        ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA)
 
 class Doacao(models.Model):
     class Meta:
