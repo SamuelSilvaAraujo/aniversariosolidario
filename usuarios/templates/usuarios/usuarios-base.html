@@ -16,6 +16,9 @@
                                 <a class="list-group-item" href="{% url 'usuarios:index' %}">Gerenciar meu Anivesário</a>
                             {% endif %}
                         {% endif %}
+                        {% if user.aniversarios_passados %}
+                            <li><a href="{% url 'usuarios:aniversarios_passados' %}">Gerenciar Aniversários passados</a></li>
+                        {% endif %}
                         <a class="list-group-item" href="{% url 'usuarios:alterar_foto' %}">Alterar foto do meu perfil</a>
                         <a class="list-group-item" href="{% url 'usuarios:alterar_perfil' %}">Editar meu perfil</a>
                         {% if user.aniversarios_passados %}<a class="list-group-item" href="{% url 'usuarios:aniversarios_passados' %}">Aniversarios passados</a>{% endif %}

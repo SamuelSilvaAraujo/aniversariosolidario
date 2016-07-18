@@ -6,75 +6,20 @@
 
 {% block content %}
     <div class="container">
-        <h2>Inicie seu Aniversário Solidário</h2>
-        <p>Seu próximo aniversário é dia {{ user.proximo_aniversario|date:'d/m/Y' }}, você tem {{ user.dias_restantes_proximo_aniversario }} dias para mobilizar seus amigos e arrecadar a meta da sua missão.</p>
         <form method="post">
             {% csrf_token %}
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-8 col-md-offset-2">
+                    <h2>Inicie seu Aniversário Solidário</h2>
+                    <p>Seu próximo aniversário é dia {{ user.proximo_aniversario|date:'d/m/Y' }}, você tem {{ user.dias_restantes_proximo_aniversario }} dias para mobilizar seus amigos e arrecadar a meta da sua missão.</p>
                     <h3>Sobre a missão</h3>
                     <p>Preencha os dados da missão do seu Aniversário Solidário. Mas não se preocupe, você pode alterá-los ao longo da campanha.</p>
                     {% bootstrap_form missao_form %}
-                </div>
-                <div class="col-md-5">
-                    <h3>Sobre a arrecadação</h3>
-                    <p>Você receberá o valor arrecadado mesmo que as doações não atinjam a meta indicada. Lembre-se que {{ TAXA_VERBOSE }} do valor arrecadado será utilizado para custear as despesas do site.</p>
-                    <h4>Simulação:</h4>
-                    <table class="table table-bordered table-striped">
-                        <tbody>
-                        <tr>
-                            <td>Valor arrecadado</td>
-                            <td width="100">R$<span class="valor-meta"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Taxa em porcentagem para custear despesas do site</td>
-                            <td>{{ TAXA_VERBOSE }}</td>
-                        </tr>
-                        <tr>
-                            <td>Taxa em Real (R$) para custear despesas do site</td>
-                            <td>R$<span class="valor-taxa"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Você irá receber</td>
-                            <td>R$<span class="valor-final"></span></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    {% buttons %}
+                        <div class="text-right"><button type="submit" class="btn btn-lg btn-primary">Iniciar Aniversário Solidário <i class="fa fa-fw fa-check"></i></button></div>
+                    {% endbuttons %}
                 </div>
             </div>
-            {% buttons %}
-                <div class="text-right"><button type="submit" class="btn btn-lg btn-primary">Iniciar Aniversário Solidário <i class="fa fa-fw fa-check"></i></button></div>
-            {% endbuttons %}
         </form>
     </div>
-{% endblock %}
-
-{% block extra-js %}
-    <script type="text/javascript">
-        function numeroParaMoeda(n, c, d, t){
-            c = isNaN(c = Math.abs(c)) ? 2 : c, d = d == undefined ? "," : d, t = t == undefined ? "." : t, s = n < 0 ? "-" : "", i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", j = (j = i.length) > 3 ? j % 3 : 0;
-            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-        }
-        $(document).ready(function (){
-            var $meta_input = $('[name=meta]');
-            function atualizarSimulacao(){
-                var
-                        valor_meta = parseFloat($meta_input.val().replace(',', '.')),
-                        valor_taxa = valor_meta*{{ TAXA|stringformat:'f' }},
-                        valor_final = valor_meta-valor_taxa;
-
-                $('.valor-meta').html(numeroParaMoeda(valor_meta));
-                $('.valor-taxa').html(numeroParaMoeda(valor_taxa));
-                $('.valor-final').html(numeroParaMoeda(valor_final));
-            }
-            $meta_input
-                    .keypress(function (e){
-                        if((e.code || e.keyCode || e.which) == 46)
-                            return false;
-                    })
-                    .change(atualizarSimulacao)
-                    .keyup(atualizarSimulacao)
-                    .change();
-        });
-    </script>
 {% endblock %}

@@ -68,7 +68,7 @@
             <div class="col-md-9">
                 {% if aniversario.missao.medias.all.0 %}
                     <div class="thumbnail">
-                        <img src="{{ aniversario.missao.medias.all.0.arquivo.url }}" alt="{{ aniversario.missao.medias.all.0.descricao|default:'Mídia 1' }}" class="img-responsive">
+                        <img src="{{ aniversario.missao.medias.all.0.arquivo_folder_url }}" alt="{{ aniversario.missao.medias.all.0.descricao|default:'Mídia 1' }}" class="img-responsive">
                         {% if aniversario.missao.medias.all.0.descricao %}
                             <div class="caption">{{ aniversario.missao.medias.all.0.descricao }}</div>
                         {% endif %}

@@ -174,6 +174,9 @@ class Email(models.Model):
             'unsubscribe_url': unsubscribe_url
         })
         if template_html:
+            kwargs.update({
+                'unsubscribe_url': unsubscribe_url
+            })
             self.corpo_html = loader.render_to_string(template_html, kwargs)
         if save:
             self.save(update_fields=['corpo', 'corpo_html'])

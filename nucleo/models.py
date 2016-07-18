@@ -180,3 +180,48 @@ class Media(OrderedModel):
     @property
     def get_editar_form(self):
         return self._editar_form if self._editar_form else self.editar_form()
+
+    @property
+    def empty_fields(self):
+        r = []
+        if not self.data_de_nascimento:
+            r += ['data_de_nascimento']
+        return r
+
+    @property
+    def arquivo_folder_url(self):
+        return get_thumbnailer(self.arquivo).get_thumbnail({
+            'size': (960, 400),
+            'crop': True,
+            'upscale': True
+        }).url
+
+    DM_DICT = {
+        'lg': (480, 480),
+        'md': (240, 240),
+        'sm': (120, 120),
+        'xs': (60, 60)
+    }
+
+    def get_arquivo_url(self, dm):
+        return get_thumbnailer(self.arquivo).get_thumbnail({
+            'size': Usuario.DM_DICT.get(dm),
+            'upscale': True
+        }).url
+
+    @property
+    def arquivo_lg_url(self):
+        return self.get_arquivo_url('lg')
+
+    @property
+    def arquivo_md_url(self):
+        return self.get_arquivo_url('md')
+
+    @property
+    def arquivo_sm_url(self):
+        return self.get_arquivo_url('sm')
+
+    @property
+    def arquivo_xs_url(self):
+        return self.get_arquivo_url('xs')
+
