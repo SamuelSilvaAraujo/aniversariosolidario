@@ -3,9 +3,8 @@
 
 {% block in-content %}
 
-    {% if aniversarios %}
-
-        {% for aniversario in aniversarios %}
+    {% if user.aniversarios_passados %}
+        {% for aniversario in user.aniversarios_passados %}
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h4>Aniversario de {{ aniversario.ano }} <small> <a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">{{ aniversario.missao.titulo }}</a></small></h4>
