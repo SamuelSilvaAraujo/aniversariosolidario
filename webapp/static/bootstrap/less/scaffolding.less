@@ -31,7 +31,6 @@ body {
   color: @text-color;
   background-color: @body-bg;
   padding-top: (@navbar-height + 10px);
-  padding-bottom: 100px;
 }
 
 // Reset fonts for relevant elements
@@ -81,7 +80,7 @@ img {
 
 // Responsive images (ensure images don't scale beyond their parents)
 .img-responsive {
-  .img-responsive();
+  .img-responsive(inline-block);
 }
 
 // Rounded corners
@@ -162,6 +161,13 @@ hr {
   cursor: pointer;
 }
 
+.footer {
+  background: @navbar-default-bg;
+  color: #FFFFFF;
+  padding: 30px 0;
+  margin-top: 20vh;
+}
+
 .footer-floating {
   position: fixed;
   display: block;
@@ -204,5 +210,25 @@ hr {
     display: block;
     font-size: @font-size-base;
     color: #666;
+  }
+}
+
+.margin-top-bottom {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.apresentacao {
+  margin-top: -20px;
+  background-color: #FFFFFF;
+}
+
+.destaque {
+  padding: 10px;
+
+  &-primary {
+    background-color: @brand-primary;
+    color: #FFFFFF;
+    font-family: @font-family-serif;
   }
 }
