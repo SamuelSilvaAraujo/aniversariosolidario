@@ -87,7 +87,7 @@
                             {% for media in medias_restantes %}
                                 <div class="col-md-3 col-xs-6">
                                     <div class="thumbnail">
-                                        <img src="{{ media.arquivo.url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive">
+                                        <img src="{{ media.arquivo_md_url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive">
                                         <div class="caption">{{ media.descricao }}</div>
                                     </div>
                                 </div>

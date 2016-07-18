@@ -108,7 +108,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
             return static('imgs/avatar-{}.png'.format(dm))
         return get_thumbnailer(self.foto).get_thumbnail({
             'size': Usuario.DM_DICT.get(dm),
-            'crop': True
+            'crop': True,
+            'upscale': True
         }).url
 
     @property

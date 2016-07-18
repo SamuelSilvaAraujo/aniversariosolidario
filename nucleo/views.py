@@ -87,7 +87,7 @@ def gerenciar_medias(request, missao):
                     media.editar_form(request.POST or None)
                     if media.get_editar_form.is_valid():
                         media.get_editar_form.save()
-                        messages.success(request, 'Arquivo editado com sucesso!')
+                        messages.success(request, 'Descrição da mídia editada com sucesso!')
 
     return render(request, 'nucleo/gerenciar_medias.html', {
         'form': media_form,
