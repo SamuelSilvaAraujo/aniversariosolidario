@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
-from pagseguro.signals import notificacao_recebida
+from pagseguro.signals import notificacao_recebida, update_transaction
+
 
 class Pagamento(models.Model):
     valor = models.IntegerField()
@@ -18,6 +19,15 @@ class Pagamento(models.Model):
     def status_valido(self):
         return self.status in ['pago', 'disponivel']
 
+class Transacao(models.Model):
+
+    valor = models.IntegerField()
+    aniversario = models.ForeignKey('nucleo.Aniversario', related_name='aniversario_transacao')
+    data_solicitacao = models.DateTimeField('Data de solicitação',auto_now_add=True)
+    data_realizacao = models.DateTimeField('Data de realização' ,null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Transação solitada em {}'.format(self.data_solicitacao)
 
 def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     from nucleo.models import Doacao
@@ -29,14 +39,3 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     doacao.pagamento.save(update_fields=['status'])
 
 notificacao_recebida.connect(pagseguro_notificacao_recebida)
-
-
-class Transacao(models.Model):
-
-    valor = models.IntegerField()
-    aniversario = models.ForeignKey('nucleo.Aniversario', related_name='aniversario_transacao')
-    data_solicitacao = models.DateTimeField('Data de solicitação',auto_now_add=True)
-    data_realizacao = models.DateTimeField('Data de realização' ,null=True, blank=True)
-
-    def __unicode__(self):
-        return 'Transação solitada em {}'.format(self.data_solicitacao)

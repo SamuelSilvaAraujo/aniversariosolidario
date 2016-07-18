@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^styleguide/$', webapp_views.styleguide, name='styleguide'),
     url(r'^raise/$', webapp_views.raisee, name='raisee'),
     url(r'^cancelarenviodeemails/(?P<chave>[A-Z]+)/$', emails_views.cancelar_envio_de_emails, name='cancelar_envio_de_emails'),
+    url(r'^retorno/doacao/', webapp_views.retorno_doacao, name='retorno_doacao'),
 
     url(r'^usuario/', include(usuarios_urls, namespace='usuarios')),
     url(r'^', include(nucleo_urls, namespace='nucleo')),
@@ -23,7 +24,7 @@ urlpatterns = [
     url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/', include([
         url(r'^$', nucleo_views.aniversario, name='index'),
         url(r'^doar/$', nucleo_views.aniversario_doar, name='doar'),
-        url(r'^doacaorealizada/$', nucleo_views.aniversario_doacao_realizada, name='aniversario_doacao_realizada'),
+        url(r'^doacaorealizada/$', nucleo_views.aniversario_doacao_realizada, name='doacao_realizada'),
     ], namespace='aniversario')),
 ]
 

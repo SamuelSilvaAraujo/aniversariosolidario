@@ -4,6 +4,7 @@
 
 {% block content %}
     <div class="container">
+        <p><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" class="btn btn-info"><i class="fa fa-fw fa-arrow-left"></i> Voltar para página do Aniversário Solidário</a></p>
         <h1 class="text-center"><i class="fa fa-fw fa-5x fa-smile-o"></i></h1>
         <h2 class="text-center">Obrigado pela sua doação!</h2>
         <hr>
@@ -22,13 +23,16 @@
                 </p>
             </div>
         </div>
-        <hr>
-        <h4>Outros Aniversários Solidários que você pode colaborar</h4>
-        <div class="row">
-            {% for aniversario in aniversarios %}
-                <div class="col-md-4">{% aniversario_panel aniversario %}</div>
-            {% endfor %}
-        </div>
+
+        {% if aniversarios %}
+            <hr>
+            <h4>Outros Aniversários Solidários que você pode colaborar</h4>
+            <div class="row">
+                {% for aniversario in aniversarios %}
+                    <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
     </div>
 {% endblock %}
