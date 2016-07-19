@@ -1,7 +1,14 @@
 from django.utils import timezone
+from usuarios.models import Usuario
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.utils import user_email, user_username, user_field
 from allauth.utils import valid_email_or_none
+from allauth.account.adapter import DefaultAccountAdapter
+from allauth.exceptions import ImmediateHttpResponse
+
+
+from django.core.urlresolvers import reverse
+
 
 class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
     def populate_user(self, request, sociallogin, data):
@@ -18,3 +25,18 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
         if not user.data_ativacao_email:
             user.data_ativacao_email = timezone.now()
         return user
+
+    def pre_social_login(self, request, sociallogin):
+        if sociallogin.is_existing:
+            return
+        try:
+            user = Usuario.objects.get(email=sociallogin.user.email)
+            sociallogin.connect(request, user)
+            raise ImmediateHttpResponse(reverse('usuarios:index'))
+        except Usuario.DoesNotExist:
+            pass
+
+
+class UsuarioAccountAdapter(DefaultAccountAdapter):
+    def get_login_redirect_url(self, request):
+        return reverse('usuarios:index')
