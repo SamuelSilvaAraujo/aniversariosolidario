@@ -1,13 +1,17 @@
 Django==1.9.7
+django-allauth==0.25.2
 django-bootstrap3==7.0.1
 django-ordered-model==1.1.0
 django-pagseguro2==1.1.0
 easy-thumbnails==2.3
 httpretty==0.8.6
 mailer==0.8.1
+oauthlib==1.1.2
 Pillow==3.3.0
 python-dateutil==2.5.3
 python-magic==0.4.12
+python-openid==2.2.5
 requests==2.10.0
+requests-oauthlib==0.6.2
 six==1.10.0
 xmltodict==0.10.2
