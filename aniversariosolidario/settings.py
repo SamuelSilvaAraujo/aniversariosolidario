@@ -17,6 +17,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,6 +28,10 @@ INSTALLED_APPS = [
     'bootstrap3',
     'ordered_model',
     'pagseguro',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
     'usuarios',
     'nucleo',
     'financeiro',
@@ -82,8 +87,20 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
-LOGIN_URL='/usuario/entrar/'
-LOGIN_REDIRECT_URL='/'
+LOGIN_URL = '/usuario/entrar/'
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+SOCIALACCOUNT_ADAPTER = 'usuarios.adapter.UsuarioSocialAccountAdapter'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
