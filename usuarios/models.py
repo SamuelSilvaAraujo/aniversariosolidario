@@ -18,6 +18,9 @@ from django.utils.text import slugify
 from easy_thumbnails.files import get_thumbnailer
 from emails.models import Email, ContaDeEmail
 
+class PoucosDiasException(Exception):
+    pass
+
 
 class UsuarioManager(BaseUserManager):
     def _create_user(self, password, is_superuser, **kwargs):
@@ -100,7 +103,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         'lg': (480, 480),
         'md': (240, 240),
         'sm': (120, 120),
-        'xs': (60, 60)
+        'xs': (60, 60),
+        'micro': (40, 40),
     }
 
     def get_foto_url(self, dm):
@@ -129,6 +133,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return self.get_foto_url('xs')
 
     @property
+    def foto_micro_url(self):
+        return self.get_foto_url('micro')
+
+    @property
     def empty_fields(self):
         r = []
         if not self.data_de_nascimento:
@@ -145,13 +153,23 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return proximo
 
     @property
+    def proximo_aniversario_solidario(self):
+        proximo_aniversario = self.proximo_aniversario
+        if proximo_aniversario - datetime.timedelta(days=settings.DIAS_NESCESSARIOS) < datetime.date.today():
+            raise PoucosDiasException()
+        if self.aniversarios.filter(ano=proximo_aniversario.year):
+            return proximo_aniversario.replace(year=proximo_aniversario.year+1)
+        return proximo_aniversario
+
+    @property
     def aniversario_solidario(self):
         if not self.proximo_aniversario:
             return None
-        from nucleo.models import Aniversario
-        return Aniversario.objects.filter(
-            usuario=self,
-            ano__in=[self.proximo_aniversario.year, self.proximo_aniversario.year-1],
+        return self.aniversarios.filter(
+            ano__in=[
+                self.proximo_aniversario.year,
+                self.proximo_aniversario.year-1
+            ],
             finalizado__isnull=True
         ).first()
 
@@ -164,7 +182,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return self.calcular_dias_restantes_proximo_aniversario()
 
     def calcular_dias_restantes_proximo_aniversario(self, ano=datetime.date.today().year):
-        return (self.proximo_aniversario - datetime.date.today().replace(year=ano)).days
+        return (self.proximo_aniversario - datetime.date.today()).days
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):

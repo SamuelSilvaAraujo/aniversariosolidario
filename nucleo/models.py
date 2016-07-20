@@ -1,8 +1,7 @@
 # coding=utf-8
-from __future__ import print_function
 from __future__ import unicode_literals
 
-import urllib
+import datetime
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -84,7 +83,7 @@ class Aniversario(models.Model):
         }))
 
     def dias_restantes(self):
-        if self.usuario.proximo_aniversario.year > self.ano:
+        if self.usuario.proximo_aniversario < datetime.date.today():
             return 0
         return self.usuario.calcular_dias_restantes_proximo_aniversario(self.ano)
 
@@ -114,9 +113,7 @@ class Aniversario(models.Model):
 
     @property
     def meta_atingida(self):
-        return self.doacoes.filter(
-            pagamento__status__in=['pago', 'disponivel']
-        ).aggregate(
+        return self.doacoes.pagas().aggregate(
             Sum('pagamento__valor')
         ).get('pagamento__valor__sum') or 0
 
@@ -126,9 +123,7 @@ class Aniversario(models.Model):
 
     @property
     def meta_de_direito(self):
-        return (self.doacoes.filter(
-            pagamento__status__in=['pago', 'disponivel']
-        ).aggregate(
+        return (self.doacoes.pagas().aggregate(
             Sum('pagamento__valor')
         ).get('pagamento__valor__sum', 0) or 0)*(1-settings.TAXA)
 
@@ -140,6 +135,13 @@ class Aniversario(models.Model):
             Sum('pagamento__valor')
         ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA)
 
+
+class DoacaoManager(models.Manager):
+    def pagas(self):
+        return super(DoacaoManager, self).get_queryset().filter(
+            pagamento__status__in=['pago', 'disponivel']
+        )
+
 class Doacao(models.Model):
     class Meta:
         ordering = ['-data']
@@ -148,6 +150,8 @@ class Doacao(models.Model):
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
     pagamento = models.ForeignKey(Pagamento)
     data = models.DateTimeField(auto_now_add=True)
+
+    objects = DoacaoManager()
 
     def __unicode__(self):
         return 'Doação para o Aniversário Solidário de {}: {}'.format(self.usuario.nome, self.aniversario.missao.titulo)
