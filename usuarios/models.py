@@ -100,7 +100,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         'lg': (480, 480),
         'md': (240, 240),
         'sm': (120, 120),
-        'xs': (60, 60)
+        'xs': (60, 60),
+        'micro': (40, 40),
     }
 
     def get_foto_url(self, dm):
@@ -127,6 +128,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     @property
     def foto_xs_url(self):
         return self.get_foto_url('xs')
+
+    @property
+    def foto_micro_url(self):
+        return self.get_foto_url('micro')
 
     @property
     def empty_fields(self):

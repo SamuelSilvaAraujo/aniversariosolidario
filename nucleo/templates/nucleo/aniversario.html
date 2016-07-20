@@ -63,8 +63,14 @@
                         <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% for doacao in aniversario.doacoes.pagas %}
+                            <img src="{{ doacao.usuario.foto_micro_url }}" alt="Doador {{ doacao.usuario.nome }}"/>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-
             <div class="col-md-9">
                 {% if aniversario.missao.medias.all.0 %}
                     <div class="thumbnail">
