@@ -18,9 +18,11 @@ urlpatterns = [
     url(r'^retorno/doacao/', webapp_views.retorno_doacao, name='retorno_doacao'),
 
     url(r'^usuario/', include(usuarios_urls, namespace='usuarios')),
-    url(r'^', include(nucleo_urls, namespace='nucleo')),
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^retorno/pagseguro/', include(pagseguro_urls)),
+    url(r'^', include(nucleo_urls, namespace='nucleo')),
+
     url(r'^(?P<slug_usuario>[\w-]+)/(?P<slug_missao>[\w-]+)/', include([
         url(r'^$', nucleo_views.aniversario, name='index'),
         url(r'^doar/$', nucleo_views.aniversario_doar, name='doar'),
