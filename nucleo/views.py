@@ -107,9 +107,11 @@ def gerenciar_medias_action(request, missao, media_id, action):
         media.delete()
     return redirect(reverse('nucleo:missao:medias', kwargs={'slug': missao.slug}))
 
-@aniversario_finalizado
 def aniversario_doar(request, slug_usuario, slug_missao):
     aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
+    if aniversario_instance.finalizado:
+        messages.error(request, 'Aniversário Solidário já foi finalizado. Por isso você não editar mais nenhuma informação!')
+        return redirect(reverse('aniversario:index', kwargs={'slug_usuario': slug_usuario, 'slug_missao':slug_missao}))
     valor = request.GET.get('valor')
     if valor:
         if not request.user.is_authenticated():
