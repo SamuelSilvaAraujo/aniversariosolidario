@@ -40,3 +40,6 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
 class UsuarioAccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
         return reverse('usuarios:index')
+
+    def add_message(self, *args, **kwargs):
+        pass
