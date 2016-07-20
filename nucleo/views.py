@@ -1,12 +1,12 @@
 # coding=utf-8
 import urllib
-import datetime
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.conf import settings
 from financeiro.models import Pagamento
 from pagseguro.api import PagSeguroItem, PagSeguroApi
 from pagseguro.models import Checkout
@@ -15,6 +15,7 @@ from .models import Aniversario, Doacao
 from .forms import MissaoForm,MediaForm, AniversarioApeloForm
 from .models import Missao, Media
 from .decorators import missao_acesso, aniversario_finalizado
+from usuarios.models import PoucosDiasException
 
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
@@ -25,6 +26,13 @@ def iniciar_aniversario(request):
         messages.error(request, 'Você já tem um Aniversário Solidário!')
         return redirect(reverse('usuarios:index'))
 
+    try:
+        if request.user.proximo_aniversario_solidario:
+            pass
+    except PoucosDiasException:
+        messages.error(request, 'Seu aniversário está muito próximo, você precisa de pelos menos {} dias para mobilizar seus amigos.'.format(settings.DIAS_NESCESSARIOS))
+        return redirect(reverse('usuarios:index'))
+
     missao_form = MissaoForm(request.POST or None)
     if missao_form.is_valid():
         missao = missao_form.save(commit=False)
@@ -33,7 +41,7 @@ def iniciar_aniversario(request):
         Aniversario.objects.create(
             usuario=request.user,
             missao=missao,
-            ano=request.user.proximo_aniversario.year
+            ano=request.user.proximo_aniversario_solidario.year
         )
         return redirect(reverse('usuarios:index'))
     return render(request, 'nucleo/iniciar_aniversario.html', {

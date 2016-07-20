@@ -169,6 +169,7 @@ PAGSEGURO_LOG_IN_MODEL = True
 # CONFIG
 
 TAXA = .12
+DIAS_NESCESSARIOS = 3
 
 try:
     from local_settings import *
