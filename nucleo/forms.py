@@ -44,7 +44,7 @@ class AniversarioApeloForm(forms.ModelForm):
         model = Aniversario
         fields = ['apelo']
 
-class FeedblackForm(forms.ModelForm):
+class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
         fields = ['mensagem', 'opniao']
