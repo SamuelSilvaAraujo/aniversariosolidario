@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.utils import timezone
 from usuarios.models import Usuario
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
@@ -27,14 +28,14 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
         return user
 
     def pre_social_login(self, request, sociallogin):
-        if sociallogin.is_existing:
-            return
-        try:
-            user = Usuario.objects.get(email=sociallogin.user.email)
-            sociallogin.connect(request, user)
-            raise ImmediateHttpResponse(reverse('usuarios:index'))
-        except Usuario.DoesNotExist:
-            pass
+        super(UsuarioSocialAccountAdapter, self).pre_social_login(request, sociallogin)
+        if not sociallogin.is_existing:
+            try:
+                user = Usuario.objects.get(email=sociallogin.user.email)
+                sociallogin.connect(request, user)
+                raise ImmediateHttpResponse(redirect(reverse('usuarios:index')))
+            except Usuario.DoesNotExist:
+                pass
 
 
 class UsuarioAccountAdapter(DefaultAccountAdapter):

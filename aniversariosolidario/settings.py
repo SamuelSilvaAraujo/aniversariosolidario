@@ -171,6 +171,8 @@ PAGSEGURO_LOG_IN_MODEL = True
 TAXA = .12
 DIAS_NESCESSARIOS = 3
 
+SITE_ID = 1
+
 try:
     from local_settings import *
 except:
