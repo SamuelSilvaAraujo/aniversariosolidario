@@ -196,12 +196,16 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
     })
 
 @login_required
-def feedblack(request):
+def feedblack(request, ano):
+    aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
     feedblack_form = FeedblackForm(request.POST or None)
     if feedblack_form.is_valid():
-        feedblack_form.save()
+        feedblack = feedblack_form.save()
+        aniversario.feedblack = feedblack
+        aniversario.feeback_liberado = False
+        aniversario.save(update_fields=['feedblack', 'feeback_liberado'])
         messages.success(request, 'Obrigado por contribuir com nosso site!')
-        return redirect(reverse('usuarios:index'))
+        return redirect(reverse('usuarios:aniversarios_passados'))
     return render(request, 'nucleo/feedblack.html', {
         'form': feedblack_form
     })

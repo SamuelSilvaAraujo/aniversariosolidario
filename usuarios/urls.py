@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^cadastraremailpagseguro/$', views.add_email_pagseguro, name='add_email_pagseguro'),
     url(r'^aniversario/(?P<ano>[\d]+)/', include([
         url(r'^retirada/$', financeiro_views.transacao, name='transacao'),
+        url(r'^feedblack/$', nucleo_views.feedblack, name='feedblack'),
     ], namespace='detalhes_aniversario')),
     url(r'^aniversarios/$', views.aniversarios_passados, name='aniversarios_passados'),
 

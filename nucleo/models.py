@@ -73,7 +73,7 @@ class Aniversario(models.Model):
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
     finalizado = models.DateTimeField(null=True, blank=True)
-    feeback_liberado = models.BooleanField()
+    feeback_liberado = models.BooleanField(default=False)
     feedblack = models.ForeignKey(Feedback, null=True, blank=True)
 
     def __unicode__(self):
