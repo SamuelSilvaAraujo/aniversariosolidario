@@ -6,10 +6,6 @@ from allauth.account.utils import user_email, user_username, user_field
 from allauth.utils import valid_email_or_none
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.exceptions import ImmediateHttpResponse
-
-from allauth.account.adapter import get_adapter as get_account_adapter
-
-
 from django.core.urlresolvers import reverse
 
 

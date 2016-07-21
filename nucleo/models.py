@@ -7,11 +7,13 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from easy_thumbnails.files import get_thumbnailer
+from emails.models import ContaDeEmail, Email
 from ordered_model.models import OrderedModel
 
 from financeiro.models import Pagamento
@@ -142,6 +144,26 @@ class Aniversario(models.Model):
         ).aggregate(
             Sum('pagamento__valor')
         ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA)
+
+    def enviar_email_iniciado(self):
+        email = Email.objects.create(
+            de=ContaDeEmail.get_naoresponda(),
+            para_email=self.usuario.email,
+            assunto='Aniversário Solidário de {} iniciado'.format(self.ano)
+        )
+        email.carregar_corpo(
+            'nucleo/emails/aniversario_iniciado.txt',
+            'nucleo/emails/aniversario_iniciado.html',
+            ano=self.ano,
+            aniversario_full_url=self.full_url
+        )
+        email.enviar_as = timezone.now()
+        email.save(update_fields=['enviar_as'])
+
+@receiver(post_save, sender=Aniversario)
+def post_save_Aniversario(instance, created, **kwargs):
+    if created:
+        instance.enviar_email_iniciado()
 
 class DoacaoManager(models.Manager):
     def pagas(self):

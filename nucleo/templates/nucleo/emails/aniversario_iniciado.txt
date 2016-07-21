@@ -1,0 +1,13 @@
+Parabéns, você iniciou o seu Aniversário Solidário de {{ ano }}.
+Abrir mão do seu presente de aniversário para ajudar o próximo é uma causa nobre.
+
+Mas vamos lá,
+mão na massa:
+Seu próximo objetivo e mobilizar seus amigos através das redes sociais.
+
+Abaixo o link que você deve compartilhar:
+{{ aniversario_full_url }}
+
+Não deixe de utilizar as ferramentas da nossa plataforma e conferir as dicas do nosso blog.
+site: http://www.aniversariosolidario.com
+blog: http://blog.aniversariosolidario.com
