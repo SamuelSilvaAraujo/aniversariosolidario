@@ -9,4 +9,6 @@ urlpatterns = [
         url(r'^medias/$', views.gerenciar_medias, name='medias'),
         url(r'^media/(?P<media_id>[\d-]+)/(?P<action>[\w]+)/$', views.gerenciar_medias_action, name='medias_action')
     ], namespace='missao')),
+
+    url(r'^feedblack/$', views.feedblack, name='feedblack')
 ]

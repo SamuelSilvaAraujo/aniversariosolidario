@@ -1,6 +1,6 @@
 # coding=utf-8
 from django import forms
-from .models import Missao,Media, Aniversario
+from .models import Missao,Media, Aniversario, Feedback
 
 from aniversariosolidario import settings
 
@@ -43,3 +43,8 @@ class AniversarioApeloForm(forms.ModelForm):
     class Meta:
         model = Aniversario
         fields = ['apelo']
+
+class FeedblackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['mensagem', 'opniao']
