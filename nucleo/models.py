@@ -52,11 +52,17 @@ class Missao(models.Model):
             'crop': True
         }).url
 
-
 @receiver(pre_save, sender=Missao)
 def pre_save_Missao(instance, **kwargs):
     if not instance.slug:
         instance.gerar_slug()
+
+class Feedback(models.Model):
+    mensagem = models.TextField('Mensagem aos doadores')
+    opniao = models.TextField('Opnião sobre serviço')
+
+    def __unicode__(self):
+        return self.mensagem
 
 class Aniversario(models.Model):
     class Meta:
@@ -67,6 +73,8 @@ class Aniversario(models.Model):
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
     finalizado = models.DateTimeField(null=True, blank=True)
+    feeback_liberado = models.BooleanField(default=False)
+    feedblack = models.ForeignKey(Feedback, null=True, blank=True)
 
     def __unicode__(self):
         return 'Aniversário de {} - {}'.format(self.usuario.nome, self.missao.titulo)
@@ -134,7 +142,6 @@ class Aniversario(models.Model):
         ).aggregate(
             Sum('pagamento__valor')
         ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA)
-
 
 class DoacaoManager(models.Manager):
     def pagas(self):
@@ -228,4 +235,3 @@ class Media(OrderedModel):
     @property
     def arquivo_xs_url(self):
         return self.get_arquivo_url('xs')
-

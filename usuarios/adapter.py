@@ -7,11 +7,14 @@ from allauth.utils import valid_email_or_none
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.exceptions import ImmediateHttpResponse
 
+from allauth.account.adapter import get_adapter as get_account_adapter
+
 
 from django.core.urlresolvers import reverse
 
 
 class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
+
     def populate_user(self, request, sociallogin, data):
         username = data.get('username')
         first_name = data.get('first_name')
@@ -27,6 +30,7 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
             user.data_ativacao_email = timezone.now()
         return user
 
+
     def pre_social_login(self, request, sociallogin):
         super(UsuarioSocialAccountAdapter, self).pre_social_login(request, sociallogin)
         if not sociallogin.is_existing:
@@ -40,7 +44,7 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
 
 class UsuarioAccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        return reverse('usuarios:index')
+        return reverse('usuarios:social_login_get_avatar')
 
     def add_message(self, *args, **kwargs):
         pass

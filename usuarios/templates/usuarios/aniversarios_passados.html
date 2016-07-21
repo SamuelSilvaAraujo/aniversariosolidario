@@ -33,6 +33,9 @@
                     {% endif %}
                 {% endwith %}
                 <p class="text-right">Você pode retirar R${{ aniversario.meta_de_direito_disponivel|floatformat:2 }} <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}" class="btn btn-primary">Solicitar Retirada</a></p>
+                {% if aniversario.feeback_liberado %}
+                    <a href="{% url 'usuarios:detalhes_aniversario:feedblack' ano=aniversario.ano %}" class="btn btn-primary">Feedblack</a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

@@ -12,7 +12,7 @@ from pagseguro.api import PagSeguroItem, PagSeguroApi
 from pagseguro.models import Checkout
 
 from .models import Aniversario, Doacao
-from .forms import MissaoForm,MediaForm, AniversarioApeloForm
+from .forms import MissaoForm,MediaForm, AniversarioApeloForm, FeedblackForm
 from .models import Missao, Media
 from .decorators import missao_acesso, aniversario_finalizado
 from usuarios.models import PoucosDiasException
@@ -193,4 +193,19 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
     return render(request, 'nucleo/aniversario_doacao_realizada.html', {
         'aniversario': aniversario_instance,
         'aniversarios': aniversarios
+    })
+
+@login_required
+def feedblack(request, ano):
+    aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
+    feedblack_form = FeedblackForm(request.POST or None)
+    if feedblack_form.is_valid():
+        feedblack = feedblack_form.save()
+        aniversario.feedblack = feedblack
+        aniversario.feeback_liberado = False
+        aniversario.save(update_fields=['feedblack', 'feeback_liberado'])
+        messages.success(request, 'Obrigado por contribuir com nosso site!')
+        return redirect(reverse('usuarios:aniversarios_passados'))
+    return render(request, 'nucleo/feedblack.html', {
+        'form': feedblack_form
     })

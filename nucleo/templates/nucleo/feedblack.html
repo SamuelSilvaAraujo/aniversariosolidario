@@ -1,0 +1,20 @@
+{% extends 'usuarios/usuarios-base.html' %}
+
+{% load bootstrap3 %}
+
+{% block in-content %}
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+        <h2>Deixe aqui seu FeedBlack!</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">Enviar feedblack</button>
+                {% endbuttons %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
