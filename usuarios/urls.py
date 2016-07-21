@@ -26,4 +26,6 @@ urlpatterns = [
     ], namespace='detalhes_aniversario')),
     url(r'^aniversarios/$', views.aniversarios_passados, name='aniversarios_passados'),
 
+    url(r'^socialgetavatar/$', views.social_login_get_avatar, name='social_login_get_avatar')
+
 ]

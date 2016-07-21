@@ -1,5 +1,6 @@
 # coding=utf-8
 import datetime
+import urllib
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -20,6 +21,17 @@ from nucleo.models import Aniversario
 @login_required
 def index(request):
     return render(request, 'usuarios/index.html')
+
+@login_required
+def social_login_get_avatar(request):
+    user = request.user
+    if not user.foto:
+        avatar_url = user.socialaccount_set.all()[0].get_avatar_url()
+        avatar_name = 'avatar-{}'.format(user.slug)
+        urllib.urlretrieve(avatar_url, 'media/{}.jpg'.format(avatar_name))
+        user.foto = './{}.jpg'.format(avatar_name)
+        user.save(update_fields=['foto'])
+    return redirect(reverse('usuarios:index'))
 
 def cadastro(request):
     form = CadastroFrom(request.POST or None, initial={'email': request.GET.get('email', '')})
