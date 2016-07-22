@@ -139,7 +139,7 @@ class Email(models.Model):
     assunto = models.CharField('assunto', max_length=255)
     corpo = models.TextField('corpo')
     corpo_html = models.TextField('corpo HTML', blank=True)
-    enviar_as = models.DateTimeField('enviar às', null=True)
+    enviar_as = models.DateTimeField('enviar às', null=True, blank=True)
     processado = models.DateTimeField('processado às..', null=True)
     enviado = models.DateTimeField('enviado às..', null=True)
 
@@ -166,6 +166,7 @@ class Email(models.Model):
             self.save(update_fields=['processado'])
             if not self.para.cancelado_as:
                 self.de.enviar(self)
+        return True
 
     def carregar_corpo(self, template_txt, template_html=None, save=True, **kwargs):
         unsubscribe_url = '{}{}'.format(settings.FULL_URL, reverse('cancelar_envio_de_emails', kwargs={'chave': self.para.chave}))
