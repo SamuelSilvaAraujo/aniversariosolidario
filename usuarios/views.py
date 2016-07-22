@@ -194,3 +194,7 @@ def add_email_pagseguro(request):
 @login_required
 def aniversarios_passados(request):
     return render(request, 'usuarios/aniversarios_passados.html')
+
+@login_required
+def doacoes(request):
+    return render(request, 'usuarios/doacoes.html')
