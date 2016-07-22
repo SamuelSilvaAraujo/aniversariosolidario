@@ -15,7 +15,10 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
         username = data.get('username')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
-        email = data.get('email')
+        if sociallogin.account.provider == 'twitter':
+            email = '{}@twitter.com'.format(username)
+        else:
+            email = data.get('email')
         name = data.get('name')
         user = sociallogin.user
         user_username(user, username or '')

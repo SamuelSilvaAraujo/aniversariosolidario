@@ -18,6 +18,7 @@ from ordered_model.models import OrderedModel
 
 from financeiro.models import Pagamento
 from usuarios.models import Usuario
+from pagseguro.settings import PAYMENT_URL
 
 class Missao(models.Model):
     usuario = models.ForeignKey(Usuario)
@@ -171,6 +172,16 @@ class DoacaoManager(models.Manager):
             pagamento__status__in=['pago', 'disponivel']
         )
 
+    def aguardando_pagamento(self):
+        return super(DoacaoManager, self).get_queryset().filter(
+            pagamento__status='aguardando'
+        )
+
+    def em_andamento(self):
+        return super(DoacaoManager, self).get_queryset().exclude(
+            pagamento__status='aguardando'
+        )
+
 class Doacao(models.Model):
     class Meta:
         ordering = ['-data']
@@ -184,6 +195,12 @@ class Doacao(models.Model):
 
     def __unicode__(self):
         return 'Doação para o Aniversário Solidário de {}: {}'.format(self.usuario.nome, self.aniversario.missao.titulo)
+
+    @property
+    def checkout_url(self):
+        if not self.pagamento.checkout:
+            return None
+        return '{}?code={}'.format(PAYMENT_URL, self.pagamento.checkout.code)
 
 class MediaManager(models.Manager):
     def exceto_primeiro(self):
