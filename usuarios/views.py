@@ -1,6 +1,9 @@
 # coding=utf-8
 import datetime
 import urllib
+from tempfile import mkstemp
+
+from os import unlink
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -9,6 +12,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.core.files import File
 from .models import ConfirmacaoDeEmail, Usuario
 
 from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm, \
@@ -25,12 +29,22 @@ def index(request):
 @login_required
 def social_login_get_avatar(request):
     user = request.user
-    if not user.foto:
-        avatar_url = user.socialaccount_set.all()[0].get_avatar_url()
-        avatar_name = 'avatar-{}'.format(user.slug)
-        urllib.urlretrieve(avatar_url, 'media/{}.jpg'.format(avatar_name))
-        user.foto = './{}.jpg'.format(avatar_name)
-        user.save(update_fields=['foto'])
+    index = int(request.GET.get('i', '0'))
+    socials = user.socialaccount_set.all()
+    if socials:
+        try:
+            avatar_url = socials[index].get_avatar_url()
+            ex = avatar_url.split('.')[-1]
+            filename = 'avatar-{}.{}'.format(user.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
+            i, temp_path = mkstemp(filename)
+            urllib.urlretrieve(avatar_url, temp_path)
+            file = open(temp_path)
+            django_file = File(file)
+            user.foto.save(filename, django_file)
+            file.close()
+            unlink(temp_path)
+        except IndexError:
+            pass
     return redirect(reverse('usuarios:index'))
 
 def cadastro(request):

@@ -58,7 +58,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     e_equipe = models.BooleanField('é da equipe?', default=False)
     data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
-    email_pagseguro = models.EmailField('e-mail PagSeguro', blank=True, null= True)
+    email_pagseguro = models.EmailField('E-mail do PagSeguro', blank=True, null= True)
 
     objects = UsuarioManager()
 

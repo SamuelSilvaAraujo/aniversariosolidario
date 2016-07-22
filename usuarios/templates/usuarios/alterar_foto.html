@@ -5,6 +5,9 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <h2>Alterar foto do perfil</h2>
+            {% for s in user.socialaccount_set.all %}
+                <p><a class="btn btn-info" href="{% url 'usuarios:social_login_get_avatar' %}?i={{ forloop.counter0 }}">Carregar foto do {{ s.provider|title }}</a></p>
+            {% endfor %}
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}

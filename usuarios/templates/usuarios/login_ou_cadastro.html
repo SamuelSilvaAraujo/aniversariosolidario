@@ -1,6 +1,6 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 socialaccount_tags %}
 
 {% block content %}
     <div class="container">
@@ -14,6 +14,8 @@
                         <div class="text-right"><button type="submit" class="btn btn-primary">Próximo <i class="fa fa-fw fa-arrow-right"></i></button></div>
                     {% endbuttons %}
                 </form>
+                <h2>Não perca tempo...</h2>
+                <p><a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-lg btn-social btn-facebook"><span class="fa fa-facebook"></span> Entre com Facebook</a></p>
             </div>
         </div>
     </div>

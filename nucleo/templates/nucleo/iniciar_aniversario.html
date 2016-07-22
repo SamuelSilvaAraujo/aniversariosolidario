@@ -15,6 +15,7 @@
                     <h3>Sobre a missão</h3>
                     <p>Preencha os dados da missão do seu Aniversário Solidário. Mas não se preocupe, você pode alterá-los ao longo da campanha.</p>
                     {% bootstrap_form missao_form %}
+                    <p class="text-center"><small>Ao iniciar um Aniversário Solidário você aceita automaticamente os <a href="{% url 'termos_uso' %}" target="_blank">termos de uso</a>.</small></p>
                     {% buttons %}
                         <div class="text-right"><button type="submit" class="btn btn-lg btn-primary">Iniciar Aniversário Solidário <i class="fa fa-fw fa-check"></i></button></div>
                     {% endbuttons %}
