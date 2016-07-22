@@ -3,7 +3,7 @@ Abrir mão do seu presente de aniversário para ajudar o próximo é uma causa n
 
 Mas vamos lá,
 mão na massa:
-Seu próximo objetivo e mobilizar seus amigos através das redes sociais.
+Seu próximo objetivo é mobilizar seus amigos através das redes sociais.
 
 Abaixo o link que você deve compartilhar:
 {{ aniversario_full_url }}

@@ -119,7 +119,8 @@ module.exports = function (grunt) {
           'js/scrollspy.js',
           'js/tab.js',
           'js/affix.js',
-          'js/panel-height-fixed.js'
+          'js/panel-height-fixed.js',
+          'js/footer-floating.js'
         ],
         dest: 'dist/js/<%= pkg.name %>.js'
       }
