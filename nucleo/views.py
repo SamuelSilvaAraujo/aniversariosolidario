@@ -122,33 +122,36 @@ def aniversario_doar(request, slug_usuario, slug_missao):
         return redirect(reverse('aniversario:index', kwargs={'slug_usuario': slug_usuario, 'slug_missao':slug_missao}))
     valor = request.GET.get('valor')
     if valor:
-        if not request.user.is_authenticated():
-            return redirect('{}?{}'.format(
-                reverse('usuarios:login_ou_cadastro'),
-                urllib.urlencode({'next': '{}?valor={}'.format(
-                    reverse('aniversario:doar', kwargs={
-                        'slug_usuario': slug_usuario,
-                        'slug_missao': slug_missao
-                    }),
-                    valor
-                )})
-            ))
-        pagamento = Pagamento.objects.create(valor=valor)
-        doacao = Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
-        pagseguro_item = PagSeguroItem(
-            id=str(doacao.aniversario.id),
-            description=str(doacao),
-            amount='%.2f' % float(doacao.pagamento.valor),
-            quantity=1
-        )
-        pagseguro_api = PagSeguroApi(
-            reference=str(doacao.id)
-        )
-        pagseguro_api.add_item(pagseguro_item)
-        pagseguro_data = pagseguro_api.checkout()
-        doacao.pagamento.checkout = Checkout.objects.get(code=pagseguro_data.get('code'))
-        doacao.pagamento.save(update_fields=['checkout'])
-        return redirect(pagseguro_data.get('redirect_url'))
+        if int(valor) < 25:
+            messages.error(request, 'O valor minimo em uma doação é de 25 reais')
+        else:
+            if not request.user.is_authenticated():
+                return redirect('{}?{}'.format(
+                    reverse('usuarios:login_ou_cadastro'),
+                    urllib.urlencode({'next': '{}?valor={}'.format(
+                        reverse('aniversario:doar', kwargs={
+                            'slug_usuario': slug_usuario,
+                            'slug_missao': slug_missao
+                        }),
+                        valor
+                    )})
+                ))
+            pagamento = Pagamento.objects.create(valor=valor)
+            doacao = Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
+            pagseguro_item = PagSeguroItem(
+                id=str(doacao.aniversario.id),
+                description=str(doacao),
+                amount='%.2f' % float(doacao.pagamento.valor),
+                quantity=1
+            )
+            pagseguro_api = PagSeguroApi(
+                reference=str(doacao.id)
+            )
+            pagseguro_api.add_item(pagseguro_item)
+            pagseguro_data = pagseguro_api.checkout()
+            doacao.pagamento.checkout = Checkout.objects.get(code=pagseguro_data.get('code'))
+            doacao.pagamento.save(update_fields=['checkout'])
+            return redirect(pagseguro_data.get('redirect_url'))
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
     })
