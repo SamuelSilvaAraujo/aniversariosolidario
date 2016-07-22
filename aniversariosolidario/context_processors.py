@@ -6,3 +6,8 @@ def taxa(request):
         'TAXA': settings.TAXA,
         'TAXA_VERBOSE': settings.TAXA_VERBOSE
     }
+
+def debug(request):
+    return {
+        'DEBUG': settings.DEBUG
+    }
