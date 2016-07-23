@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 
 from financeiro.forms import TransacaoForm, UsuarioCompletoForm
+from financeiro.models import Endereco
 from nucleo.models import Aniversario, Doacao
 
 from pagseguro.api import PagSeguroApiTransparent, PagSeguroItem, PagSeguroApi
@@ -78,31 +79,44 @@ def completar_pagamento(request, doacao_id):
         'cpf': request.user.cleaned_cpf
     }
 
-    pagseguro_api = PagSeguroApiTransparent(
-        reference=str(doacao.id)
-    )
-    pagseguro_api.add_item(pagseguro_item)
-    pagseguro_api.set_sender(**sender)
-    pagseguro_api.set_shipping(
-        street=request.POST.get('endereco-lagradouro'),
-        number=int(request.POST.get('endereco-numero')),
-        complement=request.POST.get('endereco-complemento'),
-        district=request.POST.get('endereco-estado'),
-        postal_code=request.POST.get('endereco-cep'),
-        city=request.POST.get('endereco-cidade'),
-        state=request.POST.get('endereco-estado'),
-        country='BRA',
-    )
-    pagseguro_api.set_payment_method(payment_method)
-    pagseguro_api.set_sender_hash(request.POST.get('sender_hash'))
+    endereco = None
 
-    if payment_method == 'boleto':
-        pagseguro_data = pagseguro_api.checkout()
-        doacao.pagamento.boleto_link = pagseguro_data.get('transaction').get('paymentLink')
-        doacao.pagamento.save(update_fields=['boleto_link'])
-        return redirect(reverse('financeiro:doacao_pagamento:gerar_boleto', kwargs={'doacao_id': doacao.id}))
-    if payment_method == 'creditcard':
-        return
+    if request.POST.get('endereco') == 'novo':
+        endereco = Endereco.objects.create(
+            usuario=request.user,
+            lagradouro=request.POST.get('endereco-lagradouro'),
+            numero=int(request.POST.get('endereco-numero')),
+            complemento=request.POST.get('endereco-complemento'),
+            bairro=request.POST.get('endereco-bairro'),
+            cep=request.POST.get('endereco-cep'),
+            cidade=request.POST.get('endereco-cidade'),
+            estado=request.POST.get('endereco-estado')
+        )
+    else:
+        endereco = Endereco.objects.get(
+            usuario=request.user,
+            id=int(request.POST.get('endereco'))
+        )
+
+
+    if endereco:
+        pagseguro_api = PagSeguroApiTransparent(
+            reference=str(doacao.id)
+        )
+        pagseguro_api.add_item(pagseguro_item)
+        pagseguro_api.set_sender(**sender)
+        pagseguro_api.set_shipping(**endereco.pagseguro_serialize())
+        pagseguro_api.set_payment_method(payment_method)
+        pagseguro_api.set_sender_hash(request.POST.get('sender_hash'))
+
+        if payment_method == 'boleto':
+            pagseguro_data = pagseguro_api.checkout()
+            doacao.pagamento.boleto_link = pagseguro_data.get('transaction').get('paymentLink')
+            doacao.pagamento.save(update_fields=['boleto_link'])
+            return redirect(reverse('financeiro:doacao_pagamento:gerar_boleto', kwargs={'doacao_id': doacao.id}))
+        if payment_method == 'creditcard':
+            pagseguro_api.set_creditcard_token(request.POST.get('card_token'))
+            return
 
     raise Http404()
 

@@ -168,17 +168,17 @@ def post_save_Aniversario(instance, created, **kwargs):
 
 class DoacaoManager(models.Manager):
     def pagas(self):
-        return super(DoacaoManager, self).get_queryset().filter(
+        return self.filter(
             pagamento__status__in=['pago', 'disponivel']
         )
 
     def aguardando_pagamento(self):
-        return super(DoacaoManager, self).get_queryset().filter(
+        return self.filter(
             pagamento__status='aguardando'
         )
 
     def em_andamento(self):
-        return super(DoacaoManager, self).get_queryset().exclude(
+        return self.exclude(
             pagamento__status='aguardando'
         )
 

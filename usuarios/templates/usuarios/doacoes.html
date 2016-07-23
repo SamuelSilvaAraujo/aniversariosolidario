@@ -12,7 +12,7 @@
                     <div class="col-md-4">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
+                                <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.aniversario.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
                                 <p><strong>Valor:</strong> R${{ doacao.pagamento.valor }}</p>
                                 <p><span class="label label-default">{{ doacao.pagamento.status_verbose }}</span></p>
                                 {% if doacao.pagamento.boleto_link %}
