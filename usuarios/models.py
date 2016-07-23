@@ -187,6 +187,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def calcular_dias_restantes_proximo_aniversario(self, ano=datetime.date.today().year):
         return (self.proximo_aniversario - datetime.date.today()).days
 
+    @property
+    def cleaned_cpf(self):
+        return self.cpf.replace('.', '').replace('-', '')
+
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):
     if not instance.slug:

@@ -38,7 +38,64 @@
                         </label>
                     </div>
                 </div>
+                <div class="endereco-1">
+                    <h3>Endereço</h3>
+                    <div class="form-group">
+                        <label for="endereco">Qual o seu endereço?</label>
+                        <select name="endereco" id="endereco" class="form-control">
+                            <option value="novo">Novo Endereço</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="endereco-2">
+                    <div class="form-group endereco-cep-group">
+                        <label for="endereco_cep">Qual o CEP do seu endereço?</label>
+                        <input type="text" name="endereco-cep" id="endereco_cep" class="form-control" placeholder="00000000" maxlength="8">
+                        <span class="help-block">- Apenas números</span>
+                    </div>
+                </div>
+                <div class="endereco-3">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="endereco_lagradouro">Lagradouro</label>
+                                <input type="text" name="endereco-lagradouro" id="endereco_lagradouro" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="endereco_numero">Número</label>
+                                <input type="text" name="endereco-numero" id="endereco_numero" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-md-4">
+                            <div class="form-group">
+                                <label for="endereco_cidade">Cidade</label>
+                                <input type="text" name="endereco-cidade" id="endereco_cidade" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <div class="form-group">
+                                <label for="endereco_estado">Estado</label>
+                                <input type="text" name="endereco-estado" id="endereco_estado" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group">
+                                <label for="endereco_bairro">Bairro</label>
+                                <input type="text" name="endereco-bairro" id="endereco_bairro" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco_complemento">Complemento</label>
+                        <input type="text" name="endereco-complemento" id="endereco_complemento" class="form-control">
+                    </div>
+                </div>
                 <div class="forma-de-pagamento-cartao-1">
+                    <h3>Informações do cartão de crédito</h3>
                     <div class="form-group cardBin-group">
                         <label for="cardBin">Número do cartão de crédito</label>
                         <div class="input-group">
@@ -123,7 +180,21 @@
                         $nome_no_cartao = $('#nome_no_cartao'),
                         $data_nascimento = $('#data_nascimento'),
                         $sender_hash = $('#sender_hash'),
-                        $forma_de_pagamento_form = $('#forma-de-pagamento-form');
+                        $forma_de_pagamento_form = $('#forma-de-pagamento-form'),
+                        $endereco_1 = $('.endereco-1'),
+                        $endereco = $('#endereco'),
+                        $endereco_2 = $('.endereco-2'),
+                        $endereco_cep = $('#endereco_cep'),
+                        $endereco_cep_group = $('.endereco-cep-group'),
+                        $endereco_3 = $('.endereco-3'),
+                        $endereco_lagradouro = $('#endereco_lagradouro'),
+                        $endereco_numero = $('#endereco_numero'),
+                        $endereco_cidade = $('#endereco_cidade'),
+                        $endereco_estado = $('#endereco_estado'),
+                        $endereco_bairro = $('#endereco_bairro'),
+                        $endereco_complemento = $('#endereco_complemento'),
+                        endereco_complete = null,
+                        endereco_nocomplete = null;
 
                 function payment_method_colored(e) {
                     var $target = $(e.currentTarget);
@@ -161,10 +232,46 @@
                     $data_nascimento.val('');
                 }
 
+                function close_endereco() {
+                    $endereco_1.hide();
+                    close_endereco_2();
+                }
+
+                function close_endereco_2() {
+                    $endereco_2.hide();
+                    $endereco_cep.val('');
+                    close_endereco_3();
+                }
+
+                function close_endereco_3() {
+                    $endereco_3.hide();
+                    $endereco_lagradouro.val('');
+                    $endereco_numero.val('');
+                    $endereco_cidade.val('');
+                    $endereco_estado.val('');
+                    $endereco_bairro.val('');
+                    $endereco_complemento.val('');
+                }
+
+                function init_endereco(complete, nocomplete) {
+                    close_endereco();
+                    if(complete === undefined && nocomplete === undefined) {
+                        endereco_complete = null;
+                        endereco_nocomplete = null;
+                    } else {
+                        $btn_confirmar.attr('disabled', 'disabled');
+                        endereco_complete = complete;
+                        endereco_nocomplete = nocomplete;
+                    }
+                    if(endereco_nocomplete) endereco_nocomplete();
+                    $endereco_1.fadeIn(500);
+                    $endereco.change();
+                }
+
                 function valid_cardBin() {
                     $cardBin_group.removeClass('has-error');
                     if($cardBin.val().length == 16){
-                        $cardBin.attr('disabled','disabled');
+                        $cardBin.attr('disabled', 'disabled');
                         $pagseguro_carregando.show();
                         PagSeguroDirectPayment.getBrand({
                             cardBin: $cardBin.val(),
@@ -193,10 +300,10 @@
                             $expirationM.val().length == 2 &&
                             $expirationY.val().length == 4
                     ){
-                        $cardBin.attr('disabled','disabled');
-                        $cvv.attr('disabled','disabled');
-                        $expirationM.attr('disabled','disabled');
-                        $expirationY.attr('disabled','disabled');
+                        $cardBin.attr('disabled', 'disabled');
+                        $cvv.attr('disabled', 'disabled');
+                        $expirationM.attr('disabled', 'disabled');
+                        $expirationY.attr('disabled', 'disabled');
                         $pagseguro_carregando.show();
                         PagSeguroDirectPayment.createCardToken({
                             cardNumber: $cardBin.val(),
@@ -228,23 +335,73 @@
                     if($nome_no_cartao.val().length > 3 && $data_nascimento.val().split('/').length == 3){
                         $btn_confirmar.removeAttr('disabled');
                     } else {
-                        $btn_confirmar.attr('disabled','disabled');
+                        $btn_confirmar.attr('disabled', 'disabled');
+                    }
+                }
+
+                function valid_endereco_cep() {
+                    $endereco_cep_group.removeClass('has-error');
+                    if($endereco_cep.val().length == 8){
+                        $endereco_cep.attr('disabled', 'disabled');
+                        $.ajax({
+                            'url': 'http://api.postmon.com.br/v1/cep/'+$endereco_cep.val(),
+                            'success': function (data) {
+                                $endereco_lagradouro.val(data['logradouro']);
+                                $endereco_cidade.val(data['cidade']);
+                                $endereco_estado.val(data['estado']);
+                                $endereco_bairro.val(data['bairro']);
+                                $endereco_3.fadeIn(500);
+                                if(endereco_complete) endereco_complete();
+                            },
+                            'error': function (){
+                                $endereco_cep_group.addClass('has-error');
+                                close_endereco_3();
+                                if(endereco_nocomplete) endereco_nocomplete();
+                            },
+                            'complete': function (){
+                                $endereco_cep.removeAttr('disabled');
+                            }
+                        });
+                    } else {
+                        close_endereco_3();
                     }
                 }
 
                 $formas_de_pagamento.hide();
                 $pagseguro_carregando.hide();
                 close_forma_de_pagamento_cartao();
+                close_endereco();
 
-                $('[for="payment_method_boleto"],[for="payment_method_pagseguro"]').click(function (e){
+                $('[for="payment_method_pagseguro"]').click(function (e){
                     payment_method_colored(e);
                     $btn_confirmar.removeAttr('disabled');
                     close_forma_de_pagamento_cartao();
+                    close_endereco();
+                });
+                $('[for="payment_method_boleto"]').click(function (e){
+                    payment_method_colored(e);
+                    close_forma_de_pagamento_cartao();
+                    init_endereco(function (){
+                        $btn_confirmar.removeAttr('disabled');
+                    }, function (){
+                        $btn_confirmar.attr('disabled', 'disabled');
+                    });
                 });
                 $('[for="payment_method_creditcard"]').click(function (e){
                     payment_method_colored(e);
-                    $btn_confirmar.attr('disabled','disabled');
-                    $forma_de_pagamento_cartao_1.fadeIn(500);
+                    init_endereco(function (){
+                        $forma_de_pagamento_cartao_1.fadeIn(500)
+                    }, function () {
+                        close_forma_de_pagamento_cartao();
+                    });
+                });
+                $endereco.change(function (){
+                    if($(this).val() == 'novo'){
+                        $endereco_2.fadeIn(500);
+                    } else {
+                        close_endereco_2();
+                        if(endereco_complete) endereco_complete();
+                    }
                 });
 
                 $cardBin
@@ -253,10 +410,18 @@
                 $cvv
                         .keypress(just_numbers)
                         .keyup(valid_cvv_and_expiration);
-                $expirationM.keyup(valid_cvv_and_expiration);
-                $expirationY.keyup(valid_cvv_and_expiration);
+                $expirationM
+                        .keypress(just_numbers)
+                        .keyup(valid_cvv_and_expiration);
+                $expirationY
+                        .keypress(just_numbers)
+                        .keyup(valid_cvv_and_expiration);
                 $nome_no_cartao.keyup(valid_info_dono);
                 $data_nascimento.keyup(valid_info_dono);
+                $endereco_cep
+                        .keypress(just_numbers)
+                        .keyup(valid_endereco_cep);
+                $endereco_numero.keypress(just_numbers);
 
                 PagSeguroDirectPayment.setSessionId('{{ pagseguro.session_id }}');
                 $formas_de_pagamento.fadeIn(500);
