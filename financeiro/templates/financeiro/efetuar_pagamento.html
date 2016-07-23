@@ -1,0 +1,122 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Efetue o pagamento da sua doação</h3>
+        {% if pagseguro %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="pagseguro-carregando">
+                    <p class="text-center"><i class="fa fa-fw fa-3x fa-circle-o-notch fa-spin"></i></p>
+                </div>
+                <hr>
+                <div class="formas-de-pagamento">
+                    <h4 class="text-center">Selecione a forma de pagamento...</h4>
+                    <div class="row">
+                        <label class="col-xs-6 clickable payment_method_target" for="payment_method_boleto">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">Boleto</h4>
+                                <p class="text-center"><i class="fa fa-fw fa-5x fa-barcode"></i></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="boleto" id="payment_method_boleto"></span>
+                        </label>
+                        <label class="col-xs-6 clickable payment_method_target" for="payment_method_creditcard">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">Cartão de crédito</h4>
+                                <p class="text-center"><i class="fa fa-fw fa-5x fa-credit-card"></i></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="creditcard" id="payment_method_creditcard"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="forma-de-pagamento-cartao-1">
+                    <div class="form-group">
+                        <label for="cardBin">Número do cartão de crédito</label>
+                        <input type="text" name="cardBin" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
+                        <span class="help-block">- Apenas números</span>
+                    </div>
+                </div>
+                <p class="text-center"><button type="submit" class="btn btn-lg btn-primary btn-confirmar" disabled>Confirmar</button></p>
+            </form>
+        {% else %}
+            <h4><small>Antes de continuar</small><br>Confirme seus dados...</h4>
+            <form method="post">
+            {% csrf_token %}
+            {% bootstrap_form usuario_form %}
+            {% buttons %}
+                <p class="text-center"><button class="btn btn-primary" type="submit">Confirmar Dados <i class="fa fa-fw fa-check"></i></button></p>
+            {% endbuttons %}
+        {% endif %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+    {% if pagseguro %}
+        <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function (){
+                var
+                        $pagseguro_carregando = $('.pagseguro-carregando'),
+                        $formas_de_pagamento = $('.formas-de-pagamento'),
+                        $btn_confirmar = $('.btn-confirmar'),
+                        $payment_method_targets = $('.payment_method_target'),
+                        $forma_de_pagamento_cartao_1 = $('.forma-de-pagamento-cartao-1'),
+                        $cardBin = $('#cardBin'),
+                        numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
+
+                function payment_method_colored(e){
+                    var $target = $(e.currentTarget);
+
+                    $payment_method_targets.removeClass('text-info');
+                    $target.addClass('text-info');
+                }
+
+                function close_forma_de_pagamento_cartao() {
+                    $forma_de_pagamento_cartao_1.hide();
+                    $cardBin.val('');
+                }
+
+                function valid_cardBin() {
+                    if($cardBin.val().length == 16){
+                        $cardBin.attr('disabled','disabled');
+                    }
+                }
+
+                $formas_de_pagamento.hide();
+                close_forma_de_pagamento_cartao();
+
+                $('[for="payment_method_boleto"]').click(function (e){
+                    payment_method_colored(e);
+                    $btn_confirmar.removeAttr('disabled');
+                    close_forma_de_pagamento_cartao();
+                });
+                $('[for="payment_method_creditcard"]').click(function (e){
+                    payment_method_colored(e);
+                    $btn_confirmar.attr('disabled','disabled');
+                    $forma_de_pagamento_cartao_1.fadeIn(500);
+                });
+
+                $cardBin
+                        .keypress(function (e){
+                            var key = (e.code || e.keyCode || e.which);
+                            if(numbers_ascii.indexOf(key) == -1){
+                                return false;
+                            }
+                        })
+                        .keyup(valid_cardBin)
+                        .change(valid_cardBin);
+
+                PagSeguroDirectPayment.setSessionId('{{ pagseguro.session_id }}');
+                $pagseguro_carregando.hide();
+                $formas_de_pagamento.fadeIn(500);
+
+
+
+                {#                console.log(PagSeguroDirectPayment.getSenderHash());#}
+            });
+        </script>
+    {% endif %}
+{% endblock %}

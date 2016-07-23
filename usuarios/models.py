@@ -59,6 +59,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
     email_pagseguro = models.EmailField('E-mail do PagSeguro', blank=True, null= True)
+    cpf = models.CharField('CPF', max_length=14, blank=True)
+    telefone_ddd = models.IntegerField('DDD do número do telefone', null=True)
+    telefone_numero = models.IntegerField('número do telefone sem DDD', null=True)
 
     objects = UsuarioManager()
 

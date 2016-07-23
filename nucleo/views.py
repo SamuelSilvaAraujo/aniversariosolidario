@@ -138,20 +138,20 @@ def aniversario_doar(request, slug_usuario, slug_missao):
                 ))
             pagamento = Pagamento.objects.create(valor=valor)
             doacao = Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
-            pagseguro_item = PagSeguroItem(
-                id=str(doacao.aniversario.id),
-                description=str(doacao),
-                amount='%.2f' % float(doacao.pagamento.valor),
-                quantity=1
-            )
-            pagseguro_api = PagSeguroApi(
-                reference=str(doacao.id)
-            )
-            pagseguro_api.add_item(pagseguro_item)
-            pagseguro_data = pagseguro_api.checkout()
-            doacao.pagamento.checkout = Checkout.objects.get(code=pagseguro_data.get('code'))
-            doacao.pagamento.save(update_fields=['checkout'])
-            return redirect(pagseguro_data.get('redirect_url'))
+            # pagseguro_item = PagSeguroItem(
+            #     id=str(doacao.aniversario.id),
+            #     description=str(doacao),
+            #     amount='%.2f' % float(doacao.pagamento.valor),
+            #     quantity=1
+            # )
+            # pagseguro_api = PagSeguroApi(
+            #     reference=str(doacao.id)
+            # )
+            # pagseguro_api.add_item(pagseguro_item)
+            # pagseguro_data = pagseguro_api.checkout()
+            # doacao.pagamento.checkout = Checkout.objects.get(code=pagseguro_data.get('code'))
+            # doacao.pagamento.save(update_fields=['checkout'])
+            return redirect(reverse('financeiro:efetuar_pagamento', kwargs={'doacao_id': doacao.id}))
     return render(request, 'nucleo/aniversario_doar.html', {
         'aniversario': aniversario_instance
     })
