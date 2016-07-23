@@ -3,10 +3,13 @@
 from django import forms
 
 from financeiro.models import Transacao
+from localflavor.br.forms import BRCPFField
+from usuarios.models import Usuario
+
 
 class TransacaoForm(forms.ModelForm):
     class Meta:
-        model= Transacao
+        model = Transacao
         fields = ['valor']
 
     _aniversario = None
@@ -21,3 +24,10 @@ class TransacaoForm(forms.ModelForm):
         if cleaned_data.get('valor') > meta_disponivel:
             self.add_error('valor', 'você não tem direito a esse valor!')
         return cleaned_data
+
+class UsuarioCompletoForm(forms.ModelForm):
+    cpf = BRCPFField(label='Seu CPF', required=True)
+
+    class Meta:
+        model = Usuario
+        fields = ['email', 'nome', 'cpf', 'telefone_ddd', 'telefone_numero']

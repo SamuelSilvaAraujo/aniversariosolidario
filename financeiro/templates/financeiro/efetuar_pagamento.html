@@ -1,0 +1,272 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% load bootstrap3 staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Efetue o pagamento da sua doação</h3>
+        {% if pagseguro %}
+            <form id="forma-de-pagamento-form" action="{% url 'financeiro:doacao_pagamento:completar' doacao_id=doacao.id %}" method="post">
+                {% csrf_token %}
+                <div class="pagseguro-carregando">
+                    <p class="text-center"><i class="fa fa-fw fa-3x fa-circle-o-notch fa-spin"></i></p>
+                </div>
+                <hr>
+                <div class="formas-de-pagamento">
+                    <h4 class="text-center">Selecione a forma de pagamento...</h4>
+                    <div class="row">
+                        <label class="col-xs-12 col-md-4 clickable payment_method_target" for="payment_method_pagseguro">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">PagSeguro</h4>
+                                <p class="text-center"><img src="{% static "imgs/logo-pagseguro.png" %}"></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="pagseguro" id="payment_method_pagseguro"></span>
+                        </label>
+                        <label class="col-xs-6 col-md-4 clickable payment_method_target" for="payment_method_boleto">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">Boleto</h4>
+                                <p class="text-center"><i class="fa fa-fw fa-5x fa-barcode"></i></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="boleto" id="payment_method_boleto"></span>
+                        </label>
+                        <label class="col-xs-6 col-md-4 clickable payment_method_target" for="payment_method_creditcard">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">Cartão de crédito</h4>
+                                <p class="text-center"><i class="fa fa-fw fa-5x fa-credit-card"></i></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="creditcard" id="payment_method_creditcard"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="forma-de-pagamento-cartao-1">
+                    <div class="form-group cardBin-group">
+                        <label for="cardBin">Número do cartão de crédito</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-fw fa-credit-card"></i> <span class="cartao-bandeira-label"></span></span>
+                            <input type="text" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
+                        </div>
+                        <span class="help-block">- Apenas números</span>
+                    </div>
+                </div>
+                <div class="forma-de-pagamento-cartao-2">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group cvv-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" autocomplete="off" class="form-control" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group expiration-group">
+                                <label for="cvv">Data de expiração</label>
+                                <div class="input-group">
+                                    <input type="text" id="expirationM" autocomplete="off" class="form-control" maxlength="2" placeholder="Mês">
+                                    <span class="input-group-addon">/</span>
+                                    <input type="text" id="expirationY" autocomplete="off" class="form-control" maxlength="4" placeholder="Ano">
+                                </div>
+                                <span class="help-block">- MM/AAAA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="forma-de-pagamento-cartao-3">
+                    <input type="hidden" name="card_token" id="card_token">
+                    <div class="form-group nome-no-cartao-group">
+                        <label for="nome_no_cartao">Nome impresso no cartão</label>
+                        <input type="text" name="nome-no-cartao" id="nome_no_cartao" autocomplete="off" class="form-control">
+                    </div>
+                    <div class="form-group data-nascimento-cartao-group">
+                        <label for="data_nascimento">Data de nascimento do dono do cartão</label>
+                        <input type="text" name="data-nascimento-cartao" id="data_nascimento" autocomplete="off" class="form-control">
+                        <span class="help-block">- DD/MM/AAAA</span>
+                    </div>
+                </div>
+                <input type="hidden" name="sender_hash" id="sender_hash">
+                <p class="text-center"><button type="button" class="btn btn-lg btn-primary btn-confirmar" disabled>Confirmar</button></p>
+            </form>
+        {% else %}
+            <h4><small>Antes de continuar</small><br>Confirme seus dados...</h4>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form usuario_form %}
+                {% buttons %}
+                    <p class="text-center"><button class="btn btn-primary" type="submit">Confirmar Dados <i class="fa fa-fw fa-check"></i></button></p>
+                {% endbuttons %}
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+    {% if pagseguro %}
+        <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function (){
+                var
+                        $pagseguro_carregando = $('.pagseguro-carregando'),
+                        $formas_de_pagamento = $('.formas-de-pagamento'),
+                        $btn_confirmar = $('.btn-confirmar'),
+                        $payment_method_targets = $('.payment_method_target'),
+                        $forma_de_pagamento_cartao_1 = $('.forma-de-pagamento-cartao-1'),
+                        $cardBin = $('#cardBin'),
+                        numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+                        $cardBin_group = $('.cardBin-group'),
+                        $cartao_bandeira_label = $('.cartao-bandeira-label'),
+                        $forma_de_pagamento_cartao_2 = $('.forma-de-pagamento-cartao-2'),
+                        $cvv = $('#cvv'),
+                        $expirationM = $('#expirationM'),
+                        $expirationY = $('#expirationY'),
+                        $cvv_group = $('.cvv-group'),
+                        $expiration_group = $('.expiration-group'),
+                        $forma_de_pagamento_cartao_3 = $('.forma-de-pagamento-cartao-3'),
+                        $card_token = $('#card_token'),
+                        $nome_no_cartao = $('#nome_no_cartao'),
+                        $data_nascimento = $('#data_nascimento'),
+                        $sender_hash = $('#sender_hash'),
+                        $forma_de_pagamento_form = $('#forma-de-pagamento-form');
+
+                function payment_method_colored(e) {
+                    var $target = $(e.currentTarget);
+
+                    $payment_method_targets.removeClass('text-info');
+                    $target.addClass('text-info');
+                }
+
+                function just_numbers(e) {
+                    var key = (e.code || e.keyCode || e.which);
+                    if(numbers_ascii.indexOf(key) == -1){
+                        return false;
+                    }
+                }
+
+                function close_forma_de_pagamento_cartao() {
+                    $forma_de_pagamento_cartao_1.hide();
+                    $cardBin.val('');
+                    $cartao_bandeira_label.html('');
+                    close_forma_de_pagamento_cartao_2();
+                    close_forma_de_pagamento_cartao_3();
+                }
+
+                function close_forma_de_pagamento_cartao_2() {
+                    $forma_de_pagamento_cartao_2.hide();
+                    $cvv.val('');
+                    $expirationM.val('');
+                    $expirationY.val('');
+                }
+
+                function close_forma_de_pagamento_cartao_3() {
+                    $forma_de_pagamento_cartao_3.hide();
+                    $card_token.val('');
+                    $nome_no_cartao.val('');
+                    $data_nascimento.val('');
+                }
+
+                function valid_cardBin() {
+                    $cardBin_group.removeClass('has-error');
+                    if($cardBin.val().length == 16){
+                        $cardBin.attr('disabled','disabled');
+                        $pagseguro_carregando.show();
+                        PagSeguroDirectPayment.getBrand({
+                            cardBin: $cardBin.val(),
+                            success: function (response) {
+                                $cartao_bandeira_label.html(response['brand']['name'].toUpperCase());
+                                $forma_de_pagamento_cartao_2.fadeIn(500);
+                            },
+                            error: function (response) {
+                                $cardBin_group.addClass('has-error');
+                            },
+                            complete: function (){
+                                $cardBin.removeAttr('disabled');
+                                $pagseguro_carregando.hide();
+                            }
+                        });
+                    } else {
+                        close_forma_de_pagamento_cartao_2();
+                    }
+                }
+
+                function valid_cvv_and_expiration() {
+                    $cvv_group.removeClass('has-error');
+                    $expiration_group.removeClass('has-error');
+                    if(
+                            ($cvv.val().length == 3 || $cvv.val().length == 4) &&
+                            $expirationM.val().length == 2 &&
+                            $expirationY.val().length == 4
+                    ){
+                        $cardBin.attr('disabled','disabled');
+                        $cvv.attr('disabled','disabled');
+                        $expirationM.attr('disabled','disabled');
+                        $expirationY.attr('disabled','disabled');
+                        $pagseguro_carregando.show();
+                        PagSeguroDirectPayment.createCardToken({
+                            cardNumber: $cardBin.val(),
+                            cvv: $cvv.val(),
+                            expirationMonth: $expirationM.val(),
+                            expirationYear: $expirationY.val(),
+                            success: function (response){
+                                $card_token.val(response['card']['token']);
+                                $forma_de_pagamento_cartao_3.fadeIn(500);
+                            },
+                            error: function (){
+                                $cvv_group.addClass('has-error');
+                                $expiration_group.addClass('has-error');
+                            },
+                            complete: function (){
+                                $cardBin.removeAttr('disabled');
+                                $cvv.removeAttr('disabled');
+                                $expirationM.removeAttr('disabled');
+                                $expirationY.removeAttr('disabled');
+                                $pagseguro_carregando.hide();
+                            }
+                        });
+                    } else {
+                        close_forma_de_pagamento_cartao_3();
+                    }
+                }
+
+                function valid_info_dono() {
+                    if($nome_no_cartao.val().length > 3 && $data_nascimento.val().split('/').length == 3){
+                        $btn_confirmar.removeAttr('disabled');
+                    } else {
+                        $btn_confirmar.attr('disabled','disabled');
+                    }
+                }
+
+                $formas_de_pagamento.hide();
+                $pagseguro_carregando.hide();
+                close_forma_de_pagamento_cartao();
+
+                $('[for="payment_method_boleto"],[for="payment_method_pagseguro"]').click(function (e){
+                    payment_method_colored(e);
+                    $btn_confirmar.removeAttr('disabled');
+                    close_forma_de_pagamento_cartao();
+                });
+                $('[for="payment_method_creditcard"]').click(function (e){
+                    payment_method_colored(e);
+                    $btn_confirmar.attr('disabled','disabled');
+                    $forma_de_pagamento_cartao_1.fadeIn(500);
+                });
+
+                $cardBin
+                        .keypress(just_numbers)
+                        .keyup(valid_cardBin);
+                $cvv
+                        .keypress(just_numbers)
+                        .keyup(valid_cvv_and_expiration);
+                $expirationM.keyup(valid_cvv_and_expiration);
+                $expirationY.keyup(valid_cvv_and_expiration);
+                $nome_no_cartao.keyup(valid_info_dono);
+                $data_nascimento.keyup(valid_info_dono);
+
+                PagSeguroDirectPayment.setSessionId('{{ pagseguro.session_id }}');
+                $formas_de_pagamento.fadeIn(500);
+
+
+                $btn_confirmar.click(function (){
+                    $sender_hash.val(PagSeguroDirectPayment.getSenderHash());
+                    $forma_de_pagamento_form.submit();
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

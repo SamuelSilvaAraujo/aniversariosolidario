@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from usuarios import urls as usuarios_urls
 from nucleo import urls as nucleo_urls
+from financeiro import urls as financeiro_urls
 from webapp import views as webapp_views
 from emails import views as emails_views
 from nucleo import views as nucleo_views
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^retorno/doacao/', webapp_views.retorno_doacao, name='retorno_doacao'),
 
     url(r'^usuario/', include(usuarios_urls, namespace='usuarios')),
+    url(r'^financeiro/', include(financeiro_urls, namespace='financeiro')),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^retorno/pagseguro/', include(pagseguro_urls)),
