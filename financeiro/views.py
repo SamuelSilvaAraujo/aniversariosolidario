@@ -83,15 +83,32 @@ def completar_pagamento(request, doacao_id):
     )
     pagseguro_api.add_item(pagseguro_item)
     pagseguro_api.set_sender(**sender)
-    # pagseguro_api.set_shipping()
+    pagseguro_api.set_shipping(
+        street=request.POST.get('endereco-lagradouro'),
+        number=int(request.POST.get('endereco-numero')),
+        complement=request.POST.get('endereco-complemento'),
+        district=request.POST.get('endereco-estado'),
+        postal_code=request.POST.get('endereco-cep'),
+        city=request.POST.get('endereco-cidade'),
+        state=request.POST.get('endereco-estado'),
+        country='BRA',
+    )
     pagseguro_api.set_payment_method(payment_method)
     pagseguro_api.set_sender_hash(request.POST.get('sender_hash'))
 
     if payment_method == 'boleto':
         pagseguro_data = pagseguro_api.checkout()
-        print pagseguro_data
-        return
+        doacao.pagamento.boleto_link = pagseguro_data.get('transaction').get('paymentLink')
+        doacao.pagamento.save(update_fields=['boleto_link'])
+        return redirect(reverse('financeiro:doacao_pagamento:gerar_boleto', kwargs={'doacao_id': doacao.id}))
     if payment_method == 'creditcard':
         return
 
     raise Http404()
+
+@login_required
+def gerar_boleto(request, doacao_id):
+    doacao = get_object_or_404(Doacao, id=doacao_id, usuario=request.user)
+    return render(request, 'financeiro/gerar_boleto.html', {
+        'doacao': doacao
+    })

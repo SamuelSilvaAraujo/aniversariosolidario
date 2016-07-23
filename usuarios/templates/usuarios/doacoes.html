@@ -15,7 +15,11 @@
                                 <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
                                 <p><strong>Valor:</strong> R${{ doacao.pagamento.valor }}</p>
                                 <p><span class="label label-default">{{ doacao.pagamento.status_verbose }}</span></p>
-                                <p><a class="btn btn-block btn-primary" href="{{ doacao.checkout_url }}" target="_blank">Concluir doação</a></p>
+                                {% if doacao.pagamento.boleto_link %}
+                                    <p><a class="btn btn-block btn-primary" href="{{ doacao.pagamento.boleto_link }}" target="_blank">Imprimir Boleto <i class="fa fa-fw fa-barcode"></i></a></p>
+                                {% else %}
+                                    <p><a class="btn btn-block btn-primary" href="{{ doacao.checkout_url }}" target="_blank">Concluir doação</a></p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
