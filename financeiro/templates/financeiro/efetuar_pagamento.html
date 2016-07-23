@@ -32,10 +32,33 @@
                     </div>
                 </div>
                 <div class="forma-de-pagamento-cartao-1">
-                    <div class="form-group">
+                    <div class="form-group cardBin-group">
                         <label for="cardBin">Número do cartão de crédito</label>
-                        <input type="text" name="cardBin" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-fw fa-credit-card"></i> <span class="cartao-bandeira-label"></span></span>
+                            <input type="text" name="cardBin" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
+                        </div>
                         <span class="help-block">- Apenas números</span>
+                    </div>
+                </div>
+                <div class="forma-de-pagamento-cartao-2">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" name="cvv" id="cvv" autocomplete="off" class="form-control" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="cvv">Data de expiração</label>
+                                <div class="input-group">
+                                    <input type="text" name="expirationM" id="expirationM" autocomplete="off" class="form-control" maxlength="2" placeholder="Mês">
+                                    <span class="input-group-addon">/</span>
+                                    <input type="text" name="expirationY" id="expirationY" autocomplete="off" class="form-control" maxlength="4" placeholder="Ano">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <p class="text-center"><button type="submit" class="btn btn-lg btn-primary btn-confirmar" disabled>Confirmar</button></p>
@@ -65,27 +88,99 @@
                         $payment_method_targets = $('.payment_method_target'),
                         $forma_de_pagamento_cartao_1 = $('.forma-de-pagamento-cartao-1'),
                         $cardBin = $('#cardBin'),
-                        numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
+                        numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+                        $cardBin_group = $('.cardBin-group'),
+                        $cartao_bandeira_label = $('.cartao-bandeira-label'),
+                        $forma_de_pagamento_cartao_2 = $('.forma-de-pagamento-cartao-2'),
+                        $cvv = $('#cvv'),
+                        $expirationM = $('#expirationM'),
+                        $expirationY = $('#expirationY');
 
-                function payment_method_colored(e){
+                function payment_method_colored(e) {
                     var $target = $(e.currentTarget);
 
                     $payment_method_targets.removeClass('text-info');
                     $target.addClass('text-info');
                 }
 
+                function just_numbers(e) {
+                    var key = (e.code || e.keyCode || e.which);
+                    if(numbers_ascii.indexOf(key) == -1){
+                        return false;
+                    }
+                }
+
                 function close_forma_de_pagamento_cartao() {
                     $forma_de_pagamento_cartao_1.hide();
                     $cardBin.val('');
+                    close_forma_de_pagamento_cartao_2();
+                }
+
+                function close_forma_de_pagamento_cartao_2() {
+                    $forma_de_pagamento_cartao_2.hide();
                 }
 
                 function valid_cardBin() {
+                    $cardBin_group.removeClass('has-error');
                     if($cardBin.val().length == 16){
                         $cardBin.attr('disabled','disabled');
+                        $pagseguro_carregando.show();
+                        PagSeguroDirectPayment.getBrand({
+                            cardBin: $cardBin.val(),
+                            success: function (response) {
+                                $cartao_bandeira_label.html(response['brand']['name'].toUpperCase());
+                                $forma_de_pagamento_cartao_2.fadeIn(500);
+                            },
+                            error: function (response) {
+                                $cardBin_group.addClass('has-error');
+                            },
+                            complete: function (){
+                                $cardBin.removeAttr('disabled');
+                                $pagseguro_carregando.hide();
+                            }
+                        });
+                    } else {
+                        close_forma_de_pagamento_cartao_2();
+                    }
+                }
+
+                function valid_cvv_and_expiration() {
+                    if(
+                            ($cvv.val().length == 3 || $cvv.val().length == 4) &&
+                            $expirationM.val().length == 2 &&
+                            $expirationY.val().length == 4
+                    ){
+                        $cardBin.attr('disabled','disabled');
+                        $cvv.attr('disabled','disabled');
+                        $expirationM.attr('disabled','disabled');
+                        $expirationY.attr('disabled','disabled');
+                        $pagseguro_carregando.show();
+                        PagSeguroDirectPayment.createCardToken({
+                            cardNumber: $cardBin.val(),
+                            cvv: $cvv.val(),
+                            expirationMonth: $expirationM.val(),
+                            expirationYear: $expirationY.val(),
+                            success: function (response){
+                                console.log(response);
+                            },
+                            error: function (){
+
+                            },
+                            complete: function (){
+                                $cardBin.removeAttr('disabled');
+                                $cvv.removeAttr('disabled');
+                                $expirationM.removeAttr('disabled');
+                                $expirationY.removeAttr('disabled');
+                                $pagseguro_carregando.hide();
+                            }
+                        });
+                    } else {
+
                     }
                 }
 
                 $formas_de_pagamento.hide();
+                $pagseguro_carregando.hide();
                 close_forma_de_pagamento_cartao();
 
                 $('[for="payment_method_boleto"]').click(function (e){
@@ -100,17 +195,18 @@
                 });
 
                 $cardBin
-                        .keypress(function (e){
-                            var key = (e.code || e.keyCode || e.which);
-                            if(numbers_ascii.indexOf(key) == -1){
-                                return false;
-                            }
-                        })
-                        .keyup(valid_cardBin)
-                        .change(valid_cardBin);
+                        .keypress(just_numbers)
+                        .keyup(valid_cardBin);
+
+                $cvv
+                        .keypress(just_numbers)
+                        .keyup(valid_cvv_and_expiration);
+
+                $expirationM.keyup(valid_cvv_and_expiration);
+
+                $expirationY.keyup(valid_cvv_and_expiration);
 
                 PagSeguroDirectPayment.setSessionId('{{ pagseguro.session_id }}');
-                $pagseguro_carregando.hide();
                 $formas_de_pagamento.fadeIn(500);
 
 
