@@ -51,3 +51,7 @@ def efetuar_pagamento(request, doacao_id):
         'usuario_form': usuario_form,
         'pagseguro': pagseguro
     })
+
+@login_required
+def completar_pagamento(request, doacao_id):
+    print request.POST

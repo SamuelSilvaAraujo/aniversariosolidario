@@ -1,12 +1,12 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 staticfiles %}
 
 {% block content %}
     <div class="container">
         <h3 class="text-center">Efetue o pagamento da sua doação</h3>
         {% if pagseguro %}
-            <form method="post">
+            <form id="forma-de-pagamento-form" action="{% url 'financeiro:doacao_pagamento:completar' doacao_id=doacao.id %}" method="post">
                 {% csrf_token %}
                 <div class="pagseguro-carregando">
                     <p class="text-center"><i class="fa fa-fw fa-3x fa-circle-o-notch fa-spin"></i></p>
@@ -15,14 +15,21 @@
                 <div class="formas-de-pagamento">
                     <h4 class="text-center">Selecione a forma de pagamento...</h4>
                     <div class="row">
-                        <label class="col-xs-6 clickable payment_method_target" for="payment_method_boleto">
+                        <label class="col-xs-12 col-md-4 clickable payment_method_target" for="payment_method_pagseguro">
+                            <div class="well">
+                                <h4 class="text-center" data-panel-height-fixed="1">PagSeguro</h4>
+                                <p class="text-center"><img src="{% static "imgs/logo-pagseguro.png" %}"></p>
+                            </div>
+                            <span class="hidden"><input type="radio" name="payment_method" value="pagseguro" id="payment_method_pagseguro"></span>
+                        </label>
+                        <label class="col-xs-6 col-md-4 clickable payment_method_target" for="payment_method_boleto">
                             <div class="well">
                                 <h4 class="text-center" data-panel-height-fixed="1">Boleto</h4>
                                 <p class="text-center"><i class="fa fa-fw fa-5x fa-barcode"></i></p>
                             </div>
                             <span class="hidden"><input type="radio" name="payment_method" value="boleto" id="payment_method_boleto"></span>
                         </label>
-                        <label class="col-xs-6 clickable payment_method_target" for="payment_method_creditcard">
+                        <label class="col-xs-6 col-md-4 clickable payment_method_target" for="payment_method_creditcard">
                             <div class="well">
                                 <h4 class="text-center" data-panel-height-fixed="1">Cartão de crédito</h4>
                                 <p class="text-center"><i class="fa fa-fw fa-5x fa-credit-card"></i></p>
@@ -36,43 +43,57 @@
                         <label for="cardBin">Número do cartão de crédito</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-fw fa-credit-card"></i> <span class="cartao-bandeira-label"></span></span>
-                            <input type="text" name="cardBin" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
+                            <input type="text" id="cardBin" autocomplete="off" class="form-control" maxlength="16">
                         </div>
                         <span class="help-block">- Apenas números</span>
                     </div>
                 </div>
                 <div class="forma-de-pagamento-cartao-2">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group cvv-group">
                                 <label for="cvv">CVV</label>
-                                <input type="text" name="cvv" id="cvv" autocomplete="off" class="form-control" maxlength="4">
+                                <input type="text" id="cvv" autocomplete="off" class="form-control" maxlength="4">
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group expiration-group">
                                 <label for="cvv">Data de expiração</label>
                                 <div class="input-group">
-                                    <input type="text" name="expirationM" id="expirationM" autocomplete="off" class="form-control" maxlength="2" placeholder="Mês">
+                                    <input type="text" id="expirationM" autocomplete="off" class="form-control" maxlength="2" placeholder="Mês">
                                     <span class="input-group-addon">/</span>
-                                    <input type="text" name="expirationY" id="expirationY" autocomplete="off" class="form-control" maxlength="4" placeholder="Ano">
+                                    <input type="text" id="expirationY" autocomplete="off" class="form-control" maxlength="4" placeholder="Ano">
                                 </div>
+                                <span class="help-block">- MM/AAAA</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="text-center"><button type="submit" class="btn btn-lg btn-primary btn-confirmar" disabled>Confirmar</button></p>
+                <div class="forma-de-pagamento-cartao-3">
+                    <input type="hidden" name="card_token" id="card_token">
+                    <div class="form-group nome-no-cartao-group">
+                        <label for="nome_no_cartao">Nome impresso no cartão</label>
+                        <input type="text" name="nome-no-cartao" id="nome_no_cartao" autocomplete="off" class="form-control">
+                    </div>
+                    <div class="form-group data-nascimento-cartao-group">
+                        <label for="data_nascimento">Data de nascimento do dono do cartão</label>
+                        <input type="text" name="data-nascimento-cartao" id="data_nascimento" autocomplete="off" class="form-control">
+                        <span class="help-block">- DD/MM/AAAA</span>
+                    </div>
+                </div>
+                <input type="hidden" name="sender_hash" id="sender_hash">
+                <p class="text-center"><button type="button" class="btn btn-lg btn-primary btn-confirmar" disabled>Confirmar</button></p>
             </form>
         {% else %}
             <h4><small>Antes de continuar</small><br>Confirme seus dados...</h4>
             <form method="post">
-            {% csrf_token %}
-            {% bootstrap_form usuario_form %}
-            {% buttons %}
-                <p class="text-center"><button class="btn btn-primary" type="submit">Confirmar Dados <i class="fa fa-fw fa-check"></i></button></p>
-            {% endbuttons %}
+                {% csrf_token %}
+                {% bootstrap_form usuario_form %}
+                {% buttons %}
+                    <p class="text-center"><button class="btn btn-primary" type="submit">Confirmar Dados <i class="fa fa-fw fa-check"></i></button></p>
+                {% endbuttons %}
+            </form>
         {% endif %}
-        </form>
     </div>
 {% endblock %}
 
@@ -94,7 +115,15 @@
                         $forma_de_pagamento_cartao_2 = $('.forma-de-pagamento-cartao-2'),
                         $cvv = $('#cvv'),
                         $expirationM = $('#expirationM'),
-                        $expirationY = $('#expirationY');
+                        $expirationY = $('#expirationY'),
+                        $cvv_group = $('.cvv-group'),
+                        $expiration_group = $('.expiration-group'),
+                        $forma_de_pagamento_cartao_3 = $('.forma-de-pagamento-cartao-3'),
+                        $card_token = $('#card_token'),
+                        $nome_no_cartao = $('#nome_no_cartao'),
+                        $data_nascimento = $('#data_nascimento'),
+                        $sender_hash = $('#sender_hash'),
+                        $forma_de_pagamento_form = $('#forma-de-pagamento-form');
 
                 function payment_method_colored(e) {
                     var $target = $(e.currentTarget);
@@ -113,11 +142,23 @@
                 function close_forma_de_pagamento_cartao() {
                     $forma_de_pagamento_cartao_1.hide();
                     $cardBin.val('');
+                    $cartao_bandeira_label.html('');
                     close_forma_de_pagamento_cartao_2();
+                    close_forma_de_pagamento_cartao_3();
                 }
 
                 function close_forma_de_pagamento_cartao_2() {
                     $forma_de_pagamento_cartao_2.hide();
+                    $cvv.val('');
+                    $expirationM.val('');
+                    $expirationY.val('');
+                }
+
+                function close_forma_de_pagamento_cartao_3() {
+                    $forma_de_pagamento_cartao_3.hide();
+                    $card_token.val('');
+                    $nome_no_cartao.val('');
+                    $data_nascimento.val('');
                 }
 
                 function valid_cardBin() {
@@ -145,6 +186,8 @@
                 }
 
                 function valid_cvv_and_expiration() {
+                    $cvv_group.removeClass('has-error');
+                    $expiration_group.removeClass('has-error');
                     if(
                             ($cvv.val().length == 3 || $cvv.val().length == 4) &&
                             $expirationM.val().length == 2 &&
@@ -161,10 +204,12 @@
                             expirationMonth: $expirationM.val(),
                             expirationYear: $expirationY.val(),
                             success: function (response){
-                                console.log(response);
+                                $card_token.val(response['card']['token']);
+                                $forma_de_pagamento_cartao_3.fadeIn(500);
                             },
                             error: function (){
-
+                                $cvv_group.addClass('has-error');
+                                $expiration_group.addClass('has-error');
                             },
                             complete: function (){
                                 $cardBin.removeAttr('disabled');
@@ -175,7 +220,15 @@
                             }
                         });
                     } else {
+                        close_forma_de_pagamento_cartao_3();
+                    }
+                }
 
+                function valid_info_dono() {
+                    if($nome_no_cartao.val().length > 3 && $data_nascimento.val().split('/').length == 3){
+                        $btn_confirmar.removeAttr('disabled');
+                    } else {
+                        $btn_confirmar.attr('disabled','disabled');
                     }
                 }
 
@@ -183,7 +236,7 @@
                 $pagseguro_carregando.hide();
                 close_forma_de_pagamento_cartao();
 
-                $('[for="payment_method_boleto"]').click(function (e){
+                $('[for="payment_method_boleto"],[for="payment_method_pagseguro"]').click(function (e){
                     payment_method_colored(e);
                     $btn_confirmar.removeAttr('disabled');
                     close_forma_de_pagamento_cartao();
@@ -197,21 +250,22 @@
                 $cardBin
                         .keypress(just_numbers)
                         .keyup(valid_cardBin);
-
                 $cvv
                         .keypress(just_numbers)
                         .keyup(valid_cvv_and_expiration);
-
                 $expirationM.keyup(valid_cvv_and_expiration);
-
                 $expirationY.keyup(valid_cvv_and_expiration);
+                $nome_no_cartao.keyup(valid_info_dono);
+                $data_nascimento.keyup(valid_info_dono);
 
                 PagSeguroDirectPayment.setSessionId('{{ pagseguro.session_id }}');
                 $formas_de_pagamento.fadeIn(500);
 
 
-
-                {#                console.log(PagSeguroDirectPayment.getSenderHash());#}
+                $btn_confirmar.click(function (){
+                    $sender_hash.val(PagSeguroDirectPayment.getSenderHash());
+                    $forma_de_pagamento_form.submit();
+                });
             });
         </script>
     {% endif %}

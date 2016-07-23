@@ -199,7 +199,7 @@ class Doacao(models.Model):
     @property
     def checkout_url(self):
         if not self.pagamento.checkout:
-            return None
+            return reverse('financeiro:doacao_pagamento:index', kwargs={'doacao_id': self.id})
         return '{}?code={}'.format(PAYMENT_URL, self.pagamento.checkout.code)
 
 class MediaManager(models.Manager):
