@@ -59,6 +59,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
     email_pagseguro = models.EmailField('E-mail do PagSeguro', blank=True, null= True)
+    cpf = models.CharField('CPF', max_length=14, blank=True)
+    telefone_ddd = models.IntegerField('DDD do número do telefone', null=True)
+    telefone_numero = models.IntegerField('número do telefone sem DDD', null=True)
 
     objects = UsuarioManager()
 
@@ -183,6 +186,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def calcular_dias_restantes_proximo_aniversario(self, ano=datetime.date.today().year):
         return (self.proximo_aniversario - datetime.date.today()).days
+
+    @property
+    def cleaned_cpf(self):
+        return self.cpf.replace('.', '').replace('-', '')
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):

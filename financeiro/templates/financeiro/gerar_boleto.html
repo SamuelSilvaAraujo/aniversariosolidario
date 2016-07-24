@@ -1,0 +1,9 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="text-center">Seu boleto foi gerado com sucesso!</h2>
+        <p class="text-center"><a class="btn btn-lg btn-primary" href="{{ doacao.pagamento.boleto_link }}" target="_blank">Imprimir Boleto <i class="fa fa-fw fa-barcode"></i></a></p>
+        <p><strong>ATENÇÃO:</strong><br>O link para imprimir o boleto também ficará disponível na página <a href="{% url 'usuarios:doacoes' %}">Minhas Doações</a></p>
+    </div>
+{% endblock %}
