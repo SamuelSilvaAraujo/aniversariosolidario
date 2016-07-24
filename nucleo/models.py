@@ -2,8 +2,10 @@
 from __future__ import unicode_literals
 
 import datetime
+import urllib
 from tempfile import mkstemp
 
+import flickrapi
 import os
 
 from PIL import Image
@@ -85,7 +87,7 @@ class Aniversario(models.Model):
     finalizado = models.DateTimeField(null=True, blank=True)
     feeback_liberado = models.BooleanField(default=False)
     feedback = models.ForeignKey(Feedback, null=True, blank=True)
-    imagem_divulgacao_fb = models.ImageField(null=True)
+    imagem_divulgacao_fb = models.ImageField(null=True, blank=True)
 
     def __unicode__(self):
         return 'Aniversário de {} - {}'.format(self.usuario.nome, self.missao.titulo)
@@ -169,15 +171,52 @@ class Aniversario(models.Model):
         email.enviar_as = timezone.now()
         email.save(update_fields=['enviar_as'])
 
+    DIVULGACAO_FB_SIZE = (1200, 630)
     def gerar_imagem_divulgacao_fb(self):
+        delete_background = False
         try:
             background_path = get_thumbnailer(self.missao.medias.all()[0].arquivo).get_thumbnail({
-                'size': (1200, 630),
+                'size': Aniversario.DIVULGACAO_FB_SIZE,
                 'crop': True,
                 'upscale': True
             }).path
         except:
-            background_path = None #TODO: BAIXAR IMAGEM DO GOOGLE
+            flickr = flickrapi.FlickrAPI(settings.FLICKR_KEY, settings.FLICKR_SECRET_KEY)
+            img_url = None
+            filename = None
+            for photo in flickr.walk(
+                    tags=','.join(filter(lambda x: len(x) > 2, self.missao.beneficiado.split(' '))),
+                    content_type=1
+            ):
+                img_url = 'http://farm{}.staticflickr.com/{}/{}_{}.jpg'.format(
+                    photo.get('farm'),
+                    photo.get('server'),
+                    photo.get('id'),
+                    photo.get('secret')
+                )
+                filename = '{}_{}.jpg'.format(
+                    photo.get('id'),
+                    photo.get('secret')
+                )
+                break
+            i, temp_path = mkstemp(filename)
+            urllib.urlretrieve(img_url, temp_path)
+            im = Image.open(temp_path)
+            w, h = im.size
+            w_r = Aniversario.DIVULGACAO_FB_SIZE[0]/float(w)
+            h_r = Aniversario.DIVULGACAO_FB_SIZE[1]/float(h)
+            r = w_r if w_r > h_r else h_r
+            im = im.resize((int(w*r), int(h*r)), Image.ANTIALIAS)
+            background = Image.new('RGBA', Aniversario.DIVULGACAO_FB_SIZE, (255, 255, 255, 0))
+            background.paste(
+                im, (
+                    (Aniversario.DIVULGACAO_FB_SIZE[0] - im.size[0]),
+                    (Aniversario.DIVULGACAO_FB_SIZE[1] - im.size[1])
+                )
+            )
+            background.save(temp_path)
+            background_path = temp_path
+            delete_background = True
 
         if background_path:
             background = Image.open(background_path, 'r').convert('RGBA')
@@ -200,6 +239,7 @@ class Aniversario(models.Model):
             self.imagem_divulgacao_fb.save(filename, django_file)
             file.close()
             os.unlink(temp_path)
+            if delete_background: os.unlink(background_path)
             return True
         return False
 
