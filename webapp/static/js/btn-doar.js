@@ -24,6 +24,7 @@ $(document).ready(function () {
         var $this = $(this);
         $this.click(function (){
             valorDoacao($this.data('btn-valor-docao'));
+            $input_outro_valor.val('');
         });
     });
 
