@@ -1,6 +1,7 @@
 env/
 .idea/
 media/
+staticfiles/
 activate
 db.sqlite3
 *.pyc

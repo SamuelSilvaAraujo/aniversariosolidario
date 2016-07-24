@@ -1233,6 +1233,30 @@ hr {
   color: #fff;
   background-color: #e67e22;
 }
+.clickable {
+  cursor: pointer;
+}
+.doadores:before,
+.doadores:after {
+  display: table;
+  content: " ";
+}
+.doadores:after {
+  clear: both;
+}
+.doadores:before,
+.doadores:after {
+  display: table;
+  content: " ";
+}
+.doadores:after {
+  clear: both;
+}
+.doadores .doador {
+  display: inline-block;
+  float: left;
+  margin: 5px 5px 0 0;
+}
 h1,
 h2,
 h3,

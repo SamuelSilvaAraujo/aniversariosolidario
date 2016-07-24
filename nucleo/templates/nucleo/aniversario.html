@@ -3,6 +3,19 @@
 {% load staticfiles %}
 
 {% block title %}{{ aniversario.usuario.nome_curto }} está realizando um Aniversário Solidário - {{ aniversario.missao.titulo }}{% endblock %}
+{% block description %}{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}{% endblock %}
+
+{% block facebook-tags %}
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content="{{ aniversario.full_url }}">
+    <meta property="og:title" content="{{ aniversario.usuario.nome_curto }} trocou seus presentes de aniversário para ajudar {{ aniversario.missao.beneficiado }}">
+    <meta property="og:site_name" content="Aniversário Solidário">
+    <meta property="og:description" content="{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}">
+    <meta property="og:image" content="{{ aniversario.get_imagem_divulgacao_fb.url }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -66,22 +79,23 @@
                 {% if aniversario.doacoes.pagas %}
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            {% for doacao in aniversario.doacoes.pagas %}
-                                <span data-toggle="tooltip" title="{{ doacao.usuario.nome }}"><img src='{{ doacao.usuario.foto_micro_url }}' alt='Doador {{ doacao.usuario.nome }}'/></span>
-                            {% endfor %}
+                            <h4 class="text-center">Quem já ajudou!</h4>
+                            <p class="doadores">{% for doacao in aniversario.doacoes.pagas %}<span data-toggle="tooltip" title="{{ doacao.usuario.nome }}" class="doador"><img src='{{ doacao.usuario.foto_micro_url }}' alt='Doador {{ doacao.usuario.nome }}'/></span>{% endfor %}</p>
                         </div>
                     </div>
                 {% endif %}
             </div>
             <div class="col-md-9">
-                {% if aniversario.missao.medias.all.0 %}
-                    <div class="thumbnail">
-                        <img src="{{ aniversario.missao.medias.all.0.arquivo_folder_url }}" alt="{{ aniversario.missao.medias.all.0.descricao|default:'Mídia 1' }}" class="img-responsive">
-                        {% if aniversario.missao.medias.all.0.descricao %}
-                            <div class="caption">{{ aniversario.missao.medias.all.0.descricao }}</div>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                {% with aniversario_media_0=aniversario.missao.medias.all.0 %}
+                    {% if  aniversario_media_0 %}
+                        <div class="thumbnail">
+                            <img src="{{ aniversario_media_0.arquivo_folder_url }}" alt="{{ aniversario_media_0.descricao|default:'Mídia 1' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ aniversario_media_0.arquivo.url }}">
+                            {% if aniversario_media_0.descricao %}
+                                <div class="caption">{{ aniversario_media_0.descricao }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
 
                 <div class="panel panel-default">
                     <div class="panel-heading"><h4>Sobre a missão</h4></div>
@@ -95,7 +109,7 @@
                             {% for media in medias_restantes %}
                                 <div class="col-md-3 col-xs-6">
                                     <div class="thumbnail">
-                                        <img src="{{ media.arquivo_md_url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive">
+                                        <img src="{{ media.arquivo_md_url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
                                         <div class="caption">{{ media.descricao }}</div>
                                     </div>
                                 </div>
@@ -134,6 +148,15 @@
             </div>
         </div>
     {% endif %}
+
+    <div id="abrirImagemModel" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <img class="img-responsive img-modal" data-dismiss="modal" src="">
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block extra-js %}
@@ -143,6 +166,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
+            $('#abrirImagemModel').on('show.bs.modal', function (e) {
+                var image = $(e.relatedTarget).attr('data-image');
+                $(".img-modal").attr('src', image);
+            });
         });
     </script>
 {% endblock %}

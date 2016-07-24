@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
+    'localflavor',
     'usuarios',
     'nucleo',
     'financeiro',
@@ -143,6 +144,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
@@ -166,6 +168,11 @@ PAGSEGURO_EMAIL = 'douglas.paz.net@gmail.com'
 PAGSEGURO_TOKEN = '5560FA1076914B6F98DBD3BC7FEC222E'
 PAGSEGURO_SANDBOX = True
 PAGSEGURO_LOG_IN_MODEL = True
+
+# FLICKR
+
+FLICKR_KEY = 'ac56926f7d014e5c531395d9324963bc'
+FLICKR_SECRET_KEY = '265b9fe0479d5d2e'
 
 # CONFIG
 

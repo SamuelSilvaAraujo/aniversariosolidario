@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import os
 import random
 import string
 import datetime
@@ -59,6 +60,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     data_ativacao_email = models.DateTimeField('data de ativação do e-mail', null=True, blank=True)
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
     email_pagseguro = models.EmailField('E-mail do PagSeguro', blank=True, null= True)
+    cpf = models.CharField('CPF', max_length=14, blank=True)
+    telefone_ddd = models.IntegerField('DDD do número do telefone', null=True)
+    telefone_numero = models.IntegerField('número do telefone sem DDD', null=True)
 
     objects = UsuarioManager()
 
@@ -107,14 +111,22 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         'micro': (40, 40),
     }
 
-    def get_foto_url(self, dm):
-        if not self.foto:
-            return static('imgs/avatar-{}.png'.format(dm))
+    def get_foto(self, dm):
         return get_thumbnailer(self.foto).get_thumbnail({
             'size': Usuario.DM_DICT.get(dm),
             'crop': True,
             'upscale': True
-        }).url
+        })
+
+    def get_foto_url(self, dm):
+        if not self.foto:
+            return static('imgs/avatar-{}.png'.format(dm))
+        return self.get_foto(dm).url
+
+    def get_foto_path(self, dm):
+        if not self.foto:
+            return os.path.join(settings.STATIC_ROOT, 'imgs/avatar-{}.png'.format(dm))
+        return self.get_foto(dm).path
 
     @property
     def foto_lg_url(self):
@@ -183,6 +195,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     def calcular_dias_restantes_proximo_aniversario(self, ano=datetime.date.today().year):
         return (self.proximo_aniversario - datetime.date.today()).days
+
+    @property
+    def cleaned_cpf(self):
+        return self.cpf.replace('.', '').replace('-', '')
 
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):
