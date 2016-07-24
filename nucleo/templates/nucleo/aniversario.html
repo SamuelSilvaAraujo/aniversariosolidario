@@ -5,7 +5,7 @@
 {% block title %}{{ aniversario.usuario.nome_curto }} está realizando um Aniversário Solidário - {{ aniversario.missao.titulo }}{% endblock %}
 {% block description %}{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}{% endblock %}
 
-{% block facebook-tags %}
+{% block social-tags %}
     <meta property="fb:app_id" content="1551384735169388">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:url" content="{{ aniversario.full_url }}">
