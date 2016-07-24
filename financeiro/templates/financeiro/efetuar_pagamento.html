@@ -1,6 +1,6 @@
 {% extends 'webapp/bootstrap_base.html' %}
 
-{% load bootstrap3 staticfiles %}
+{% load bootstrap3 staticfiles pagseguro_extra %}
 
 {% block content %}
     <div class="container">
@@ -243,7 +243,7 @@
 
 {% block extra-js %}
     {% if pagseguro %}
-        <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+        <script type="text/javascript" src="{% pagseguro_directpayment %}"></script>
         <script type="text/javascript">
             $(document).ready(function (){
                 var
