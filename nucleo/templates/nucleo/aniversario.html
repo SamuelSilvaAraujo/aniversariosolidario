@@ -77,7 +77,7 @@
                 {% with aniversario_media_0=aniversario.missao.medias.all.0 %}
                     {% if  aniversario_media_0 %}
                         <div class="thumbnail">
-                            <img src="{{ aniversario_media_0.arquivo_folder_url }}" alt="{{ aniversario_media_0.descricao|default:'Mídia 1' }}" class="img-responsive" data-toggle="modal" data-target="#myModal" data-image="{{ aniversario_media_0.arquivo.url }}">
+                            <img src="{{ aniversario_media_0.arquivo_folder_url }}" alt="{{ aniversario_media_0.descricao|default:'Mídia 1' }}" class="img-responsive" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ aniversario_media_0.arquivo.url }}">
                             {% if aniversario_media_0.descricao %}
                                 <div class="caption">{{ aniversario_media_0.descricao }}</div>
                             {% endif %}
@@ -97,7 +97,7 @@
                             {% for media in medias_restantes %}
                                 <div class="col-md-3 col-xs-6">
                                     <div class="thumbnail">
-                                        <img src="{{ media.arquivo_md_url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive" data-toggle="modal" data-target="#myModal" data-image="{{ media.arquivo.url }}">
+                                        <img src="{{ media.arquivo_md_url }}" alt="{{ media.descricao|default:'Mídia 1' }}" class="img-responsive" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
                                         <div class="caption">{{ media.descricao }}</div>
                                     </div>
                                 </div>
@@ -137,14 +137,14 @@
         </div>
     {% endif %}
 
-    <div id="myModal" class="modal fade" role="dialog">
+    <div id="abrirImagemModel" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     <img class="img-responsive img-modal" src="" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-fw fa-"></i> Fechar</button>
                 </div>
             </div>
         </div>
@@ -159,8 +159,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
-
-            $('#myModal').on('show.bs.modal', function (e) {
+            $('#abrirImagemModel').on('show.bs.modal', function (e) {
                 var image = $(e.relatedTarget).attr('data-image');
                 $(".img-modal").attr('src', image);
             });
