@@ -2,6 +2,11 @@
 
 {% load staticfiles %}
 
+{% block facebook-tags %}
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content="{{ aniversario.full_url }}">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">

@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="{% block description %}Seu melhor presente pode ser o sorriso de alguém. Troque o seu presente de aniversário tradicional por uma doação e faça o bem.{% endblock %}">
+    {% block extra-meta %}{% endblock %}
+    {% block facebook-tags %}{% endblock %}
     <title>{% block title %}Aniversário Solidário{% endblock %}</title>
 
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,300,700">
@@ -79,7 +82,7 @@
         {% if user.is_authenticated and not user.data_ativacao_email %}
             <div class="well">
                 <h3>Confirme seu e-mail!</h3>
-                <p>Enviamos um e-mail para <strong>{{ user.email }}</strong> com um link de confirmação.<br>Caso queira receber outro e-mail: <a href="{% url 'usuarios:reenviar_email_de_confirmacao' %}">clique aqui</a>.</p>
+                <p>Enviamos um e-mail para <strong>{{ user.email }}</strong> com um link de confirmação.<br>Ainda não recebeu o e-mail? <a href="{% url 'usuarios:reenviar_email_de_confirmacao' %}">clique aqui</a>.</p>
             </div>
         {% endif %}
     </div>

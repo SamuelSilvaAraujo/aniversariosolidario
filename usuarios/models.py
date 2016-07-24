@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import os
 import random
 import string
 import datetime
@@ -110,14 +111,22 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         'micro': (40, 40),
     }
 
-    def get_foto_url(self, dm):
-        if not self.foto:
-            return static('imgs/avatar-{}.png'.format(dm))
+    def get_foto(self, dm):
         return get_thumbnailer(self.foto).get_thumbnail({
             'size': Usuario.DM_DICT.get(dm),
             'crop': True,
             'upscale': True
-        }).url
+        })
+
+    def get_foto_url(self, dm):
+        if not self.foto:
+            return static('imgs/avatar-{}.png'.format(dm))
+        return self.get_foto(dm).url
+
+    def get_foto_path(self, dm):
+        if not self.foto:
+            return os.path.join(settings.STATIC_ROOT, 'imgs/avatar-{}.png'.format(dm))
+        return self.get_foto(dm).path
 
     @property
     def foto_lg_url(self):

@@ -2,8 +2,15 @@
 from __future__ import unicode_literals
 
 import datetime
+from tempfile import mkstemp
 
+import os
+
+from PIL import Image
+from PIL.ImageDraw import ImageDraw, Draw
+from PIL.ImageFont import ImageFont, truetype
 from django.conf import settings
+from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
@@ -78,6 +85,7 @@ class Aniversario(models.Model):
     finalizado = models.DateTimeField(null=True, blank=True)
     feeback_liberado = models.BooleanField(default=False)
     feedback = models.ForeignKey(Feedback, null=True, blank=True)
+    imagem_divulgacao_fb = models.ImageField(null=True)
 
     def __unicode__(self):
         return 'Aniversário de {} - {}'.format(self.usuario.nome, self.missao.titulo)
@@ -160,6 +168,46 @@ class Aniversario(models.Model):
         )
         email.enviar_as = timezone.now()
         email.save(update_fields=['enviar_as'])
+
+    def gerar_imagem_divulgacao_fb(self):
+        try:
+            background_path = get_thumbnailer(self.missao.medias.all()[0].arquivo).get_thumbnail({
+                'size': (1200, 630),
+                'crop': True,
+                'upscale': True
+            }).path
+        except:
+            background_path = None #TODO: BAIXAR IMAGEM DO GOOGLE
+
+        if background_path:
+            background = Image.open(background_path, 'r').convert('RGBA')
+            avatar = Image.open(self.usuario.get_foto_path('sm'), 'r').convert('RGBA')
+            tarxa = Image.new('RGBA', (1200, 120), (236, 240, 241, 255))
+            background.paste(tarxa, (0, 500))
+            background.paste(avatar, (10, 500))
+            txt = Image.new('RGBA', background.size, (255, 255, 255, 0))
+            fnt = truetype(os.path.join(settings.STATIC_ROOT, 'fonts/fontastique.ttf'), 40)
+            subfnt = truetype(os.path.join(settings.STATIC_ROOT, 'fonts/fontastique.ttf'), 30)
+            draw = Draw(txt)
+            draw.text((150, 520), self.usuario.nome_curto, font=fnt, fill=(44, 62, 80, 255))
+            draw.text((150, 570), self.missao.titulo, font=subfnt, fill=(52, 73, 94, 255))
+            final_img = Image.alpha_composite(background, txt)
+            filename = '{}-fb-cover.png'.format(self.usuario.slug)
+            i, temp_path = mkstemp(filename)
+            final_img.save(temp_path)
+            file = open(temp_path)
+            django_file = File(file)
+            self.imagem_divulgacao_fb.save(filename, django_file)
+            file.close()
+            os.unlink(temp_path)
+            return True
+        return False
+
+    def get_imagem_divulgacao_fb(self):
+        if not self.imagem_divulgacao_fb:
+            self.gerar_imagem_divulgacao_fb()
+        return self.imagem_divulgacao_fb
+
 
 @receiver(post_save, sender=Aniversario)
 def post_save_Aniversario(instance, created, **kwargs):
