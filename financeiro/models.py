@@ -10,8 +10,9 @@ from usuarios.models import Usuario
 class Pagamento(models.Model):
     valor = models.IntegerField()
     status = models.CharField(choices=TRANSACTION_STATUS_CHOICES, default='aguardando', max_length=32)
-    checkout = models.ForeignKey(Checkout, related_name='pagamentos', null=True)
+    checkout = models.ForeignKey(Checkout, related_name='pagamentos', null=True, blank=True)
     boleto_link = models.URLField('Link para o boleto', blank=True)
+    cartao = models.ForeignKey(Checkout, related_name='pagamentos_por_cartao', null=True, blank=True)
 
     @property
     def status_verbose(self):

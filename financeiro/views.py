@@ -50,7 +50,6 @@ def completar_pagamento(request, doacao_id):
     if not request.method == 'POST':
         return redirect(reverse('financeiro:doacao_pagamento:index', kwargs={'doacao_id': doacao_id}))
 
-    print request.POST
     doacao = get_object_or_404(Doacao, id=doacao_id, usuario=request.user)
 
     payment_method = request.POST.get('payment_method')
@@ -116,7 +115,45 @@ def completar_pagamento(request, doacao_id):
             return redirect(reverse('financeiro:doacao_pagamento:gerar_boleto', kwargs={'doacao_id': doacao.id}))
         if payment_method == 'creditcard':
             pagseguro_api.set_creditcard_token(request.POST.get('card_token'))
-            return
+            pagseguro_api.set_creditcard_data(
+                quantity=1,
+                value='%.2f' % doacao.pagamento.valor,
+                name=request.POST.get('nome-no-cartao'),
+                birth_date=request.POST.get('data-nascimento-cartao'),
+                cpf=request.POST.get('cpf-cartao'),
+                area_code=request.POST.get('telefone-ddd'),
+                phone=request.POST.get('telefone')
+            )
+
+            endereco_cartao = None
+            endereco_cartao_opt = request.POST.get('endereco-cartao')
+            if endereco_cartao_opt == 'mesmo':
+                endereco_cartao = endereco
+            elif endereco_cartao_opt == 'novo':
+                endereco_cartao = Endereco.objects.create(
+                    usuario=request.user,
+                    lagradouro=request.POST.get('endereco-cartao-lagradouro'),
+                    numero=int(request.POST.get('endereco-cartao-numero')),
+                    complemento=request.POST.get('endereco-cartao-complemento'),
+                    bairro=request.POST.get('endereco-cartao-bairro'),
+                    cep=request.POST.get('endereco-cartao-cep'),
+                    cidade=request.POST.get('endereco-cartao-cidade'),
+                    estado=request.POST.get('endereco-cartao-estado')
+                )
+            else:
+                endereco_cartao = Endereco.objects.get(
+                    usuario=request.user,
+                    id=int(request.POST.get('endereco-cartao'))
+                )
+            pagseguro_api.set_creditcard_billing_address(**endereco_cartao.pagseguro_serialize())
+
+            pagseguro_data = pagseguro_api.checkout()
+            doacao.pagamento.cartao = Checkout.objects.get(code=pagseguro_data.get('code'))
+            doacao.pagamento.save(update_fields=['cartao'])
+            return redirect(reverse('aniversario:doacao_realizada', kwargs={
+                'slug_usuario': doacao.aniversario.usuario.slug,
+                'slug_missao': doacao.aniversario.missao.slug
+            }))
 
     raise Http404()
 

@@ -35,7 +35,7 @@
                             <div class="panel-body">
                                 <P>Aniversário solidário: <a href="{% url 'aniversario:index' slug_usuario=doacao.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></P>
                                 <P>Valor doado: {{ doacao.pagamento.valor }}</P>
-                                <span class="label label-primary">{{ doacao.pagamento.status }}</span>
+                                <span class="label label-primary">{{ doacao.pagamento.status_verbose }}</span>
                             </div>
                         </div>
                     </div>
