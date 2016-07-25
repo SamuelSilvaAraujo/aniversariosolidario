@@ -243,10 +243,13 @@ class Aniversario(models.Model):
             return True
         return False
 
-    def get_imagem_divulgacao_fb(self):
+    def get_imagem_divulgacao_fb_url(self):
         if not self.imagem_divulgacao_fb:
             self.gerar_imagem_divulgacao_fb()
-        return self.imagem_divulgacao_fb
+        return '{}{}'.format(
+            settings.MEDIA_FULL_URL,
+            self.imagem_divulgacao_fb.name[2:]
+        )
 
 
 @receiver(post_save, sender=Aniversario)

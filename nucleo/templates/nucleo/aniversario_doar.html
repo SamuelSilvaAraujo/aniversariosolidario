@@ -9,7 +9,7 @@
     <meta property="og:title" content="Faça uma doação para o Aniversário Solidário de {{ aniversario.usuario.nome_curto }} e ajude {{ aniversario.missao.beneficiado }}">
     <meta property="og:site_name" content="Aniversário Solidário">
     <meta property="og:description" content="{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}">
-    <meta property="og:image" content="{{ aniversario.get_imagem_divulgacao_fb.url }}">
+    <meta property="og:image" content="{{ aniversario.get_imagem_divulgacao_fb_url }}">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -17,7 +17,7 @@
     <meta name="twitter:site" content="@aniverSolidario">
     <meta name="twitter:title" content="Faça uma doação para o Aniversário Solidário de {{ aniversario.usuario.nome_curto }} e ajude {{ aniversario.missao.beneficiado }}">
     <meta name="twitter:description" content="{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}">
-    <meta name="twitter:image" content="{{ aniversario.get_imagem_divulgacao_fb.url }}">
+    <meta name="twitter:image" content="{{ aniversario.get_imagem_divulgacao_fb_url }}">
 {% endblock %}
 
 {% block content %}
