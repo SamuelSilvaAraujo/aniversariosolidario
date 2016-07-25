@@ -5,7 +5,8 @@
 {% block title %}{{ aniversario.usuario.nome_curto }} está realizando um Aniversário Solidário - {{ aniversario.missao.titulo }}{% endblock %}
 {% block description %}{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}{% endblock %}
 
-{% block facebook-tags %}
+{% block social-tags %}
+    <meta property="fb:app_id" content="1551384735169388">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:url" content="{{ aniversario.full_url }}">
     <meta property="og:title" content="{{ aniversario.usuario.nome_curto }} trocou seus presentes de aniversário para ajudar {{ aniversario.missao.beneficiado }}">
@@ -13,8 +14,13 @@
     <meta property="og:description" content="{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}">
     <meta property="og:image" content="{{ aniversario.get_imagem_divulgacao_fb.url }}">
     <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="850">
+    <meta property="og:image:height" content="315">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@aniverSolidario">
+    <meta name="twitter:title" content="{{ aniversario.usuario.nome_curto }} trocou seus presentes de aniversário para ajudar {{ aniversario.missao.beneficiado }}">
+    <meta name="twitter:description" content="{% if aniversario.apelo %}{{ aniversario.apelo }} - {{ aniversario.usuario.nome }}{% else %}{{ aniversario.missao.descricao }}{% endif %}">
+    <meta name="twitter:image" content="{{ aniversario.get_imagem_divulgacao_fb.url }}">
 {% endblock %}
 
 {% block content %}
