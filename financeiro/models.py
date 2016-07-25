@@ -14,6 +14,9 @@ class Pagamento(models.Model):
     boleto_link = models.URLField('Link para o boleto', blank=True)
     cartao = models.ForeignKey(Checkout, related_name='pagamentos_por_cartao', null=True, blank=True)
 
+    def __unicode__(self):
+        return '{}'.format(self.status_verbose)
+
     @property
     def status_verbose(self):
         return dict(TRANSACTION_STATUS_CHOICES).get(self.status)
