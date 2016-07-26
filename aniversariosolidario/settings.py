@@ -107,6 +107,24 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 SOCIALACCOUNT_ADAPTER = 'usuarios.adapter.UsuarioSocialAccountAdapter'
 ACCOUNT_ADAPTER = 'usuarios.adapter.UsuarioAccountAdapter'
 
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time',
+            'birthday'],
+    },
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 

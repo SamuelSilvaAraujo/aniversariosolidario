@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import redirect
 from django.utils import timezone
 from usuarios.models import Usuario
@@ -12,6 +14,7 @@ from django.core.urlresolvers import reverse
 class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def populate_user(self, request, sociallogin, data):
+        user = sociallogin.user
         username = data.get('username')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
@@ -19,8 +22,9 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
             email = '{}@twitter.com'.format(username)
         else:
             email = data.get('email')
+            birthday = sociallogin.account.extra_data.get('birthday')
+            user_field(user, 'data_de_nascimento', '{}'.format(datetime.strptime(birthday, '%m/%d/%Y').strftime('%Y-%m-%d') or None))
         name = data.get('name')
-        user = sociallogin.user
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
         name_parts = (name or '').partition(' ')
