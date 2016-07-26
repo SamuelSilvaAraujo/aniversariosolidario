@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^styleguide/$', webapp_views.styleguide, name='styleguide'),
     url(r'^raise/$', webapp_views.raisee, name='raisee'),
     url(r'^error404/$', webapp_views.error404, name='error404'),
+    url(r'^error500/$', webapp_views.error500, name='error500'),
     url(r'^cancelarenviodeemails/(?P<chave>[A-Z]+)/$', emails_views.cancelar_envio_de_emails, name='cancelar_envio_de_emails'),
     url(r'^retorno/doacao/', webapp_views.retorno_doacao, name='retorno_doacao'),
 
