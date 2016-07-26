@@ -15,9 +15,6 @@ def index(request):
 def styleguide(request):
     return render(request, 'webapp/styleguide.html')
 
-def raisee(request):
-    raise
-
 def termos_uso(request):
     return render(request, 'webapp/termos_uso.html')
 
@@ -33,3 +30,9 @@ def retorno_doacao(request):
         'slug_usuario': doacao.aniversario.usuario.slug,
         'slug_missao': doacao.aniversario.missao.slug
     }))
+
+def raisee(request):
+    raise
+
+def error404(request):
+    return render(request, '404.html')

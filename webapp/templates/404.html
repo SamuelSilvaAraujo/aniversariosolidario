@@ -1,0 +1,30 @@
+{% extends 'webapp/bootstrap_base.html' %}
+
+{% block title %}Página não encontrada{% endblock %}
+
+{% block extra-messages %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Página não encontrada :(</h1>
+        <h4>Sentimos muito por não ter encontrado o que procurava!</h4>
+        <hr>
+        <h3>Talvez você esteja procurando por...</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'index' %}">Página inicial</a></li>
+                    <li><a href="{% url 'termos_uso' %}">Termos de uso</a></li>
+                    <li><a href="http://blog.aniversariosolidario.com/" target="_blank">Blog do Aniversário Solidário</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-6">
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'usuarios:cadastro' %}">Criar uma conta</a></li>
+                    <li><a href="{% url 'usuarios:login' %}">Entrar na minha conta</a></li>
+                    <li><a href="{% url 'usuarios:recuperarsenha:index' %}">Recuperar minha senha</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
