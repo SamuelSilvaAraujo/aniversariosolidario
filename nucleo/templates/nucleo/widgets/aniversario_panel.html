@@ -1,9 +1,9 @@
 <div class="panel panel-default">
-    <a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}"><img src="{{ aniversario.missao.foto_divulgacao_quadrada_url }}" class="img-responsive" /></a>
+    <a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}"><img src="{{ aniversario.missao.foto_divulgacao_quadrada_url }}" class="img-responsive" alt="Foto principal da missão {{ aniversario.missao.titulo }}" /></a>
     <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
     <div class="panel-body">
         <div class="media">
-            <div class="media-left"><img src="{{ aniversario.usuario.foto_xs_url }}" class="img-rounded" /></div>
+            <div class="media-left"><img src="{{ aniversario.usuario.foto_xs_url }}" class="img-rounded" alt="Foto de {{ aniversario.usuario.nome }}" /></div>
             <div class="media-body">
                 <h4><small>A missao de {{ aniversario.usuario.nome_curto }} é </small><br><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">{{ aniversario.missao.titulo }}</a></h4>
                 <p>R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
