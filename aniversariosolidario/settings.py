@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'aniversariosolidario.context_processors.taxa',
                 'aniversariosolidario.context_processors.debug',
+                'aniversariosolidario.context_processors.full_urls',
             ],
         },
     },
