@@ -268,9 +268,14 @@ class DoacaoManager(models.Manager):
             pagamento__status='aguardando'
         )
 
-    def em_andamento(self):
-        return self.exclude(
-            pagamento__status='aguardando'
+    def em_analise(self):
+        return self.filter(
+            pagamento__status='em_analise'
+        )
+
+    def canceladas(self):
+        return self.filter(
+            pagamento__status__in=['cancelado', 'devolvido', 'em_disputa']
         )
 
 class Doacao(models.Model):

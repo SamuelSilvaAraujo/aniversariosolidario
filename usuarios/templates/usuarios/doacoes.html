@@ -1,8 +1,8 @@
 {% extends 'usuarios/usuarios-base.html' %}
 
 {% block in-content %}
-    {% with aguardando_pagamento=user.doacoes_feitas.aguardando_pagamento em_andamento=user.doacoes_feitas.em_andamento  %}
-        {% if not aguardando_pagamento and not em_andamento %}
+    {% with aguardando_pagamento=user.doacoes_feitas.aguardando_pagamento em_analise=user.doacoes_feitas.em_analise pagas=user.doacoes_feitas.pagas canceladas=user.doacoes_feitas.canceladas %}
+        {% if not aguardando_pagamento and not em_analise and not pagas and not canceladas %}
             <p class="text-center">Você não fez nenhuma doação por enquanto!</p>
         {% endif %}
         {% if aguardando_pagamento %}
@@ -26,16 +26,48 @@
                 {% endfor %}
             </div>
         {% endif %}
-        {% if em_andamento %}
-            <h2>Doações em andamento</h2>
+        {% if em_analise %}
+            <h2>Em análise</h2>
             <div class="row">
-                {% for doacao in user.doacoes_feitas.em_andamento %}
+                {% for doacao in em_analise %}
                     <div class="col-md-4">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <P>Aniversário solidário: <a href="{% url 'aniversario:index' slug_usuario=doacao.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></P>
-                                <P>Valor doado: {{ doacao.pagamento.valor }}</P>
-                                <span class="label label-primary">{{ doacao.pagamento.status_verbose }}</span>
+                                <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.aniversario.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
+                                <p><strong>Valor:</strong> R${{ doacao.pagamento.valor }}</p>
+                                <p><span class="label label-primary">{{ doacao.pagamento.status_verbose }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if pagas %}
+            <h3>Concluídas</h3>
+            <div class="row">
+                {% for doacao in pagas %}
+                   <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.aniversario.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
+                                <p><strong>Valor:</strong> R${{ doacao.pagamento.valor }}</p>
+                                <p><span class="label label-success">{{ doacao.pagamento.status_verbose }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if canceladas %}
+            <h3>Canceladas</h3>
+            <div class="row">
+                {% for doacao in canceladas %}
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4><small>Aniversário Solidário:</small><br><a href="{% url 'aniversario:index' slug_usuario=doacao.aniversario.usuario.slug slug_missao=doacao.aniversario.missao.slug %}">{{ doacao.aniversario.missao.titulo }}</a></h4>
+                                <p><strong>Valor:</strong> R${{ doacao.pagamento.valor }}</p>
+                                <p><span class="label label-danger">{{ doacao.pagamento.status_verbose }}</span></p>
                             </div>
                         </div>
                     </div>
