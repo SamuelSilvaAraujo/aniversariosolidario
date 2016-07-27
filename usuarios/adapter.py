@@ -29,7 +29,9 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
         name_parts = (name or '').partition(' ')
-        user_field(user, 'nome', '{} {}'.format(first_name or name_parts[0], last_name or name_parts[2]))
+        first_name = first_name or name_parts[0]
+        last_name = last_name or name_parts[2]
+        user_field(user, 'nome', u'{} {}'.decode('utf-8').format(first_name, last_name))
         if not user.data_ativacao_email:
             user.data_ativacao_email = timezone.now()
         return user
