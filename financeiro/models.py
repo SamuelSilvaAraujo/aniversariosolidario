@@ -77,7 +77,7 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     doacao.pagamento.save(update_fields=['status'])
     if not doacao.usuario and not doacao.doador:
         email = transaction.get('email')
-        nome = transaction.get('nome')
+        nome = transaction.get('name')
 
         try:
             doacao.usuario = Usuario.objects.get(email=email)
