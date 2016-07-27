@@ -1,11 +1,16 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import logging
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
 from pagseguro.signals import notificacao_recebida, update_transaction
 from usuarios.models import Usuario
+
+
+logger = logging.getLogger(__name__)
 
 
 class Pagamento(models.Model):
@@ -76,7 +81,8 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     doacao.pagamento.status = transaction_instance.status
     doacao.pagamento.save(update_fields=['status'])
     if not doacao.usuario and not doacao.doador:
-        print transaction, transaction.keys()
+        logger.debug(transaction)
+        logger.debug(transaction.keys())
 
         email = transaction.get('email')
         nome = transaction.get('name')
