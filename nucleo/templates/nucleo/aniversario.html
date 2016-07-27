@@ -43,11 +43,11 @@
                 {% endif %}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h3 class="no-margin-top"><p><small>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</small></p>{{ aniversario.missao.titulo }}<p><small>beneficiando {{ aniversario.missao.beneficiado }}</small></p></h3>
+                        <h3 class="no-margin-top"><p>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é {{ aniversario.missao.titulo }} beneficiando {{ aniversario.missao.beneficiado }}</p></h3>
                         {% if aniversario.apelo %}
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="large depoimento">{{ aniversario.apelo }} <i class="fa fa-fw fa-quote-right"></i><span class="depoimento-por">{{ aniversario.usuario.nome }}</span></p>
+                                    <p class="large depoimento">{{ aniversario.apelo }} <i class="fa fa-fw fa-quote-right"></i><span class="depoimento-por text-right">{{ aniversario.usuario.nome }}</span></p>
                                 </div>
                                 <div class="media-right"><i class="fa fa-fw fa-5x fa-commenting-o"></i></div>
                             </div>
@@ -89,6 +89,12 @@
                             <p class="doadores">{% for doacao in aniversario.doacoes.pagas %}<span data-toggle="tooltip" title="{{ doacao.usuario.nome }}" class="doador"><img src='{{ doacao.usuario.foto_micro_url }}' alt='Doador {{ doacao.usuario.nome }}'/></span>{% endfor %}</p>
                         </div>
                     </div>
+                {% else %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>{{ aniversario.usuario.nome }} não recebeu nenhuma doação ate o momento. Seja o primeiro, doe e faça alguem feliz!</p>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
             <div class="col-md-9">
@@ -102,12 +108,10 @@
                         </div>
                     {% endif %}
                 {% endwith %}
-
                 <div class="panel panel-default">
                     <div class="panel-heading"><h4>Sobre a missão</h4></div>
                     <div class="panel-body">{{ aniversario.missao.descricao }}</div>
                 </div>
-
                 {% with medias_restantes=aniversario.missao.medias.exceto_primeiro %}
                     {% if medias_restantes %}
                         <h2>Fotos</h2>
@@ -154,7 +158,6 @@
             </div>
         </div>
     {% endif %}
-
     <div id="abrirImagemModel" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -162,7 +165,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block extra-js %}
