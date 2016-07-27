@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from pagseguro.models import Checkout, TRANSACTION_STATUS_CHOICES
 from pagseguro.signals import notificacao_recebida, update_transaction
@@ -74,5 +75,23 @@ def pagseguro_notificacao_recebida(sender, transaction, **kwargs):
     doacao = Doacao.objects.get(id=int(transaction_instance.reference))
     doacao.pagamento.status = transaction_instance.status
     doacao.pagamento.save(update_fields=['status'])
+    if not doacao.usuario and not doacao.doador:
+        email = transaction.get('email')
+        nome = transaction.get('nome')
+
+        try:
+            doacao.usuario = Usuario.objects.get(email=email)
+            doacao.save(update_fields=['usuario'])
+        except ObjectDoesNotExist:
+            pass
+
+        if not doacao.usuario:
+            from nucleo.models import Doador
+            
+            doacao.doador, created = Doador.objects.get_or_create(
+                nome=nome,
+                email=email
+            )
+            doacao.save(update_fields=['doador'])
 
 notificacao_recebida.connect(pagseguro_notificacao_recebida)

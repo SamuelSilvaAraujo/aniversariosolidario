@@ -125,19 +125,12 @@ def aniversario_doar(request, slug_usuario, slug_missao):
         if int(valor) < 25:
             messages.error(request, 'O valor minimo em uma doação é de 25 reais')
         else:
-            if not request.user.is_authenticated():
-                return redirect('{}?{}'.format(
-                    reverse('usuarios:login_ou_cadastro'),
-                    urllib.urlencode({'next': '{}?valor={}'.format(
-                        reverse('aniversario:doar', kwargs={
-                            'slug_usuario': slug_usuario,
-                            'slug_missao': slug_missao
-                        }),
-                        valor
-                    )})
-                ))
             pagamento = Pagamento.objects.create(valor=valor)
-            doacao = Doacao.objects.create(usuario=request.user, aniversario=aniversario_instance, pagamento=pagamento)
+            doacao = Doacao.objects.create(
+                usuario=request.user if request.user.is_authenticated() else None,
+                aniversario=aniversario_instance,
+                pagamento=pagamento
+            )
             pagseguro_item = PagSeguroItem(
                 id=str(doacao.aniversario.id),
                 description=str(doacao),
