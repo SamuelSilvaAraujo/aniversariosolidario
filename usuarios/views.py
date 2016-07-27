@@ -26,7 +26,7 @@ from nucleo.models import Aniversario
 def index(request):
     return render(request, 'usuarios/index.html')
 
-def social_login_get_avatar(request):
+def social_login_get_infos(request):
     if request.user.is_authenticated():
         user = request.user
         index = int(request.GET.get('i', '0'))

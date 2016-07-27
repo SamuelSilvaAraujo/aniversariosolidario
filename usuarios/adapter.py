@@ -50,7 +50,7 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
 
 class UsuarioAccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        return reverse('usuarios:social_login_get_avatar')
+        return reverse('usuarios:social_login_get_infos')
 
     def add_message(self, *args, **kwargs):
         pass
