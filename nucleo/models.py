@@ -303,6 +303,14 @@ class Doacao(models.Model):
             return reverse('financeiro:doacao_pagamento:index', kwargs={'doacao_id': self.id})
         return '{}?code={}'.format(PAYMENT_URL, self.pagamento.checkout.code)
 
+    @property
+    def usuario_nome(self):
+        if self.usuario:
+            return self.usuario.nome
+        if self.doador:
+            return self.doador.nome
+        return 'Doador não identificado'
+
 class MediaManager(models.Manager):
     def exceto_primeiro(self):
         return self.all()[1:]
