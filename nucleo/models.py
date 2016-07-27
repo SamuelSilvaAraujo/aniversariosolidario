@@ -311,6 +311,12 @@ class Doacao(models.Model):
             return self.doador.nome
         return 'Doador não identificado'
 
+    @property
+    def usuario_foto_url(self):
+        if self.usuario:
+            return self.usuario.foto_micro_url
+        return static('imgs/avatar-micro.png')
+
 class MediaManager(models.Manager):
     def exceto_primeiro(self):
         return self.all()[1:]
