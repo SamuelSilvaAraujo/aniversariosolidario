@@ -26,25 +26,32 @@ from nucleo.models import Aniversario
 def index(request):
     return render(request, 'usuarios/index.html')
 
-@login_required
 def social_login_get_avatar(request):
-    user = request.user
-    index = int(request.GET.get('i', '0'))
-    socials = user.socialaccount_set.all()
-    if socials:
-        try:
-            avatar_url = socials[index].get_avatar_url()
-            ex = avatar_url.split('.')[-1]
-            filename = 'avatar-{}.{}'.format(user.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
-            i, temp_path = mkstemp(filename)
-            urllib.urlretrieve(avatar_url, temp_path)
-            file = open(temp_path)
-            django_file = File(file)
-            user.foto.save(filename, django_file)
-            file.close()
-            unlink(temp_path)
-        except IndexError:
-            pass
+    if request.user.is_authenticated():
+        user = request.user
+        index = int(request.GET.get('i', '0'))
+        socials = user.socialaccount_set.all()
+        if socials:
+            try:
+                social = socials[index]
+            except IndexError:
+                social = None
+
+            if social:
+                avatar_url = social.get_avatar_url()
+                ex = avatar_url.split('.')[-1]
+                filename = 'avatar-{}.{}'.format(user.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
+                i, temp_path = mkstemp(filename)
+                urllib.urlretrieve(avatar_url, temp_path)
+                file = open(temp_path)
+                django_file = File(file)
+                user.foto.save(filename, django_file)
+                file.close()
+                unlink(temp_path)
+
+                birthday = social.extra_data.get('birthday')
+                if birthday:
+                    request.user.data_de_nascimento = '{}'.format(datetime.datetime.strptime(birthday, '%m/%d/%Y').strftime('%Y-%m-%d'))
     return redirect(reverse('usuarios:index'))
 
 def cadastro(request):

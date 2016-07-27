@@ -24,7 +24,7 @@ class UsuarioSocialAccountAdapter(DefaultSocialAccountAdapter):
             email = data.get('email')
             birthday = sociallogin.account.extra_data.get('birthday')
             if birthday:
-                user_field(user, 'data_de_nascimento', '{}'.format(datetime.strptime(birthday, '%m/%d/%Y').strftime('%Y-%m-%d') or None))
+                user_field(user, 'data_de_nascimento', '{}'.format(datetime.strptime(birthday, '%m/%d/%Y').strftime('%Y-%m-%d')))
         name = data.get('name')
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
