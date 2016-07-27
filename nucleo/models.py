@@ -278,11 +278,16 @@ class DoacaoManager(models.Manager):
             pagamento__status__in=['cancelado', 'devolvido', 'em_disputa']
         )
 
+class Doador(models.Model):
+    nome = models.CharField(max_length=255)
+    email = models.EmailField()
+
 class Doacao(models.Model):
     class Meta:
         ordering = ['-data']
 
-    usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas')
+    usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas', null=True, blank=True)
+    doador = models.ForeignKey(Doador, related_name='doacoes_feitas', null=True, blank=True)
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
     pagamento = models.ForeignKey(Pagamento)
     data = models.DateTimeField(auto_now_add=True)
