@@ -26,6 +26,6 @@ urlpatterns = [
         url(r'^feedback/$', nucleo_views.feedback, name='feedback'),
     ], namespace='detalhes_aniversario')),
     url(r'^aniversarios/$', views.aniversarios_passados, name='aniversarios_passados'),
-    url(r'^socialgetavatar/$', views.social_login_get_avatar, name='social_login_get_avatar'),
+    url(r'^socialgetinfos/$', views.social_login_get_infos, name='social_login_get_infos'),
     url(r'^doacoes/$', views.doacoes, name='doacoes')
 ]

@@ -86,7 +86,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h4 class="text-center">Quem já ajudou!</h4>
-                            <p class="doadores">{% for doacao in aniversario.doacoes.pagas %}<span data-toggle="tooltip" title="{{ doacao.usuario.nome }}" class="doador"><img src='{{ doacao.usuario.foto_micro_url }}' alt='Doador {{ doacao.usuario.nome }}'/></span>{% endfor %}</p>
+                            <p class="doadores">{% for doacao in aniversario.doacoes.pagas %}<span data-toggle="tooltip" title="{{ doacao.usuario_nome }}" class="doador"><img src='{{ doacao.usuario_foto_url }}' alt='Doador {{ doacao.usuario_nome }}'/></span>{% endfor %}</p>
                         </div>
                     </div>
                 {% else %}
