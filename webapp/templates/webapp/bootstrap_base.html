@@ -137,7 +137,7 @@
 
 <script type="text/javascript" src="{% static 'js/jquery-2.2.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.ba-throttle-debounce.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% if DEBUG %}{% static 'bootstrap/dist/js/bootstrap.js' %}{% else %}{% static 'bootstrap/dist/js/bootstrap.min.js' %}{% endif %}"></script>
 {% block extra-js %}{% endblock %}
 <script type="application/ld+json">
 {
