@@ -122,7 +122,8 @@ SOCIALACCOUNT_PROVIDERS = {
             'link',
             'gender',
             'updated_time',
-            'birthday'],
+            'birthday'
+        ],
     },
 }
 
