@@ -290,7 +290,7 @@ class Doacao(models.Model):
     objects = DoacaoManager()
 
     def __unicode__(self):
-        return 'Doação para o Aniversário Solidário de {}: {}'.format(self.usuario.nome, self.aniversario.missao.titulo)
+        return 'Doação para o Aniversário Solidário de {}: {}'.format(self.aniversario.usuario.nome, self.aniversario.missao.titulo)
 
     @property
     def checkout_url(self):
