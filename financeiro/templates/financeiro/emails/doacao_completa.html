@@ -1,0 +1,11 @@
+{% extends 'emails/html_template.html' %}
+
+{% block title %}OBA!{% endblock %}
+{% block subtitle-content %}Você acabou de receber mais um presente!{% endblock %}
+
+{% block content %}
+    <p><strong>{{ nome }}</strong> doou <strong>R${{ valor }}</strong> para ajudar {{ beneficiado }}.</p>
+    <p>&nbsp;</p>
+    <p>Confira os detalhes desta e outras doações...</p>
+    <p style="margin: 20px 0;"><a style="display: inline-block; margin: auto; background-color: #e67e22; color: #FFF; font-size: 18px; padding: 10px; text-decoration: none;" href="{{ url_painel }}">+ DETALHES</a></p>
+{% endblock %}
