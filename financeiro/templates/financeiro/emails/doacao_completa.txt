@@ -1,0 +1,6 @@
+Você acabou de receber mais um presente!
+
+{{ nome }} doou R${{ valor }} para ajudar {{ beneficiado }}.
+
+Confira os detalhes desta e outras doações em:
+{{ url_painel }}

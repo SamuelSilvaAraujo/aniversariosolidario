@@ -289,13 +289,17 @@ class Doacao(models.Model):
     usuario = models.ForeignKey(Usuario, related_name='doacoes_feitas', null=True, blank=True)
     doador = models.ForeignKey(Doador, related_name='doacoes_feitas', null=True, blank=True)
     aniversario = models.ForeignKey(Aniversario, related_name='doacoes')
-    pagamento = models.ForeignKey(Pagamento)
+    pagamento = models.ForeignKey(Pagamento, related_name='doacoes')
     data = models.DateTimeField(auto_now_add=True)
 
     objects = DoacaoManager()
 
     def __unicode__(self):
-        return 'Doação para o Aniversário Solidário de {}: {}'.format(self.aniversario.usuario.nome, self.aniversario.missao.titulo)
+        return 'Doação de {} para o Aniversário Solidário de {}'.format(
+            self.usuario_nome,
+            self.aniversario.usuario.nome,
+            self.aniversario.missao.titulo
+        )
 
     @property
     def checkout_url(self):
@@ -371,7 +375,8 @@ class Media(OrderedModel):
     def get_arquivo_url(self, dm):
         return get_thumbnailer(self.arquivo).get_thumbnail({
             'size': Usuario.DM_DICT.get(dm),
-            'upscale': True
+            'upscale': True,
+            'crop': True
         }).url
 
     @property
