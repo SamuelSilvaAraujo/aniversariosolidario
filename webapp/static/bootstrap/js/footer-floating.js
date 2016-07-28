@@ -31,7 +31,6 @@
         $footer_floating.css('position', 'absolute');
         $footer_floating.css('bottom', footer_height + 'px');
         $footer_floating.css('top', 'auto');
-        console.log('2');
       } else {
         if(start_after !== null && start_after > distance_bottom) {
           $footer_floating.css('position', 'absolute');
@@ -41,7 +40,6 @@
           $footer_floating.css('position', 'fixed');
           $footer_floating.css('bottom', '0');
           $footer_floating.css('top', 'auto');
-          console.log('3');
         }
       }
     });

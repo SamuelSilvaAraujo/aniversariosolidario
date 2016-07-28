@@ -5,11 +5,26 @@
 
 // Base class
 .panel {
+  position: relative;
   margin-bottom: @line-height-computed;
   background-color: @panel-bg;
   border: 1px solid transparent;
   border-radius: @panel-border-radius;
   .box-shadow(0 1px 1px rgba(0,0,0,.05));
+
+  &-comment {
+    &:before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: -10px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #FFF;
+    }
+  }
 }
 
 // Panel contents

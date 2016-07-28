@@ -371,7 +371,8 @@ class Media(OrderedModel):
     def get_arquivo_url(self, dm):
         return get_thumbnailer(self.arquivo).get_thumbnail({
             'size': Usuario.DM_DICT.get(dm),
-            'upscale': True
+            'upscale': True,
+            'crop': True
         }).url
 
     @property
