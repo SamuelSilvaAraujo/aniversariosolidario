@@ -23,7 +23,7 @@ class TransacaoForm(forms.ModelForm):
         cleaned_data = super(TransacaoForm, self).clean()
         meta_disponivel = self._aniversario.meta_de_direito_disponivel
         if cleaned_data.get('valor') > meta_disponivel:
-            self.add_error('valor', 'você não tem direito a esse valor!')
+            self.add_error('valor', 'Você não tem direito a esse valor!')
         return cleaned_data
 
 class UsuarioCompletoForm(forms.ModelForm):
