@@ -37,15 +37,7 @@ def social_login_get_infos(request):
 
             if social:
                 avatar_url = social.get_avatar_url()
-                ex = avatar_url.split('.')[-1]
-                filename = 'avatar-{}.{}'.format(user.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
-                i, temp_path = mkstemp(filename)
-                urllib.urlretrieve(avatar_url, temp_path)
-                file = open(temp_path)
-                django_file = File(file)
-                user.foto.save(filename, django_file)
-                file.close()
-                unlink(temp_path)
+                user.set_foto_from_url(avatar_url)
 
                 birthday = social.extra_data.get('birthday')
                 if birthday:
@@ -90,16 +82,17 @@ def reenviar_email_de_confirmacao(request):
         messages.error(request, 'Você fez um pedido para reenvio do e-mail de confirmação faz pouco tempo.')
     return redirect(reverse('usuarios:index'))
 
-@login_required
 def confirmar_email(request, chave):
     confirmacao_de_email = get_object_or_404(ConfirmacaoDeEmail, chave=chave)
-    if request.user != confirmacao_de_email.usuario:
-        raise Http404()
+    confirmacao_de_email.usuario.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, confirmacao_de_email.usuario)
     if not request.user.data_ativacao_email:
         request.user.data_ativacao_email = timezone.now()
         request.user.save(update_fields=['data_ativacao_email'])
         messages.success(request, 'E-mail confirmado com sucesso!')
     request.user.confirmacoes_de_email.all().delete()
+    if not request.user.password:
+        return redirect(reverse('usuarios:editar_senha'))
     return redirect(reverse('usuarios:index'))
 
 @login_required

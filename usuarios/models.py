@@ -1,6 +1,9 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import urllib
+from tempfile import mkstemp
+
 import os
 import random
 import string
@@ -10,6 +13,7 @@ from django.conf import settings
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save, post_save
@@ -63,6 +67,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     cpf = models.CharField('CPF', max_length=14, blank=True)
     telefone_ddd = models.IntegerField('DDD do número do telefone', null=True)
     telefone_numero = models.IntegerField('número do telefone sem DDD', null=True)
+    migrado = models.BooleanField(default=False)
 
     objects = UsuarioManager()
 
@@ -200,6 +205,23 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     def cleaned_cpf(self):
         return self.cpf.replace('.', '').replace('-', '')
 
+    def set_foto_from_url(self, url):
+        ex = url.split('.')[-1]
+        filename = 'avatar-{}.{}'.format(self.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
+        i, temp_path = mkstemp(filename)
+        urllib.urlretrieve(url, temp_path)
+        file = open(temp_path)
+        django_file = File(file)
+        self.foto.save(filename, django_file)
+        file.close()
+        os.unlink(temp_path)
+
+    def do_migracao(self):
+        ConfirmacaoDeEmail.objects.create(
+            usuario=self,
+            migrado=True
+        )
+
 @receiver(pre_save, sender=Usuario)
 def pre_save_Usuario(instance, **kwargs):
     if not instance.slug:
@@ -207,8 +229,11 @@ def pre_save_Usuario(instance, **kwargs):
 
 @receiver(post_save, sender=Usuario)
 def post_save_Usuario(instance, created, **kwargs):
-    if created and not instance.data_ativacao_email:
-        ConfirmacaoDeEmail.objects.create(usuario=instance)
+    if created:
+        if instance.migrado:
+            instance.do_migracao()
+        elif not instance.data_ativacao_email:
+            ConfirmacaoDeEmail.objects.create(usuario=instance)
 
 class ConfirmacaoDeEmail(models.Model):
     class Meta:
@@ -218,6 +243,7 @@ class ConfirmacaoDeEmail(models.Model):
     chave = models.CharField('chave', max_length=16, blank=True, unique=True)
     data_solicitacao = models.DateTimeField('data de solicitação', auto_now_add=True)
     email = models.ForeignKey(Email, null=True, blank=True, related_name='confirmacoes_de_email', on_delete=models.SET_NULL)
+    migrado = models.BooleanField(default=False)
 
     def __unicode__(self):
         return 'Chave de ativação de {}'.format(self.usuario)
@@ -230,23 +256,42 @@ class ConfirmacaoDeEmail(models.Model):
         return True
 
     def enviar_email(self):
-        email = Email.objects.create(
-            de=ContaDeEmail.get_naoresponda(),
-            para_email=self.usuario.email,
-            assunto='Confirme seu e-mail'
-        )
-        email.carregar_corpo(
-            'usuarios/emails/confirmar_email.txt',
-            'usuarios/emails/confirmar_email.html',
-            url_de_confirmacao='{}{}'.format(
-                settings.FULL_URL,
-                reverse('usuarios:confirmar_email', kwargs={'chave': self.chave})
+        if self.migrado:
+            email = Email.objects.create(
+                de=ContaDeEmail.get_naoresponda(),
+                para_email=self.usuario.email,
+                assunto='Bem vindo ao novo Aniversário Solidário'
             )
-        )
-        email.enviar_as = timezone.now()
-        email.save(update_fields=['enviar_as'])
-        self.email = email
-        self.save(update_fields=['email'])
+            email.carregar_corpo(
+                'usuarios/emails/confirmar_email.txt',
+                'usuarios/emails/confirmar_email.html',
+                url_de_confirmacao='{}{}'.format(
+                    settings.FULL_URL,
+                    reverse('usuarios:bem_vindo', kwargs={'chave': self.chave})
+                )
+            )
+            email.enviar_as = timezone.now()
+            email.save(update_fields=['enviar_as'])
+            self.email = email
+            self.save(update_fields=['email'])
+        else:
+            email = Email.objects.create(
+                de=ContaDeEmail.get_naoresponda(),
+                para_email=self.usuario.email,
+                assunto='Confirme seu e-mail'
+            )
+            email.carregar_corpo(
+                'usuarios/emails/confirmar_email.txt',
+                'usuarios/emails/confirmar_email.html',
+                url_de_confirmacao='{}{}'.format(
+                    settings.FULL_URL,
+                    reverse('usuarios:confirmar_email', kwargs={'chave': self.chave})
+                )
+            )
+            email.enviar_as = timezone.now()
+            email.save(update_fields=['enviar_as'])
+            self.email = email
+            self.save(update_fields=['email'])
 
 @receiver(pre_save, sender=ConfirmacaoDeEmail)
 def pre_save_ConfirmacaoDeEmail(instance, **kwargs):

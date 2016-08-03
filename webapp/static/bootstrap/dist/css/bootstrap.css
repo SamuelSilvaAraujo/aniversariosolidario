@@ -1263,9 +1263,9 @@ hr {
 }
 .aniversario-header {
   position: relative;
-  height: 300px;
+  min-height: 200px;
   margin-top: -10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   overflow: hidden;
   background-color: #95a5a6;
 }
@@ -1313,6 +1313,10 @@ hr {
   left: 0;
   z-index: 2;
   width: 100%;
+}
+.extra-padding-h {
+  padding-right: 30px;
+  padding-left: 30px;
 }
 h1,
 h2,

@@ -76,22 +76,24 @@
         </div>
     </nav>
 {% endblock %}
-{% block iniciar-aniversario %}{% if not user.is_authenticated or not user.aniversario_solidario %}<div class="container"><p><a class="btn btn-block btn-lg btn-info hidden-md hidden-lg" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a></p></div>{% endif %}{% endblock %}
+{% block iniciar-aniversario %}{% if not user.is_authenticated or not user.aniversario_solidario %}<div class="container hidden-md hidden-lg"><p><a class="btn btn-block btn-lg btn-info" href="{% url 'nucleo:iniciar_aniversario' %}">Iniciar um Aniversário Solidário</a></p></div>{% endif %}{% endblock %}
 {% block extra-messages %}
-    <div class="container">
-        {% if user.is_authenticated and not user.data_ativacao_email %}
+    {% if user.is_authenticated and not user.data_ativacao_email %}
+        <div class="container">
             <div class="well">
                 <h3>Confirme seu e-mail!</h3>
                 <p>Enviamos um e-mail para <strong>{{ user.email }}</strong> com um link de confirmação.<br>Ainda não recebeu o e-mail? <a href="{% url 'usuarios:reenviar_email_de_confirmacao' %}">clique aqui</a>.</p>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block messages %}
-    <div class="container">
-        {% bootstrap_messages %}
-    </div>
+    {% if messages %}
+        <div class="container">
+            {% bootstrap_messages %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}{% endblock %}
