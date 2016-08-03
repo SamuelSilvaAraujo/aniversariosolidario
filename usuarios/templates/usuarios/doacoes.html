@@ -3,7 +3,7 @@
 {% block in-content %}
     {% with aguardando_pagamento=user.doacoes_feitas.aguardando_pagamento em_analise=user.doacoes_feitas.em_analise pagas=user.doacoes_feitas.pagas canceladas=user.doacoes_feitas.canceladas %}
         {% if not aguardando_pagamento and not em_analise and not pagas and not canceladas %}
-            <p class="text-center">Você não fez nenhuma doação por enquanto!</p>
+            <h4>Você não fez nenhuma doação por enquanto!</h4>
         {% endif %}
         {% if aguardando_pagamento %}
             <h2>Conclua suas doações</h2>

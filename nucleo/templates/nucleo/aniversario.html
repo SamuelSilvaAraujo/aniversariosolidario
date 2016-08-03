@@ -30,9 +30,6 @@
                 <img src="{{ aniversario_media_0.arquivo_folder_url }}" alt="{{ aniversario_media_0.descricao|default:'Capa' }}" class="aniversario-header-background-img">
             {% endif %}
         {% endwith %}
-        {% if aniversario.finalizado %}
-            <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
-        {% endif %}
         <div class="aniversario-header-up">
             <div class="container">
                 <div class="row row-down">
@@ -85,13 +82,13 @@
                             <ul class="list-group">
                                 {% for doacao in pagas %}
                                     {% if pagas.count > 2 and forloop.counter == 3 %}<div id="doacoes-collapse" class="collapse">{% endif %}
-                                        <li class="list-group-item">
-                                            <div class="media">
-                                                <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
-                                                <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
-                                            </div>
-                                        </li>
-                                    {% if pagas.count > 2 and forloop.last %}</div><li class="list-group-item text-right"><a href="#doacoes-collapse" data-toggle="collapse">+ Ver todas</a></li>{% endif %}
+                                <li class="list-group-item">
+                                    <div class="media">
+                                        <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
+                                        <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
+                                    </div>
+                                </li>
+                                {% if pagas.count > 2 and forloop.last %}</div><li class="list-group-item text-right"><a href="#doacoes-collapse" data-toggle="collapse">+ Ver todas</a></li>{% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -113,6 +110,9 @@
                             </div>
                         </div>
                     </div>
+                {% endif %}
+                {% if aniversario.finalizado %}
+                    <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
                 {% endif %}
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">

@@ -1,5 +1,6 @@
 {% extends 'usuarios/usuarios-base.html' %}
 
+{% load humanize %}
 
 {% block in-content %}
     {% for aniversario in user.aniversarios_passados %}
@@ -8,9 +9,9 @@
                 <h4>Aniversário Solidário de {{ aniversario.ano }}<br><small><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" target="_blank">{{ aniversario.missao.titulo }}</a></small></h4>
                 <p><strong>Valor arrecadado:</strong> R${{ aniversario.meta_atingida }}</p>
                 <h3>Retiradas</h3>
-                {% with transacoes=aniversario.aniversario_transacao.all %}
+                {% with transacoes=aniversario.transacoes.all %}
                     {% if transacoes %}
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead class="thead-default">
                             <tr>
                                 <th>Data de solicitação</th>
@@ -21,9 +22,9 @@
                             <tbody>
                             {% for transacao in transacoes %}
                                 <tr>
-                                    <td>{{ transacao.data_solicitacao }}</td>
+                                    <td>{{ transacao.data_solicitacao|naturaltime }} ({{ transacao.data_solicitacao|date:'d/m/Y' }})</td>
                                     <td>{% if not transacao.data_realizacao %}<p>Aguardando transação!</p> {% else %}{{ transacao.data_realizacao }}{% endif %}</td>
-                                    <td>{{ transacao.valor }}</td>
+                                    <td>R${{ transacao.valor }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -85,7 +85,7 @@ class Aniversario(models.Model):
     ano = models.IntegerField('Ano')
     apelo = models.TextField('apelo', blank=True)
     finalizado = models.DateTimeField(null=True, blank=True)
-    feeback_liberado = models.BooleanField(default=False)
+    feedback_liberado = models.BooleanField(default=False)
     feedback = models.ForeignKey(Feedback, null=True, blank=True)
     imagem_divulgacao_fb = models.ImageField(null=True, blank=True)
 
@@ -150,11 +150,14 @@ class Aniversario(models.Model):
 
     @property
     def meta_de_direito_disponivel(self):
+        n = 0
+        for t in self.transacoes.all():
+            n += (float(t.valor)/(1 - t.taxa_atual)) * (1 - settings.TAXA)
         return (self.doacoes.filter(
             pagamento__status__in=['disponivel']
         ).aggregate(
             Sum('pagamento__valor')
-        ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA)
+        ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA) - n
 
     def enviar_email_iniciado(self):
         email = Email.objects.create(

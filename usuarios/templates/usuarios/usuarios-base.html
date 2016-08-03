@@ -16,10 +16,10 @@
                                 <a class="list-group-item" href="{% url 'usuarios:index' %}">Gerenciar meu Aniversário</a>
                             {% endif %}
                         {% endif %}
-                        <a href="{% url 'usuarios:doacoes' %}" class="list-group-item">Minhas doações</a>
                         {% if user.aniversarios_passados %}
                             <a  href="{% url 'usuarios:aniversarios_passados' %}" class="list-group-item">Gerenciar Aniversários passados</a>
                         {% endif %}
+                        <a href="{% url 'usuarios:doacoes' %}" class="list-group-item">Minhas doações</a>
                         <a class="list-group-item" href="{% url 'usuarios:alterar_foto' %}">Alterar foto do meu perfil</a>
                         <a class="list-group-item" href="{% url 'usuarios:alterar_perfil' %}">Editar meu perfil</a>
                     </div>

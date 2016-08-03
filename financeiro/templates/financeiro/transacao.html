@@ -3,18 +3,16 @@
 {% load bootstrap3 %}
 
 {% block in-content %}
-
-    <div class="panel panel-default">
-    <div class="panel-body">
-        <p>Agora que o dia do seu aniversario chegou e você finalizou seu aniversario solidario, esta na hora de pegar suas doações e concluir sua missão!</p>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <p>Agora que o dia do seu aniversário chegou e você finalizou seu Aniversário Solidário, está na hora de pegar suas doações e concluir sua missão!</p>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                    <p class="text-right"><button type="submit" class="btn btn-primary">Confirmar <i class="fa fa-fw fa-check"></i></button></p>
+                {% endbuttons %}
+            </form>
+        </div>
     </div>
-    </div>
-
-    <form method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-            <button type="submit" class="btn btn-primary">Confirmar</button>
-        {% endbuttons %}
-    </form>
 {% endblock %}
