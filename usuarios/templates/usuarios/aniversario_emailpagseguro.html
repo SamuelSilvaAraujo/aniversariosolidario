@@ -4,14 +4,9 @@
 
 {% block in-content %}
     <div class="row">
-        <div class="col-md-10">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3>Cadastre aqui seu email PagSeguro!</h3>
-                <p>O valor arrecadado em seu aniversario solidario sera transferido para você via pagseguro. Caso você não tenha uma conta pagseguro <a href="https://pagseguro.uol.com.br/" target="_blank"> click aqui.</a></p>
-            </div>
-        </div>
-
+        <div class="col-md-8 col-md-offset-2">
+            <h3>Qual o seu e-mail do PagSeguro?</h3>
+            <p>O valor arrecadado em seu Aniversário Solidário será transferido para você via PagSeguro. Caso você não tenha uma conta no PagSeguro <a href="https://pagseguro.uol.com.br/registration/registration.jhtml" target="_blank">clique aqui</a>.</p>
             <form method="post">
                 {% csrf_token %}
                 {% bootstrap_form form %}

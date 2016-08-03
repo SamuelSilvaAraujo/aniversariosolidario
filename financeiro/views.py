@@ -15,6 +15,11 @@ from pagseguro.models import Checkout
 
 @login_required
 def transacao(request, ano):
+    if not request.user.email_pagseguro:
+        return redirect('{}?next={}'.format(
+            reverse('usuarios:add_email_pagseguro'),
+            reverse('usuarios:detalhes_aniversario:transacao', kwargs={'ano': ano})
+        ))
     aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
     transacao_form = TransacaoForm(aniversario, request.POST or None, initial={'valor': aniversario.meta_de_direito_disponivel})
     if transacao_form.is_valid():

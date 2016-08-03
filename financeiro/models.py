@@ -66,9 +66,10 @@ def post_save_Pagamento(instance, update_fields, **kwargs):
 
 class Transacao(models.Model):
     valor = models.IntegerField()
-    aniversario = models.ForeignKey('nucleo.Aniversario', related_name='aniversario_transacao')
+    aniversario = models.ForeignKey('nucleo.Aniversario', related_name='transacoes')
     data_solicitacao = models.DateTimeField('Data de solicitação',auto_now_add=True)
     data_realizacao = models.DateTimeField('Data de realização' ,null=True, blank=True)
+    taxa_atual = models.FloatField(default=settings.TAXA)
 
     def __unicode__(self):
         return 'Transação solitada em {}'.format(self.data_solicitacao)
