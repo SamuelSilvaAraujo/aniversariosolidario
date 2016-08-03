@@ -255,10 +255,10 @@ hr {
 
 .aniversario-header {
   position: relative;
-  height: 300px;
+  min-height: 200px;
   background-color: #95a5a6;
   margin-top: -10px;
-  margin-bottom: 20px;
+  margin-bottom: @grid-gutter-width;
   overflow: hidden;
   .clearfix();
 
@@ -290,4 +290,9 @@ hr {
     left: 0;
     z-index: 2;
   }
+}
+
+.extra-padding-h {
+  padding-left: @grid-gutter-width;
+  padding-right: @grid-gutter-width;
 }

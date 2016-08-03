@@ -23,21 +23,25 @@
     <meta name="twitter:image" content="{{ aniversario.get_imagem_divulgacao_fb_url }}">
 {% endblock %}
 
+{% block iniciar-aniversario %}{% endblock %}
+
 {% block content %}
     <div class="aniversario-header">
         {% with aniversario_media_0=aniversario.missao.medias.all.0 %}
             {% if aniversario_media_0 %}
-                <img src="{{ aniversario_media_0.arquivo_folder_url }}" alt="{{ aniversario_media_0.descricao|default:'Capa' }}" class="aniversario-header-background-img">
+                <div class="container"><img src="{{ aniversario_media_0.arquivo_container_url }}" alt="{{ aniversario_media_0.descricao|default:'Capa' }}" class="img-responsive"></div>
             {% endif %}
         {% endwith %}
         <div class="aniversario-header-up">
             <div class="container">
-                <div class="row row-down">
+                <div class="row">
                     <div class="col-md-8">
-                        <h3>&nbsp;</h3>
-                        <h4 class="font-white">A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</h4>
-                        <h3 class="font-white no-margin-top">{{ aniversario.missao.titulo }}</h3>
-                        <p>&nbsp;</p>
+                        <div class="extra-padding-h">
+                            <h3>&nbsp;</h3>
+                            <h4 class="font-white">A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</h4>
+                            <h3 class="font-white no-margin-top">{{ aniversario.missao.titulo }}</h3>
+                            <p>&nbsp;</p>
+                        </div>
                     </div>
                     {% if not aniversario.finalizado %}
                         <div class="col-md-4 hidden-sm hidden-xs">
