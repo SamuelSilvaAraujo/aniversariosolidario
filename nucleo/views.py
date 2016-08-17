@@ -189,14 +189,18 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
 @login_required
 def feedback(request, ano):
     aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
+    if not aniversario.feedback_liberado:
+        messages.error(request, 'Feedback enviado ou indisponível para este Aniversário Solidário.')
+        return redirect(reverse('usuarios:aniversarios_passados'))
     feedback_form = FeedbackForm(request.POST or None)
     if feedback_form.is_valid():
         feedback = feedback_form.save()
         aniversario.feedback = feedback
-        aniversario.feeback_liberado = False
-        aniversario.save(update_fields=['feedback', 'feeback_liberado'])
+        aniversario.feedback_liberado = False
+        aniversario.save(update_fields=['feedback', 'feedback_liberado'])
         messages.success(request, 'Obrigado por contribuir com nosso site!')
         return redirect(reverse('usuarios:aniversarios_passados'))
-    return render(request, 'nucleo/feedblack.html', {
-        'form': feedback_form
+    return render(request, 'nucleo/feedback.html', {
+        'form': feedback_form,
+        'aniversario': aniversario
     })
