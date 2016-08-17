@@ -369,18 +369,28 @@ class Media(OrderedModel):
         }).url
 
     DM_DICT = {
+        'container': (1170, 720),
+        'xg': (960, 960),
         'lg': (480, 480),
         'md': (240, 240),
         'sm': (120, 120),
         'xs': (60, 60)
     }
 
-    def get_arquivo_url(self, dm):
+    def get_arquivo_url(self, dm, crop=True):
         return get_thumbnailer(self.arquivo).get_thumbnail({
-            'size': Usuario.DM_DICT.get(dm),
+            'size': Media.DM_DICT.get(dm),
             'upscale': True,
-            'crop': True
+            'crop': crop
         }).url
+
+    @property
+    def arquivo_container_url(self):
+        return self.get_arquivo_url('container')
+
+    @property
+    def arquivo_xg_url(self):
+        return self.get_arquivo_url('xg')
 
     @property
     def arquivo_lg_url(self):

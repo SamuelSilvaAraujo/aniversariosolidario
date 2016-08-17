@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
 from usuarios import urls as usuarios_urls
 from nucleo import urls as nucleo_urls
 from financeiro import urls as financeiro_urls
@@ -9,6 +10,13 @@ from webapp import views as webapp_views
 from emails import views as emails_views
 from nucleo import views as nucleo_views
 from pagseguro import urls as pagseguro_urls
+
+from aniversariosolidario.sitemap import StaticViewSitemap, AniversarioSolidarioSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'aniversarios': AniversarioSolidarioSitemap
+}
 
 urlpatterns = [
     url(r'^$', webapp_views.index, name='index'),
@@ -32,6 +40,10 @@ urlpatterns = [
         url(r'^doar/$', nucleo_views.aniversario_doar, name='doar'),
         url(r'^doacaorealizada/$', nucleo_views.aniversario_doacao_realizada, name='doacao_realizada'),
     ], namespace='aniversario')),
+
+    url(r'^sitemap\.xml$', sitemap, {
+        'sitemaps': sitemaps
+    }, name='sitemap'),
 ]
 
 if settings.DEBUG:

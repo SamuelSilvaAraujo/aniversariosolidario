@@ -19,12 +19,14 @@
         start_after_top = null;
 
       if($footer_floating.data('start-after') !== undefined){
-        var $start_after = $($footer_floating.data('start-after'));
+        var
+          $start_after = $($footer_floating.data('start-after')),
+          margin = ($footer_floating.outerHeight() + 20);
 
         start_after_top = $start_after.offset().top + $start_after.outerHeight();
         start_after = start_after_top + $footer_floating.outerHeight();
 
-        $('footer').css('margin-top', ($footer_floating.outerHeight() + 20) + 'px');
+        $('footer').css('margin-top', margin + 'px');
       }
 
       if(distance_bottom > footer_top){
