@@ -38,7 +38,7 @@ class MediaEditarForm(forms.ModelForm):
         fields = ['descricao']
 
 class AniversarioApeloForm(forms.ModelForm):
-    apelo = forms.CharField(label='Escreva uma mensagem para os seus amigos', widget=forms.Textarea())
+    apelo = forms.CharField(label='Escreva uma mensagem para os seus amigos', widget=forms.Textarea(), required=False)
 
     class Meta:
         model = Aniversario

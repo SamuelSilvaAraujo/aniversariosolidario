@@ -95,30 +95,40 @@
                 </div>
             {% endif %}
         {% endwith %}
-        {% if user.aniversario_solidario.apelo %}
-            <h2>Apelo</h2>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    {% if not user.aniversario_solidario.finalizado %}
-                        <ul class="nav nav-pills p">
-                            <li><a href="{% url 'usuarios:aniversario_apelo' %}"><i class="fa fa-fw fa-pencil"></i>Editar apelo</a></li>
-                        </ul>
-                    {% endif %}
-                    <p>{{ user.aniversario_solidario.apelo }}</p>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Missão</h2>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% if not user.aniversario_solidario.finalizado %}
+                            <ul class="nav nav-pills">
+                                <li><a href="{% url 'nucleo:missao:editar_missao' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-pencil"></i> Editar Missão</a></li>
+                                <li><a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-camera"></i> Gerenciar Fotos</a></li>
+                            </ul>
+                        {% endif %}
+                        <h2>{{ user.aniversario_solidario.missao.titulo }}</h2>
+                        <p><strong>DESCRIÇÃO:</strong><br>{{ user.aniversario_solidario.missao.descricao }}</p>
+                    </div>
                 </div>
             </div>
-        {% endif %}
-        <h2>Missão</h2>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                {% if not user.aniversario_solidario.finalizado %}
-                    <ul class="nav nav-pills">
-                        <li><a href="{% url 'nucleo:missao:editar_missao' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-pencil"></i> Editar Missão</a></li>
-                        <li><a href="{% url 'nucleo:missao:medias' slug=user.aniversario_solidario.missao.slug %}"><i class="fa fa-fw fa-camera"></i> Gerenciar Fotos</a></li>
-                    </ul>
-                {% endif %}
-                <h2>{{ user.aniversario_solidario.missao.titulo }}</h2>
-                <p><strong>DESCRIÇÃO:</strong><br>{{ user.aniversario_solidario.missao.descricao }}</p>
+            <div class="col-md-6">
+                <h2>Apelo</h2>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% if user.aniversario_solidario.apelo %}
+                            {% if not user.aniversario_solidario.finalizado %}
+                                <ul class="nav nav-pills p">
+                                    <li><a href="{% url 'usuarios:aniversario_apelo' %}"><i class="fa fa-fw fa-pencil"></i>Editar apelo</a></li>
+                                </ul>
+                            {% endif %}
+                            <h4>{{ user.aniversario_solidario.apelo }}</h4>
+                        {% else %}
+                            <h4 class="text-center">Você ainda não fez seu apelo?!</h4>
+                            <p>Através do apelo você pode expressar seus sentimentos e tocar seus amigos.</p>
+                            <p class="text-center"><a href="{% url 'usuarios:aniversario_apelo' %}" class="btn btn-primary">Escrever apelo</a></p>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
         <h2>Doações</h2>
