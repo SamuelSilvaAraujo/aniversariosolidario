@@ -169,19 +169,14 @@ def aniversario_finalizar(request):
     if not aniversario:
         messages.error(request, 'Você não tem nenhum Aniversário Solidário acontecendo.')
         return redirect(reverse('usuarios:index'))
+
     if aniversario.dias_restantes() == 0:
-        if aniversario.usuario.email_pagseguro:
-            aniversario.finalizado = timezone.now()
-            aniversario.save(update_fields=['finalizado'])
-            return redirect(reverse('usuarios:index'))
-        else:
-            return redirect('{}?{}'.format(
-                reverse('usuarios:add_email_pagseguro'),
-                urllib.urlencode({'next': reverse('nucleo:aniversario_finalizar')})
-            ))
-    else:
-        messages.error(request, 'Ainda falta alguns dias para seu aniversario!')
-        return redirect(reverse('usuarios:index'))
+        aniversario.finalizado = timezone.now()
+        aniversario.save(update_fields=['finalizado'])
+        return redirect(reverse('usuarios:aniversarios_passados'))
+
+    messages.error(request, 'Ainda falta alguns dias para seu aniversario!')
+    return redirect(reverse('usuarios:index'))
 
 def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
     aniversario_instance = get_object_or_404(Aniversario, usuario__slug=slug_usuario, missao__slug=slug_missao)
