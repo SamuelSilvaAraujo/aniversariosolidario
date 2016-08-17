@@ -5,7 +5,7 @@ from nucleo.models import Aniversario
 
 
 class StaticViewSitemap(Sitemap):
-    changefreq = 'hourly'
+    changefreq = 'weekly'
     priority = 1.0
 
     def items(self):
@@ -22,4 +22,7 @@ class AniversarioSolidarioSitemap(Sitemap):
         return Aniversario.objects.all()
 
     def location(self, item):
-        return reverse('aniversario', kwargs={'slug_usuario':item.usuario.slug, 'slug_missao':item.missao.slug})
+        return reverse('aniversario:index', kwargs={
+            'slug_usuario': item.usuario.slug,
+            'slug_missao': item.missao.slug
+        })

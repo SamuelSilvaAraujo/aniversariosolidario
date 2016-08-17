@@ -41,7 +41,9 @@ urlpatterns = [
         url(r'^doacaorealizada/$', nucleo_views.aniversario_doacao_realizada, name='doacao_realizada'),
     ], namespace='aniversario')),
 
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'static':StaticViewSitemap}}, name='sitemap')
+    url(r'^sitemap\.xml$', sitemap, {
+        'sitemaps': sitemaps
+    }, name='sitemap'),
 ]
 
 if settings.DEBUG:
