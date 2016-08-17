@@ -15,18 +15,16 @@ from pagseguro.models import Checkout
 
 @login_required
 def transacao(request, ano):
-    if not request.user.email_pagseguro:
-        return redirect('{}?next={}'.format(
-            reverse('usuarios:add_email_pagseguro'),
-            reverse('usuarios:detalhes_aniversario:transacao', kwargs={'ano': ano})
-        ))
     aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
+    if aniversario.meta_de_direito_disponivel == 0:
+        messages.error(request, 'Você não tem valor disponivel para retirada!')
+        return redirect(reverse('usuarios:aniversarios_passados'))
     transacao_form = TransacaoForm(aniversario, request.POST or None, initial={'valor': aniversario.meta_de_direito_disponivel})
     if transacao_form.is_valid():
         form = transacao_form.save(commit=False)
         form.aniversario = aniversario
         form.save()
-        messages.success(request, 'Solicitação de transação enviada com sucesso!')
+        messages.success(request, 'Solicitação de transação enviada com sucesso! Iremos entrar em contato via e-mail em breve, aguarde.')
         return redirect(reverse('usuarios:aniversarios_passados'))
     return render(request, 'financeiro/transacao.html', {
         'form':transacao_form
