@@ -59,135 +59,124 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-3" id="barra-estatisticas">
-                <div class="panel panel-default">
-                    <div class="hidden-xs hidden-sm"><img src="{{ aniversario.usuario.foto_lg_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-responsive" /></div>
-                    <div class="panel-body">
-                        <div class="media">
-                            <div class="media-left hidden-md hidden-lg"><img src="{{ aniversario.usuario.foto_xs_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-circle" /></div>
-                            <div class="media-body"><h4>{{ aniversario.usuario.nome }}<br><small>faz aniversário dia {{ aniversario.usuario_proximo_aniversario|date:'d/m/Y' }}</small></h4></div>
-                        </div>
+        <div class="col-md-3" id="barra-estatisticas">
+            <div class="panel panel-default">
+                <div class="hidden-xs hidden-sm"><img src="{{ aniversario.usuario.foto_lg_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-responsive" /></div>
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-left hidden-md hidden-lg"><img src="{{ aniversario.usuario.foto_xs_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-circle" /></div>
+                        <div class="media-body"><h4>{{ aniversario.usuario.nome }}<br><small>faz aniversário dia {{ aniversario.usuario_proximo_aniversario|date:'d/m/Y' }}</small></h4></div>
                     </div>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
-                        <p class="text-center">R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
-                        <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
-                    </div>
-                </div>
-                {% with pagas=aniversario.doacoes.pagas %}
-                    {% if pagas %}
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4 class="text-center">Quem já ajudou</h4>
-                            </div>
-                            <ul class="list-group">
-                                {% for doacao in pagas %}
-                                    {% if pagas.count > 2 and forloop.counter == 3 %}<div id="doacoes-collapse" class="collapse">{% endif %}
-                                <li class="list-group-item">
-                                    <div class="media">
-                                        <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
-                                        <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
-                                    </div>
-                                </li>
-                                {% if pagas.count > 2 and forloop.last %}</div><li class="list-group-item text-right"><a href="#doacoes-collapse" data-toggle="collapse">+ Ver todas</a></li>{% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                {% endwith %}
             </div>
-            <div class="col-md-9">
-                {% if aniversario.apelo %}
-                    <div class="row">
-                        <div class="col-xs-3 hidden-md hidden-lg">
-                            <img src="{{ aniversario.usuario.foto_md_url }}" alt="" class="img-responsive img-circle">
-                        </div>
-                        <div class="col-xs-9">
-                            <div class="panel panel-default panel-comment">
-                                <div class="panel-body">
-                                    <p class="large">{{ aniversario.apelo }}</p>
-                                    <p class="text-right">{{ aniversario.usuario.nome_curto }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if aniversario.finalizado %}
-                    <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <h4 class="text-center">Compartilhe <span class="hidden-sm hidden-xs">e ajude {{ aniversario.missao.beneficiado }}</span></h4>
-                        <p class="text-center hidden-xs hidden-sm">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
-                            <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
-                            <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Conte</a>
-                        </p>
-                        <p class="text-center hidden-md hidden-lg">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
-                            <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
-                            <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-google"><span class="fa fa-google-plus"></span></a>
-                        </p>
-                        <p class="input-group">
-                            <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
-                            <input type="text" value="{{ aniversario.full_url }}" class="form-control input-lg" id="link-compartilhar">
-                            <span class="input-group-btn"><button class="btn btn-lg btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
-                        </p>
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
+                    <p class="text-center">R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
+                    <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h4>Sobre a missão</h4></div>
-                    <div class="panel-body">{{ aniversario.missao.descricao }}</div>
-                </div>
-                {% with medias=aniversario.missao.medias.all %}
-                    {% if medias %}
-                        <h2>Fotos</h2>
-                        <div class="row">
-                            {% for media in medias %}
-                                <div class="col-md-4 col-xs-6">
-                                    <div class="thumbnail">
-                                        <img src="{{ media.arquivo_lg_url }}" alt="{{ media.descricao|default:'Mídia' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
-                                        {% if media.descricao %}<div class="caption">{{ media.descricao }}</div>{% endif %}
-                                    </div>
+            </div>
+            {% with pagas=aniversario.doacoes.pagas %}
+                {% if pagas %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-center">Quem já ajudou</h4>
+                        </div>
+                        <ul class="list-group">
+                            {% for doacao in pagas %}
+                                {% if pagas.count > 2 and forloop.counter == 3 %}<div id="doacoes-collapse" class="collapse">{% endif %}
+                            <li class="list-group-item">
+                                <div class="media">
+                                    <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
+                                    <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
                                 </div>
+                            </li>
+                            {% if pagas.count > 2 and forloop.last %}</div><li class="list-group-item text-right"><a href="#doacoes-collapse" data-toggle="collapse">+ Ver todas</a></li>{% endif %}
                             {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-md-9">
+            {% if aniversario.apelo %}
+                <div class="row">
+                    <div class="col-xs-3 hidden-md hidden-lg">
+                        <img src="{{ aniversario.usuario.foto_md_url }}" alt="" class="img-responsive img-circle">
+                    </div>
+                    <div class="col-md-12 col-xs-9">
+                        <div class="panel panel-default panel-comment">
+                            <div class="panel-body">
+                                <h4 class="text-justify">{{ aniversario.apelo }}</h4>
+                                <p>{{ aniversario.usuario.nome_curto }}</p>
+                            </div>
                         </div>
-                    {% endif %}
-                {% endwith %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if aniversario.finalizado %}
+                <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Compartilhe <span class="hidden-sm hidden-xs">e ajude {{ aniversario.missao.beneficiado }}</span></h3>
+                    <p class="text-center hidden-md hidden-xs hidden-sm">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
+                        <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
+                        <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Conte</a>
+                    </p>
+                    <p class="text-center hidden-lg">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
+                        <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
+                        <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-google"><span class="fa fa-google-plus"></span></a>
+                    </p>
+                    <p class="input-group">
+                        <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                        <input type="text" value="{{ aniversario.full_url }}" class="form-control" id="link-compartilhar">
+                        <span class="input-group-btn"><button class="btn btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h3>Faça uma doação</h3>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="25">R$25</button>
+                                <button class="btn btn-lg btn-default hidden-xs" type="button" data-btn-valor-docao="50">R$50</button>
+                                <button class="btn btn-lg btn-default hidden-md hidden-sm hidden-xs" type="button" data-btn-valor-docao="75">R$75</button>
+                            </div>
+                            <div class="input-group-addon">R$</div>
+                            <input type="text" class="form-control input-lg outro-valor" placeholder="Outro Valor">
+                        </div>
+                    </div>
+                    <form action="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" method="get">
+                        <input class="valor-doacao" type="hidden" name="valor">
+                        <p><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
+                    </form>
+                </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>Sobre a missão</h4></div>
+                <div class="panel-body">{{ aniversario.missao.descricao }}</div>
+            </div>
+            {% with medias=aniversario.missao.medias.all %}
+                {% if medias %}
+                    <h2>Fotos</h2>
+                    <div class="row">
+                        {% for media in medias %}
+                            <div class="col-md-4 col-xs-6">
+                                <div class="thumbnail">
+                                    <img src="{{ media.arquivo_lg_url }}" alt="{{ media.descricao|default:'Mídia' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
+                                    {% if media.descricao %}<div class="caption">{{ media.descricao }}</div>{% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </div>
     </div>
     {% if not aniversario.finalizado %}
-        <div class="footer-floating hidden-sm hidden-xs" data-start-after="#barra-estatisticas">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h4 class="no-margin-top text-center">Faça uma doação</h4>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-default" type="button" data-btn-valor-docao="25">R$25</button>
-                                            <button class="btn btn-sm btn-default hidden-md" type="button" data-btn-valor-docao="50">R$50</button>
-                                        </div>
-                                        <div class="input-group-addon">R$</div>
-                                        <input type="text" class="form-control input-sm outro-valor" placeholder="Outro Valor">
-                                    </div>
-                                </div>
-                                <form action="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" method="get">
-                                    <input class="valor-doacao" type="hidden" name="valor">
-                                    <p class="text-center"><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="footer-floating hidden-lg hidden-md">
             <div class="container">
                 <div class="row">

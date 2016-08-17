@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var
         $input_valor_doacao = $('.valor-doacao'),
+        $form_valor_doacao = $input_valor_doacao.parents('form'),
         $input_outro_valor = $('.outro-valor'),
         numbers_ascii = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
 
@@ -25,6 +26,7 @@ $(document).ready(function () {
         $this.click(function (){
             valorDoacao($this.data('btn-valor-docao'));
             $input_outro_valor.val('');
+            $form_valor_doacao.submit();
         });
     });
 
