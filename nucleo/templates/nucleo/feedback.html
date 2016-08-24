@@ -6,13 +6,13 @@
 
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-        <h2>Deixe aqui seu FeedBlack!</h2>
+            <h3>Conte um pouco da sua experiência</h3>
+            <p>O seu Aniversário Solidário de {{ aniversario.ano }} chegou ao fim e queremos saber como foi ajudar {{ aniversario.missao.beneficiado }}.</p>
             <form method="post">
                 {% csrf_token %}
                 {% bootstrap_form form %}
-
                 {% buttons %}
-                    <button type="submit" class="btn btn-primary">Enviar feedblack</button>
+                    <button type="submit" class="btn btn-primary">Enviar feedback</button>
                 {% endbuttons %}
             </form>
         </div>

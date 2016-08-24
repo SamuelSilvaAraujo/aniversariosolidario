@@ -2,10 +2,11 @@
 import requests
 
 from django.core.management import BaseCommand
+from django.utils import timezone
 from usuarios.models import Usuario
 
-JSON_URL = 'http://172.16.194.92:8080/XOQM/'
-# JSON_URL = 'http://o.aniversariosolidario.com/XOQM/'
+# JSON_URL = 'http://172.16.194.92:8080/XOQM/'
+JSON_URL = 'http://o.aniversariosolidario.com/XOQM/'
 
 class Command(BaseCommand):
     help = 'Migrar usuários da plataforma antiga'
@@ -26,10 +27,11 @@ class Command(BaseCommand):
                     email=u.get('email'),
                     nome=u.get('nome'),
                     data_de_nascimento=u.get('data_nascimento'),
-                    migrado=True
+                    password=u.get('password'),
+                    migrado=True,
+                    data_ativacao_email=timezone.now()
                 )
                 if u.get('foto'):
                     usuario.set_foto_from_url(u.get('foto'))
 
             print(usuario)
-            usuario.delete()
