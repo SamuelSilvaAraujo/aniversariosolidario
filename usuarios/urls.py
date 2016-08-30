@@ -28,5 +28,7 @@ urlpatterns = [
     ], namespace='detalhes_aniversario')),
     url(r'^aniversarios/$', views.aniversarios_passados, name='aniversarios_passados'),
     url(r'^socialgetinfos/$', views.social_login_get_infos, name='social_login_get_infos'),
-    url(r'^doacoes/$', views.doacoes, name='doacoes')
+    url(r'^doacoes/$', views.doacoes, name='doacoes'),
+
+    url(r'^export/$', views.export_dados, name='esport')
 ]

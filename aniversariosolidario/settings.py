@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'webapp',
     'emails',
     'easy_thumbnails',
+    'import_export',
 ]
 
 MIDDLEWARE_CLASSES = [

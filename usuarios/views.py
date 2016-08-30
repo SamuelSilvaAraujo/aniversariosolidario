@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -19,6 +20,8 @@ from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm
     LoginOuCadastroForm, AddEmailPagSeguro
 
 from .models import RecuperarSenha
+
+from .admin import UsuarioResource
 
 @login_required
 def index(request):
@@ -196,3 +199,7 @@ def aniversarios_passados(request):
 @login_required
 def doacoes(request):
     return render(request, 'usuarios/doacoes.html')
+
+def export_dados(request):
+    export = UsuarioResource().export()
+    return HttpResponse(export.csv, content_type="file/csv")
