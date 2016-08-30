@@ -72,22 +72,6 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="row">
-                <div class="col-sm-6">
-                    <p>&nbsp;</p>
-                    <h4>A missão de {{ aniversario.usuario.nome_curto }} no ano de {{ aniversario.ano }} é</h4>
-                    <h2 class="no-margin-top">{{ aniversario.missao.titulo }}</h2>
-                </div>
-                <div class="col-sm-6">
-                    <h3 class="text-center">Eu quero ajudar com...</h3>
-                    <p class="text-center">
-                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=25">R$25</a>
-                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=50">R$50</a>
-                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=75">R$75</a>
-                        <a class="btn btn-lg btn-default" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">Outro Valor</a>
-                    </p>
-                </div>
-            </div>
             {% if aniversario.apelo %}
                 <div class="row">
                     <div class="col-xs-3 hidden-md hidden-lg">
@@ -96,8 +80,8 @@
                     <div class="col-md-12 col-xs-9">
                         <div class="panel panel-default panel-comment">
                             <div class="panel-body">
-                                <h4 class="text-justify">{{ aniversario.apelo }}</h4>
-                                <p class="text-right">{{ aniversario.usuario.nome_curto }}</p>
+                                <h4 class="text-justify"><i>{{ aniversario.apelo }}</i></h4>
+                                {#                                <p class="text-right">{{ aniversario.usuario.nome_curto }}</p>#}
                             </div>
                         </div>
                     </div>
@@ -118,50 +102,27 @@
 
             <h4>&nbsp;</h4>
             <div class="panel panel-default">
-                <div class="panel-heading"><h4>Sobre a missão</h4></div>
+                <div class="panel-heading"><h4>{{ aniversario.missao.titulo }}</h4></div>
                 <div class="panel-body">{{ aniversario.missao.descricao }}</div>
             </div>
 
             {% with pagas=aniversario.doacoes.pagas %}
                 {% if pagas %}
                     <h2>Quem já ajudou</h2>
-                    {% for doacao in pagas %}
-                        <div class="col-md-3">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
-                                    <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
+                    <div class="row">
+                        {% for doacao in pagas %}
+                            <div class="col-md-3">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
+                                        <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             {% endwith %}
-
-            <h4>&nbsp;</h4>
-            <h3 class="text-center">Compartilhe e ajude {{ aniversario.missao.titulo }}</h3>
-            <p class="text-center hidden-md hidden-xs hidden-sm">
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-facebook"><span class="fa fa-facebook"></span> Compartilhe</a>
-                <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-twitter"><span class="fa fa-twitter"></span> Tweet</a>
-                <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-social btn-google"><span class="fa fa-google-plus"></span> Conte</a>
-            </p>
-            <p class="input-group">
-                <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
-                <input type="text" value="{{ aniversario.full_url }}" class="form-control" id="link-compartilhar">
-                <span class="input-group-btn"><button class="btn btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
-            </p>
-            {#                <div class="col-md-6">#}
-            {#                    <h4>&nbsp;</h4>#}
-            {#                    <h3 class="text-center">Doe e ajude!</h3>#}
-            {#                    <p class="text-center">#}
-            {#                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=25">R$25</a>#}
-            {#                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=50">R$50</a>#}
-            {#                        <a class="btn btn-lg btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=75">R$75</a>#}
-            {#                        <a class="btn btn-lg btn-default" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">Outro Valor</a>#}
-            {#                    </p>#}
-            {#                </div>#}
-            {#            </div>#}
-
 
             {% with medias=aniversario.missao.medias.all %}
                 {% if medias %}
