@@ -202,4 +202,4 @@ def doacoes(request):
 
 def export_dados(request):
     export = UsuarioResource().export()
-    return HttpResponse(export.csv, content_type="file/csv")
+    return HttpResponse(export.xls, content_type="file/csv")
