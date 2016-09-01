@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'emails',
     'easy_thumbnails',
     'import_export',
-    'social_widgets',
 ]
 
 MIDDLEWARE_CLASSES = [
