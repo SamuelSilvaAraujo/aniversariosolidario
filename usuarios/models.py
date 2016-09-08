@@ -65,8 +65,8 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     data_cadastro = models.DateTimeField('data de cadastro', auto_now_add=True)
     email_pagseguro = models.EmailField('E-mail do PagSeguro', blank=True, null= True)
     cpf = models.CharField('CPF', max_length=14, blank=True)
-    telefone_ddd = models.IntegerField('DDD do número do telefone', null=True)
-    telefone_numero = models.IntegerField('número do telefone sem DDD', null=True)
+    telefone_ddd = models.IntegerField('DDD do número do telefone', blank=True, null=True)
+    telefone_numero = models.IntegerField('número do telefone sem DDD', blank=True, null=True)
     migrado = models.BooleanField(default=False)
 
     objects = UsuarioManager()

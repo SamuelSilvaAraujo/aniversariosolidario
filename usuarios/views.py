@@ -202,4 +202,6 @@ def doacoes(request):
 
 def export_dados(request):
     export = UsuarioResource().export()
-    return HttpResponse(export.csv, content_type="file/csv")
+    response = HttpResponse(export.xls, content_type="file/xls")
+    response['Content-Disposition'] = 'attachment; filename="usuarios.xls"'
+    return response

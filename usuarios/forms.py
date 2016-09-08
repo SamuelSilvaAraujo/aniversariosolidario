@@ -10,7 +10,7 @@ class CadastroFrom(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'email', 'password']
+        fields = ['nome', 'email', 'telefone_ddd', 'telefone_numero', 'password']
 
     def clean(self):
         cleaned_data = super(CadastroFrom, self).clean()
@@ -49,7 +49,7 @@ class AlterarPerfilForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'data_de_nascimento', 'email_pagseguro']
+        fields = ['nome', 'data_de_nascimento','telefone_ddd', 'telefone_numero', 'email_pagseguro']
 
 class CompletarPerfilForm(forms.ModelForm):
     class Meta:
