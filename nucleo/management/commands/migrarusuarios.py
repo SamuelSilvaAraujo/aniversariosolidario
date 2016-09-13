@@ -5,8 +5,8 @@ from django.core.management import BaseCommand
 from django.utils import timezone
 from usuarios.models import Usuario
 
-# JSON_URL = 'http://172.16.194.92:8080/XOQM/'
-JSON_URL = 'http://o.aniversariosolidario.com/XOQM/'
+JSON_URL = 'http://localhost:8100/XOQM/'
+# JSON_URL = 'http://o.aniversariosolidario.com/XOQM/'
 
 class Command(BaseCommand):
     help = 'Migrar usuários da plataforma antiga'
