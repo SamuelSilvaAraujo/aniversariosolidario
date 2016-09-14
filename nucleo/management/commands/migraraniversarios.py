@@ -8,11 +8,12 @@ from django.core.management import BaseCommand
 from django.core.files import File
 
 from usuarios.models import Usuario
-from nucleo.models import Missao, Aniversario, Media
+from nucleo.models import Missao, Aniversario, Media, Doador, Doacao
+from financeiro.models import Pagamento
 
 
-JSON_URL = 'http://localhost:8100/XOQAN/'
-# JSON_URL = 'http://o.aniversariosolidario.com/XOQAN/'
+# JSON_URL = 'http://localhost:8100/XOQAN/'
+JSON_URL = 'http://o.aniversariosolidario.com/XOQAN/'
 
 class Command(BaseCommand):
     help = 'Migrar aniversarios da plataforma antiga'
@@ -22,6 +23,15 @@ class Command(BaseCommand):
         aniversarios = j.get('anivesarios')
         missoes = j.get('missoes')
         medias = j.get('medias')
+        doadores = j.get('doadores')
+        doacoes = j.get('doacoes')
+
+        for doador in doadores:
+            Doador.objects.create(
+                nome = doador.nome,
+                email = doador.email
+            )
+
         for m in missoes:
             usuario = None
             try:
@@ -47,14 +57,27 @@ class Command(BaseCommand):
                 pass
 
             if usuario:
-                print a
-                Aniversario.objects.create(
+                aniversario = Aniversario.objects.create(
                     usuario = usuario,
                     missao = Missao.objects.get(slug=a.get('missao')),
                     ano = a.get('ano'),
                     apelo = a.get('apelo'),
                     finalizado = a.get('finalizado')
                 )
+                for doacao in doacoes:
+                    if a.get('id') == doacao.get('aniversario'):
+                        pagamento = Pagamento.objects.create(
+                            valor = doacao.get('valor'),
+                            status = 'pago'
+                        )
+                        Doacao.objects.create(
+                            aniversario = aniversario,
+                            usuario = doacao.get('usuario'),
+                            doador = doacao.get('doador'),
+                            data = doacao.get('data'),
+                            pagamento = pagamento
+                        )
+                print a
 
         for me in medias:
             missao = Missao.objects.get(slug=me.get('missao'))

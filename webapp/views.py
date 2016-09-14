@@ -8,8 +8,10 @@ from pagseguro.api import PagSeguroApi
 
 def index(request):
     aniversarios = Aniversario.objects.filter(finalizado__isnull=True)
+    aniversarios_realizados = Aniversario.objects.filter(finalizado__isnull=False)
     return render(request, 'webapp/index.html', {
-        'aniversarios': aniversarios
+        'aniversarios': aniversarios,
+        'aniversarios_realizados': aniversarios_realizados
     })
 
 def styleguide(request):
