@@ -17,6 +17,8 @@ from .models import Missao, Media
 from .decorators import missao_acesso, aniversario_finalizado
 from usuarios.models import PoucosDiasException
 
+from emails.models import Email, ContaDeEmail
+
 def iniciar_aniversario(request):
     if not request.user.is_authenticated():
         return redirect('{}?next={}'.format(reverse('usuarios:login_ou_cadastro'), reverse('nucleo:iniciar_aniversario')))
@@ -198,6 +200,33 @@ def feedback(request, ano):
         aniversario.feedback = feedback
         aniversario.feedback_liberado = False
         aniversario.save(update_fields=['feedback', 'feedback_liberado'])
+        for doacao in aniversario.doacoes.pagas():
+            if doacao.usuario:
+                email = Email.objects.create(
+                    de = ContaDeEmail.get_naoresponda(),
+                    para_email = doacao.usuario.email,
+                    assunto = "Obrigado por sua doação!"
+                )
+                email.carregar_corpo(
+                    'nucleo/emails/mensagem_agradecimento.txt',
+                    'nucleo/emails/mensagem_agradecimento.html',
+                    messagem='{}'.format(feedback.mensagem)
+                )
+                email.enviar_as = timezone.now()
+                email.save(update_fields=['enviar_as'])
+            if doacao.doador:
+                email = Email.objects.create(
+                    de=ContaDeEmail.get_naoresponda(),
+                    para_email=doacao.doador.email,
+                    assunto="Obrigado por sua doação!"
+                )
+                email.carregar_corpo(
+                    'nucleo/emails/mensagem_agradecimento.txt',
+                    'nucleo/emails/mensagem_agradecimento.html',
+                    messagem = '{}'.format(feedback.mensagem)
+                )
+                email.enviar_as = timezone.now()
+                email.save(update_fields=['enviar_as'])
         messages.success(request, 'Obrigado por contribuir com nosso site!')
         return redirect(reverse('usuarios:aniversarios_passados'))
     return render(request, 'nucleo/feedback.html', {
