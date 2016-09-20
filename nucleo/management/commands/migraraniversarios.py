@@ -28,9 +28,10 @@ class Command(BaseCommand):
 
         for doador in doadores:
             Doador.objects.create(
-                nome = doador.nome,
-                email = doador.email
+                nome = doador.get('nome'),
+                email = doador.get('email')
             )
+            print doador
 
         for m in missoes:
             usuario = None
@@ -66,17 +67,29 @@ class Command(BaseCommand):
                 )
                 for doacao in doacoes:
                     if a.get('id') == doacao.get('aniversario'):
+                        usuario = None
+                        doador = None
+                        try:
+                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
+                            doador = Doador.objects.get(email=doacao.get('doador'))
+                        except Usuario.DoesNotExist:
+                            pass
+                        except Doador.DoesNotExist:
+                            pass
+
                         pagamento = Pagamento.objects.create(
                             valor = doacao.get('valor'),
                             status = 'pago'
                         )
-                        Doacao.objects.create(
+                        d = Doacao.objects.create(
                             aniversario = aniversario,
-                            usuario = doacao.get('usuario'),
-                            doador = doacao.get('doador'),
-                            data = doacao.get('data'),
+                            usuario = usuario,
+                            doador = doador,
                             pagamento = pagamento
                         )
+                        d.data = doacao.get('data')
+                        d.save(update_fields=['data'])
+                        print doacao
                 print a
 
         for me in medias:
@@ -89,7 +102,7 @@ class Command(BaseCommand):
             if me.get('arquivo'):
                 url = me.get('arquivo')
                 ex = url.split('.')[-1]
-                filename = 'avatar-{}.{}'.format(missao.usuario.slug, ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
+                filename = '{}.{}'.format(me.get('descricao'), ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
                 i, temp_path = mkstemp(filename)
                 urllib.urlretrieve(url, temp_path)
                 file = open(temp_path)
