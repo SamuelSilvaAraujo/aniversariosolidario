@@ -192,42 +192,34 @@ def aniversario_doacao_realizada(request, slug_usuario, slug_missao):
 def feedback(request, ano):
     aniversario = get_object_or_404(Aniversario, usuario=request.user, ano=ano)
     if not aniversario.feedback_liberado:
-        messages.error(request, 'Feedback enviado ou indisponível para este Aniversário Solidário.')
+        messages.error(request, 'Feedback já enviado ou indisponível para este Aniversário Solidário.')
         return redirect(reverse('usuarios:aniversarios_passados'))
     feedback_form = FeedbackForm(request.POST or None)
     if feedback_form.is_valid():
         feedback = feedback_form.save()
         aniversario.feedback = feedback
-        aniversario.feedback_liberado = False
-        aniversario.save(update_fields=['feedback', 'feedback_liberado'])
+        aniversario.save(update_fields=['feedback'])
         for doacao in aniversario.doacoes.pagas():
+            para_email = None
             if doacao.usuario:
-                email = Email.objects.create(
-                    de = ContaDeEmail.get_naoresponda(),
-                    para_email = doacao.usuario.email,
-                    assunto = "Obrigado por sua doação!"
-                )
-                email.carregar_corpo(
-                    'nucleo/emails/mensagem_agradecimento.txt',
-                    'nucleo/emails/mensagem_agradecimento.html',
-                    messagem='{}'.format(feedback.mensagem)
-                )
-                email.enviar_as = timezone.now()
-                email.save(update_fields=['enviar_as'])
-            if doacao.doador:
+                para_email = doacao.usuario.email
+            elif doacao.doador:
+                para_email = doacao.doador.email
+            if para_email:
                 email = Email.objects.create(
                     de=ContaDeEmail.get_naoresponda(),
-                    para_email=doacao.doador.email,
-                    assunto="Obrigado por sua doação!"
+                    para_email=para_email,
+                    assunto='{} agradece a sua doação'.format(aniversario.usuario.nome_curto)
                 )
                 email.carregar_corpo(
                     'nucleo/emails/mensagem_agradecimento.txt',
                     'nucleo/emails/mensagem_agradecimento.html',
-                    messagem = '{}'.format(feedback.mensagem)
+                    messagem=feedback.mensagem,
+                    aniversario=aniversario
                 )
                 email.enviar_as = timezone.now()
                 email.save(update_fields=['enviar_as'])
-        messages.success(request, 'Obrigado por contribuir com nosso site!')
+        messages.success(request, 'Parabéns você completou o seu Aniversário Solidário. Enviamos o seu agradecimento para os doadores e recebemos sua opinião, obrigado!')
         return redirect(reverse('usuarios:aniversarios_passados'))
     return render(request, 'nucleo/feedback.html', {
         'form': feedback_form,

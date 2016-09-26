@@ -70,8 +70,8 @@ def pre_save_Missao(instance, **kwargs):
         instance.gerar_slug()
 
 class Feedback(models.Model):
-    mensagem = models.TextField('Deixe uma mensagem de agradecimento para os doadores do seu aniversário solidário! Essa mensagem sera enviada via e-mail para todos aqueles que ajudaram.')
-    opniao = models.TextField('O que você achou do www.aniversariosolidario.com? Deixe suas criticas e sugestoẽs.')
+    mensagem = models.TextField('mensagem')
+    opniao = models.TextField('opinião', blank=True)
 
     def __unicode__(self):
         return self.mensagem

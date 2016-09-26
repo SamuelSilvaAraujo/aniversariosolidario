@@ -6,7 +6,20 @@
     {% for aniversario in user.aniversarios_passados %}
         <div class="panel panel-default">
             <div class="panel-body">
-                <h4>Aniversário Solidário de {{ aniversario.ano }}<br><small><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" target="_blank">{{ aniversario.missao.titulo }}</a></small></h4>
+                <div class="media">
+                    <div class="media-body">
+                        <h4>Aniversário Solidário de {{ aniversario.ano }}<br><small><a href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}" target="_blank">{{ aniversario.missao.titulo }}</a></small></h4>
+                    </div>
+                    <div class="media-right">
+                        {% if aniversario.feedback_liberado %}
+                            {% if aniversario.feedback %}
+                                <h4><span class="btn btn-default"><i class="fa fa-fw fa-check"></i> Agradecimento enviado</span></h4>
+                            {% else %}
+                                <h4><a href="{% url 'usuarios:detalhes_aniversario:feedback' ano=aniversario.ano %}" class="btn btn-primary">Enviar agradecimento ao doadores</a></h4>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
                 <p><strong>Valor arrecadado:</strong> R${{ aniversario.meta_atingida }}</p>
                 <h3>Retiradas</h3>
                 {% with transacoes=aniversario.transacoes.all %}
@@ -33,7 +46,7 @@
                         <p>Nenhuma solicitação de retirada!</p>
                     {% endif %}
                 {% endwith %}
-                <p class="text-right">Você pode retirar R${{ aniversario.meta_de_direito_disponivel|floatformat:2 }} <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}" class="btn btn-primary">Solicitar Retirada</a></p>
+                <p class="text-right">Você pode retirar R${{ aniversario.meta_de_direito_disponivel|floatformat:2 }} <a href="{% url 'usuarios:detalhes_aniversario:transacao' ano=aniversario.ano %}" class="btn btn-sm btn-info">Solicitar Retirada</a></p>
                 {% if aniversario.feeback_liberado %}
                     <a href="{% url 'usuarios:detalhes_aniversario:feedback' ano=aniversario.ano %}" class="btn btn-primary">Feedback</a>
                 {% endif %}
