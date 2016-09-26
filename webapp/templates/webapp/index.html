@@ -60,5 +60,14 @@
                 {% endfor %}
             </div>
         {% endif %}
+        {% if aniversarios_realizados %}
+            <h3>Aniversários que já aconteceram</h3>
+            <div class="row">
+                {% for aniversario in aniversarios_realizados %}
+                    <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
     </div>
 {% endblock %}

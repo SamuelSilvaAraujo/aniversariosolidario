@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Missao, Aniversario, Doacao, Media, Feedback
+from .models import Missao, Aniversario, Doacao, Media, Feedback, Doador
 from ordered_model.admin import OrderedModelAdmin
 
 
@@ -21,4 +21,8 @@ class MediaAdmin(OrderedModelAdmin):
 
 @admin.register(Feedback)
 class FeedblackAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Doador)
+class DoadorAdmin(admin.ModelAdmin):
     pass
