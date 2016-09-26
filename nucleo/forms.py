@@ -45,6 +45,9 @@ class AniversarioApeloForm(forms.ModelForm):
         fields = ['apelo']
 
 class FeedbackForm(forms.ModelForm):
+    mensagem = forms.CharField(label='Deixe uma mensagem de agradecimento para os doadores do seu Aniversário Solidário! Enviaremos sua mensagem para cada um via e-mail.', widget=forms.Textarea)
+    opniao = forms.CharField(label='Conte o que você achou do www.aniversariosolidario.com? Deixe suas críticas e sugestoẽs para melhorar nossa plataforma.', widget=forms.Textarea, required=False)
+
     class Meta:
         model = Feedback
         fields = ['mensagem', 'opniao']

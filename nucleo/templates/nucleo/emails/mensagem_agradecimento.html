@@ -3,5 +3,6 @@
 {% block subtitle-content %}Obrigado por doar!{% endblock %}
 
 {% block content %}
-    {{ messagem }}
+    <p>{{ messagem }}</p>
+    <p>- {{ aniversario.usuario.nome }}</p>
 {% endblock %}
