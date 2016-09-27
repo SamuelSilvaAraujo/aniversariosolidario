@@ -16,6 +16,8 @@ from django.utils import timezone
 from django.core.files import File
 from .models import ConfirmacaoDeEmail, Usuario
 
+from django.contrib.auth.decorators import user_passes_test
+
 from .forms import CadastroFrom, LoginForm, AlterarFotoForm, CompletarPerfilForm, AlterarPerfilForm,EditarSenhaForm,RecuperarSenhaForm, \
     LoginOuCadastroForm, AddEmailPagSeguro
 
@@ -205,3 +207,10 @@ def export_dados(request):
     response = HttpResponse(export.xls, content_type="file/xls")
     response['Content-Disposition'] = 'attachment; filename="usuarios.xls"'
     return response
+
+@user_passes_test(lambda u: u.is_superuser)
+def logar_como(request, slug):
+    usuario = get_object_or_404(Usuario, slug=slug)
+    usuario.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, usuario)
+    return redirect(reverse('usuarios:index'))

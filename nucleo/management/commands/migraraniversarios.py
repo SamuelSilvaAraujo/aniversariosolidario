@@ -25,6 +25,7 @@ class Command(BaseCommand):
         medias = j.get('medias')
         doadores = j.get('doadores')
         doacoes = j.get('doacoes')
+        pagamentos = j.get('pagamentos')
 
         for doador in doadores:
             Doador.objects.create(
@@ -77,9 +78,19 @@ class Command(BaseCommand):
                         except Doador.DoesNotExist:
                             pass
 
+                        status_dict = {
+                            0: 'em_analise',
+                            1: 'aguardando',
+                            2: 'pago',
+                            3: 'disponivel',
+                            4: 'em_disputa',
+                            5: 'devolvido',
+                            6: 'cancelado',
+                        }
+
                         pagamento = Pagamento.objects.create(
                             valor = doacao.get('valor'),
-                            status = 'pago'
+                            status = status_dict[doacao.get('status')]
                         )
                         d = Doacao.objects.create(
                             aniversario = aniversario,
