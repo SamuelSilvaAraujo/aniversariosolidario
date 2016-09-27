@@ -63,11 +63,36 @@
         {% if aniversarios_realizados %}
             <h3>Aniversários que já aconteceram</h3>
             <div class="row">
-                {% for aniversario in aniversarios_realizados %}
-                    <div class="col-md-4">{% aniversario_panel aniversario %}</div>
-                {% endfor %}
+                <div class="container-fluid">
+                    <div id="carousel-aniversarios-realidos" class="carousel slide">
+                        <div class="carousel-inner">
+                            {% for aniversario in aniversarios_realizados %}
+                                {% if forloop.first %}
+                                    <div class="item active">
+                                        <div class="row">
+                                            <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="item">
+                                        <div class="row">
+                                            <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <a class="left carousel-control" href="#carousel-aniversarios-realidos" role="button" data-slide="prev">
+                            <span class="icon-prev" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-aniversarios-realidos" role="button" data-slide="next">
+                            <span class="icon-next" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         {% endif %}
-
     </div>
 {% endblock %}
