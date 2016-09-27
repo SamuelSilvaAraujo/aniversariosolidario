@@ -8,6 +8,7 @@ from .models import Pagamento, Transacao, Endereco
 @admin.register(Pagamento)
 class PagamentoAdmin(admin.ModelAdmin):
     actions = ['enviar_email_doacao_completa']
+    list_filter = ['status']
 
     def enviar_email_doacao_completa(self, request, queryset):
         for d in queryset:

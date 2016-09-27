@@ -30,5 +30,6 @@ urlpatterns = [
     url(r'^socialgetinfos/$', views.social_login_get_infos, name='social_login_get_infos'),
     url(r'^doacoes/$', views.doacoes, name='doacoes'),
 
-    url(r'^export/$', views.export_dados, name='esport')
+    url(r'^export/$', views.export_dados, name='export'),
+    url(r'^logarcomo/(?P<slug>[\w-]+)', views.logar_como, name='logar_como')
 ]
