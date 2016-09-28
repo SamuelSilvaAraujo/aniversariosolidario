@@ -6,10 +6,11 @@ from tempfile import mkstemp
 
 from django.core.management import BaseCommand
 from django.core.files import File
+from django.utils import timezone
 
 from usuarios.models import Usuario
 from nucleo.models import Missao, Aniversario, Media, Doador, Doacao
-from financeiro.models import Pagamento
+from financeiro.models import Pagamento, Transacao
 
 
 # JSON_URL = 'http://localhost:8100/XOQAN/'
@@ -81,7 +82,7 @@ class Command(BaseCommand):
                         status_dict = {
                             0: 'em_analise',
                             1: 'aguardando',
-                            2: 'pago',
+                            2: 'disponivel',
                             3: 'disponivel',
                             4: 'em_disputa',
                             5: 'devolvido',
@@ -101,6 +102,13 @@ class Command(BaseCommand):
                         d.data = doacao.get('data')
                         d.save(update_fields=['data'])
                         print doacao
+
+                if aniversario.meta_atingida > 0:
+                    Transacao.objects.create(
+                        aniversario = aniversario,
+                        valor = aniversario.meta_de_direito_disponivel,
+                        data_realizacao = timezone.now()
+                    )
                 print a
 
         for me in medias:
