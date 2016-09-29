@@ -284,3 +284,23 @@
 .panel-danger {
   .panel-variant(@panel-danger-border; @panel-danger-text; @panel-danger-heading-bg; @panel-danger-border);
 }
+
+
+// Aniversário Panel
+.aniversario {
+  &-titulo {
+    position: relative;
+    display: block;
+    height: 90px;
+    overflow: hidden;
+
+    &-container {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      display: block;
+      transform: translateY(-50%);
+    }
+  }
+}

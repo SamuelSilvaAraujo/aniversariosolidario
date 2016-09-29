@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.core.urlresolvers import reverse
+from django.db.models import Sum
 from django.http.response import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from nucleo.models import Aniversario, Doacao
@@ -8,7 +9,13 @@ from pagseguro.api import PagSeguroApi
 
 def index(request):
     aniversarios = Aniversario.objects.filter(finalizado__isnull=True)
-    aniversarios_realizados = sorted(Aniversario.objects.filter(finalizado__isnull=False, missao__meta__gte=1), key=lambda a: a.meta_atingida)[::-1]
+    aniversarios_realizados = Aniversario.objects.filter(
+        finalizado__isnull=False,
+        missao__meta__gte=1,
+        doacoes__pagamento__status__in=['pago', 'disponivel']
+    ).annotate(
+        total_doacoes=Sum('doacoes__pagamento__valor')
+    ).order_by('-total_doacoes')[:9]
     return render(request, 'webapp/index.html', {
         'aniversarios': aniversarios,
         'aniversarios_realizados': aniversarios_realizados

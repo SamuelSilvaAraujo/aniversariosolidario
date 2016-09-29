@@ -18,6 +18,10 @@
     position: relative;
     .transition(.6s ease-in-out left);
 
+    &-inner {
+      padding: 0 @carousel-control-width;
+    }
+
     // Account for jankitude on images
     > img,
     > a > img {
@@ -105,14 +109,9 @@
   // We can't have this transition here because WebKit cancels the carousel
   // animation if you trip this while in the middle of another animation.
 
-  // Set gradients for backgrounds
-  &.left {
-    #gradient > .horizontal(@start-color: rgba(0,0,0,.5); @end-color: rgba(0,0,0,.0001));
-  }
   &.right {
     left: auto;
     right: 0;
-    #gradient > .horizontal(@start-color: rgba(0,0,0,.0001); @end-color: rgba(0,0,0,.5));
   }
 
   // Hover/focus state

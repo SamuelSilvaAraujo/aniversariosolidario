@@ -61,7 +61,8 @@ class Missao(models.Model):
         media = medias.first()
         return get_thumbnailer(media.arquivo).get_thumbnail({
             'size': (360, 270),
-            'crop': True
+            'crop': True,
+            'upscale': True
         }).url
 
 @receiver(pre_save, sender=Missao)
