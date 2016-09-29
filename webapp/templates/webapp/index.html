@@ -53,28 +53,33 @@
             <div class="col-md-3 col-sm-6 margin-top-bottom text-center"><img src="{% static 'imgs/COMO-FUNCIONA-3.png' %}" class="img-responsive" alt="Receba seus presentes em forma de doações" /></div>
             <div class="col-md-3 col-sm-6 margin-top-bottom text-center"><img src="{% static 'imgs/COMO-FUNCIONA-4.png' %}" class="img-responsive" alt="Faça uma boa ação, deixe alguém feliz" /></div>
         </div>
-
-        {% if aniversarios_realizados %}
-            <h3>Aniversários finalizados!</h3>
-            <div class="row">
-                <div class="carousel slide" id="carousel-aniversarios-realizados">
-                    <div class="carousel-inner">
-                        {% for aniversario in aniversarios_realizados %}
-                            {% if forloop.counter0|divisibleby:3 %}
-                                <div class="item item-inner{% if forloop.first %} active{% endif %}">
-                            {% endif %}
-                                    <div class="col-md-4">{% aniversario_panel aniversario %}</div>
-                            {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="well">
+        <div class="container">
+            {% if aniversarios_realizados %}
+                <h3 class="item-inner">Alguns Aniversários Solidários de sucesso</h3>
+                <p class="item-inner">Selecionamos abaixo alguns dos Aniversários Solidários que foram um sucesso! O aniversariante com a ajuda de seus amigos/doadores conseguiram concluir suas missões e impactar ao seu redor.</p>
+                <div class="row">
+                    <div class="carousel slide" id="carousel-aniversarios-realizados">
+                        <div class="carousel-inner">
+                            {% for aniversario in aniversarios_realizados %}
+                                {% if forloop.counter0|divisibleby:3 %}
+                                    <div class="item item-inner{% if forloop.first %} active{% endif %}">
+                                {% endif %}
+                            <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                            {% if forloop.counter|divisibleby:3 or forloop.last %}
                                 </div>
                             {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control left" href="#carousel-aniversarios-realizados" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                        <a class="carousel-control right" href="#carousel-aniversarios-realizados" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
                     </div>
-                    <a class="carousel-control left" href="#carousel-aniversarios-realizados" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
-                    <a class="carousel-control right" href="#carousel-aniversarios-realizados" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
                 </div>
-            </div>
-        {% endif %}
-
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
         {% if aniversarios %}
             <h3>Aniversários acontecendo agora</h3>
             <div class="row">

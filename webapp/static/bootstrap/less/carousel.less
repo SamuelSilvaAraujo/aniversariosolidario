@@ -8,6 +8,10 @@
   position: relative;
 }
 
+.item-inner {
+  padding: 0 @carousel-control-width;
+}
+
 .carousel-inner {
   position: relative;
   overflow: hidden;
@@ -17,10 +21,6 @@
     display: none;
     position: relative;
     .transition(.6s ease-in-out left);
-
-    &-inner {
-      padding: 0 @carousel-control-width;
-    }
 
     // Account for jankitude on images
     > img,
