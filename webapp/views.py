@@ -15,7 +15,7 @@ def index(request):
         doacoes__pagamento__status__in=['pago', 'disponivel']
     ).annotate(
         total_doacoes=Sum('doacoes__pagamento__valor')
-    ).order_by('-total_doacoes')[:8]
+    ).order_by('-total_doacoes')[:9]
     return render(request, 'webapp/index.html', {
         'aniversarios': aniversarios,
         'aniversarios_realizados': aniversarios_realizados
