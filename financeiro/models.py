@@ -65,7 +65,7 @@ def post_save_Pagamento(instance, update_fields, **kwargs):
         instance.enviar_email_doacao_completa()
 
 class Transacao(models.Model):
-    valor = models.IntegerField()
+    valor = models.FloatField()
     aniversario = models.ForeignKey('nucleo.Aniversario', related_name='transacoes')
     data_solicitacao = models.DateTimeField('Data de solicitação',auto_now_add=True)
     data_realizacao = models.DateTimeField('Data de realização' ,null=True, blank=True)

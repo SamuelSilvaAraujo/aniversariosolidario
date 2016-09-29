@@ -61,7 +61,8 @@ class Missao(models.Model):
         media = medias.first()
         return get_thumbnailer(media.arquivo).get_thumbnail({
             'size': (360, 270),
-            'crop': True
+            'crop': True,
+            'upscale': True
         }).url
 
 @receiver(pre_save, sender=Missao)
@@ -285,6 +286,15 @@ class Doador(models.Model):
     nome = models.CharField(max_length=255)
     email = models.EmailField()
 
+    def __unicode__(self):
+        return self.email
+
+    def nome_curto(self):
+        nome_curto = self.nome.split(' ')
+        if len(nome_curto) == 1:
+            return nome_curto
+        return ' '.join([nome_curto[0], nome_curto[-1]])
+
 class Doacao(models.Model):
     class Meta:
         ordering = ['-data']
@@ -313,9 +323,9 @@ class Doacao(models.Model):
     @property
     def usuario_nome(self):
         if self.usuario:
-            return self.usuario.nome
+            return self.usuario.nome_curto
         if self.doador:
-            return self.doador.nome
+            return self.doador.nome_curto
         return 'Doador não identificado'
 
     @property

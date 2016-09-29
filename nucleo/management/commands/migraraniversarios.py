@@ -6,10 +6,11 @@ from tempfile import mkstemp
 
 from django.core.management import BaseCommand
 from django.core.files import File
+from django.utils import timezone
 
 from usuarios.models import Usuario
 from nucleo.models import Missao, Aniversario, Media, Doador, Doacao
-from financeiro.models import Pagamento
+from financeiro.models import Pagamento, Transacao
 
 
 # JSON_URL = 'http://localhost:8100/XOQAN/'
@@ -25,7 +26,6 @@ class Command(BaseCommand):
         medias = j.get('medias')
         doadores = j.get('doadores')
         doacoes = j.get('doacoes')
-        pagamentos = j.get('pagamentos')
 
         for doador in doadores:
             Doador.objects.create(
@@ -51,6 +51,7 @@ class Command(BaseCommand):
                     meta = m.get('meta'),
                     beneficiado = m.get('beneficiado'),
                 )
+
         for a in aniversarios:
             usuario = None
             try:
@@ -68,30 +69,33 @@ class Command(BaseCommand):
                 )
                 for doacao in doacoes:
                     if a.get('id') == doacao.get('aniversario'):
-                        usuario = None
-                        doador = None
-                        try:
-                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
-                            doador = Doador.objects.get(email=doacao.get('doador'))
-                        except Usuario.DoesNotExist:
-                            pass
-                        except Doador.DoesNotExist:
-                            pass
 
                         status_dict = {
                             0: 'em_analise',
                             1: 'aguardando',
-                            2: 'pago',
+                            2: 'disponivel',
                             3: 'disponivel',
                             4: 'em_disputa',
                             5: 'devolvido',
                             6: 'cancelado',
                         }
-
                         pagamento = Pagamento.objects.create(
                             valor = doacao.get('valor'),
                             status = status_dict[doacao.get('status')]
                         )
+
+                        try:
+                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
+                        except Usuario.DoesNotExist:
+                            usuario = None
+
+                        try:
+                            doador = Doador.objects.get(email=doacao.get('doador_email'), nome=doacao.get('doador_nome'))
+                        except Doador.DoesNotExist:
+                            doador = None
+                        except Doador.MultipleObjectsReturned:
+                            pass
+
                         d = Doacao.objects.create(
                             aniversario = aniversario,
                             usuario = usuario,
@@ -101,6 +105,13 @@ class Command(BaseCommand):
                         d.data = doacao.get('data')
                         d.save(update_fields=['data'])
                         print doacao
+
+                if aniversario.meta_atingida > 0:
+                    Transacao.objects.create(
+                        aniversario = aniversario,
+                        valor = aniversario.meta_de_direito_disponivel,
+                        data_realizacao = timezone.now()
+                    )
                 print a
 
         for me in medias:
