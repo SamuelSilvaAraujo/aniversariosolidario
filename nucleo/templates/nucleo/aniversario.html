@@ -125,7 +125,7 @@
                 {% endif %}
             {% endwith %}
 
-            {% with medias=aniversario.missao.medias.all %}
+            {% with medias=aniversario.missao.medias.all|slice:"1:" %}
                 {% if medias %}
                     <h2>Fotos</h2>
                     <div class="row">
