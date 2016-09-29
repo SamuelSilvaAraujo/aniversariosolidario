@@ -66,10 +66,10 @@
                                 {% if forloop.counter0|divisibleby:3 %}
                                     <div class="item item-inner{% if forloop.first %} active{% endif %}">
                                 {% endif %}
-                            <div class="col-md-4">{% aniversario_panel aniversario %}</div>
-                            {% if forloop.counter|divisibleby:3 or forloop.last %}
-                                </div>
-                            {% endif %}
+                                        <div class="col-md-4">{% aniversario_panel aniversario %}</div>
+                                {% if forloop.counter|divisibleby:3 or forloop.last %}
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                         <a class="carousel-control left" href="#carousel-aniversarios-realizados" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
@@ -81,7 +81,7 @@
     </div>
     <div class="container">
         {% if aniversarios %}
-            <h3>Aniversários acontecendo agora</h3>
+            <h3>Próximos Aniversários Solidários</h3>
             <div class="row">
                 {% for aniversario in aniversarios %}
                     <div class="col-md-4">{% aniversario_panel aniversario %}</div>
