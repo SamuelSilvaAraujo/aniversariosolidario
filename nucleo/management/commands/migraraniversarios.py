@@ -26,7 +26,6 @@ class Command(BaseCommand):
         medias = j.get('medias')
         doadores = j.get('doadores')
         doacoes = j.get('doacoes')
-        pagamentos = j.get('pagamentos')
 
         for doador in doadores:
             Doador.objects.create(
@@ -52,6 +51,7 @@ class Command(BaseCommand):
                     meta = m.get('meta'),
                     beneficiado = m.get('beneficiado'),
                 )
+
         for a in aniversarios:
             usuario = None
             try:
@@ -69,15 +69,6 @@ class Command(BaseCommand):
                 )
                 for doacao in doacoes:
                     if a.get('id') == doacao.get('aniversario'):
-                        usuario = None
-                        doador = None
-                        try:
-                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
-                            doador = Doador.objects.get(email=doacao.get('doador'))
-                        except Usuario.DoesNotExist:
-                            pass
-                        except Doador.DoesNotExist:
-                            pass
 
                         status_dict = {
                             0: 'em_analise',
@@ -88,11 +79,23 @@ class Command(BaseCommand):
                             5: 'devolvido',
                             6: 'cancelado',
                         }
-
                         pagamento = Pagamento.objects.create(
                             valor = doacao.get('valor'),
                             status = status_dict[doacao.get('status')]
                         )
+
+                        try:
+                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
+                        except Usuario.DoesNotExist:
+                            usuario = None
+
+                        try:
+                            doador = Doador.objects.get(email=doacao.get('doador_email'), nome=doacao.get('doador_nome'))
+                        except Doador.DoesNotExist:
+                            doador = None
+                        except Doador.MultipleObjectsReturned:
+                            pass
+
                         d = Doacao.objects.create(
                             aniversario = aniversario,
                             usuario = usuario,
