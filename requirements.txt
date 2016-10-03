@@ -15,6 +15,7 @@ Pillow==3.3.0
 python-dateutil==2.5.3
 python-magic==0.4.12
 python-openid==2.2.5
+pytz==2016.7
 requests==2.10.0
 requests-oauthlib==0.6.2
 requests-toolbelt==0.7.0
