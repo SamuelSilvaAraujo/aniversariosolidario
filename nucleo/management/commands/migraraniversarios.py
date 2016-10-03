@@ -145,7 +145,7 @@ class Command(BaseCommand):
                                 print d
 
                     if aniversario.meta_atingida > 0:
-                        t = Transacao.objects.create(
+                        Transacao.objects.create(
                             aniversario=aniversario,
                             data_realizacao=timezone.now(),
                             taxa_atual=TAXA_ANTIGA,
@@ -154,20 +154,25 @@ class Command(BaseCommand):
                     print a
 
         for me in medias:
-            missao = Missao.objects.get(slug=me.get('missao'))
-            media = Media.objects.create(
-                missao = missao,
-                descricao = me.get('descricao'),
-            )
-            print me
-            if me.get('arquivo'):
-                url = me.get('arquivo')
-                ex = url.split('.')[-1]
-                filename = '{}.{}'.format(me.get('descricao'), ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
-                i, temp_path = mkstemp(filename)
-                urllib.urlretrieve(url, temp_path)
-                file = open(temp_path)
-                django_file = File(file)
-                media.arquivo.save(filename, django_file)
-                file.close()
-                os.unlink(temp_path)
+            try:
+                missao = Missao.objects.get(slug=me.get('missao'))
+            except Missao.DoesNotExist:
+                missao = None
+
+            if missao:
+                media = Media.objects.create(
+                    missao = missao,
+                    descricao = me.get('descricao'),
+                )
+                print me
+                if me.get('arquivo'):
+                    url = me.get('arquivo')
+                    ex = url.split('.')[-1]
+                    filename = '{}.{}'.format(me.get('descricao'), ex if ex in ['jpg', 'jpeg', 'png', 'gif'] else 'jpg')
+                    i, temp_path = mkstemp(filename)
+                    urllib.urlretrieve(url, temp_path)
+                    file = open(temp_path)
+                    django_file = File(file)
+                    media.arquivo.save(filename, django_file)
+                    file.close()
+                    os.unlink(temp_path)
