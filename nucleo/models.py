@@ -95,7 +95,9 @@ class Aniversario(models.Model):
 
     @property
     def usuario_proximo_aniversario(self):
-        return self.usuario.proximo_aniversario.replace(year=self.ano)
+        if self.usuario.proximo_aniversario:
+            return self.usuario.proximo_aniversario.replace(year=self.ano)
+        return None
 
     @property
     def full_url(self):
