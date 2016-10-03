@@ -17,6 +17,7 @@ from financeiro.models import Pagamento, Transacao
 
 # JSON_URL = 'http://localhost:8100/XOQAN/'
 JSON_URL = 'http://o.aniversariosolidario.com/XOQAN/'
+TAXA_ANTIGA = .17
 
 class Command(BaseCommand):
     help = 'Migrar aniversarios da plataforma antiga'
@@ -145,12 +146,11 @@ class Command(BaseCommand):
 
                     if aniversario.meta_atingida > 0:
                         t = Transacao.objects.create(
-                            aniversario = aniversario,
-                            valor = aniversario.meta_de_direito_disponivel,
-                            data_realizacao = timezone.now(),
+                            aniversario=aniversario,
+                            data_realizacao=timezone.now(),
+                            taxa_atual=TAXA_ANTIGA,
+                            valor=aniversario._meta_de_direito_disponivel(taxa=TAXA_ANTIGA)
                         )
-                        t.taxa_atual = .17
-                        t.save(update_fields=['taxa_atual'])
                     print a
 
         for me in medias:
