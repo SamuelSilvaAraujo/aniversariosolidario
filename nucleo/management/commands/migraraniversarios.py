@@ -8,6 +8,8 @@ from django.core.management import BaseCommand
 from django.core.files import File
 from django.utils import timezone
 
+from dateutil import parser
+
 from usuarios.models import Usuario
 from nucleo.models import Missao, Aniversario, Media, Doador, Doacao
 from financeiro.models import Pagamento, Transacao
@@ -15,6 +17,7 @@ from financeiro.models import Pagamento, Transacao
 
 # JSON_URL = 'http://localhost:8100/XOQAN/'
 JSON_URL = 'http://o.aniversariosolidario.com/XOQAN/'
+TAXA_ANTIGA = .17
 
 class Command(BaseCommand):
     help = 'Migrar aniversarios da plataforma antiga'
@@ -27,92 +30,128 @@ class Command(BaseCommand):
         doadores = j.get('doadores')
         doacoes = j.get('doacoes')
 
-        for doador in doadores:
-            Doador.objects.create(
-                nome = doador.get('nome'),
-                email = doador.get('email')
-            )
-            print doador
-
-        for m in missoes:
-            usuario = None
+        for d in doadores:
+            doador = None
             try:
-                usuario = Usuario.objects.get(email=m.get('usuario'))
-            except Usuario.DoesNotExist:
+                doador = Doador.objects.get(email=d.get('email'), nome=d.get('nome'))
+            except Doador.DoesNotExist:
                 pass
 
-            if usuario:
-                print m
-                Missao.objects.create(
-                    usuario = usuario,
-                    titulo = m.get('titulo'),
-                    descricao = m.get('descricao'),
-                    slug = m.get('slug'),
-                    meta = m.get('meta'),
-                    beneficiado = m.get('beneficiado'),
+            if not doador:
+                Doador.objects.create(
+                    nome = d.get('nome'),
+                    email = d.get('email')
                 )
+            print d
+
+        for m in missoes:
+            missao = None
+
+            try:
+                missao = Missao.objects.get(slug=m.get('slug'))
+            except Missao.DoesNotExist:
+                pass
+
+            if not missao:
+                usuario = None
+
+                try:
+                    usuario = Usuario.objects.get(email=m.get('usuario'))
+                except Usuario.DoesNotExist:
+                    pass
+
+                if usuario:
+                    Missao.objects.create(
+                        usuario = usuario,
+                        titulo = m.get('titulo'),
+                        descricao = m.get('descricao'),
+                        slug = m.get('slug'),
+                        meta = m.get('meta'),
+                        beneficiado = m.get('beneficiado'),
+                    )
+            print m
 
         for a in aniversarios:
             usuario = None
+
             try:
                 usuario = Usuario.objects.get(email=a.get('usuario'))
             except Usuario.DoesNotExist:
                 pass
 
             if usuario:
-                aniversario = Aniversario.objects.create(
-                    usuario = usuario,
-                    missao = Missao.objects.get(slug=a.get('missao')),
-                    ano = a.get('ano'),
-                    apelo = a.get('apelo'),
-                    finalizado = a.get('finalizado')
-                )
-                for doacao in doacoes:
-                    if a.get('id') == doacao.get('aniversario'):
+                aniversario = None
 
-                        status_dict = {
-                            0: 'em_analise',
-                            1: 'aguardando',
-                            2: 'disponivel',
-                            3: 'disponivel',
-                            4: 'em_disputa',
-                            5: 'devolvido',
-                            6: 'cancelado',
-                        }
-                        pagamento = Pagamento.objects.create(
-                            valor = doacao.get('valor'),
-                            status = status_dict[doacao.get('status')]
-                        )
+                try:
+                    aniversario = Aniversario.objects.get(ano=a.get('ano'), usuario=usuario)
+                except Aniversario.DoesNotExist:
+                    pass
 
-                        try:
-                            usuario = Usuario.objects.get(email=doacao.get('usuario'))
-                        except Usuario.DoesNotExist:
-                            usuario = None
-
-                        try:
-                            doador = Doador.objects.get(email=doacao.get('doador_email'), nome=doacao.get('doador_nome'))
-                        except Doador.DoesNotExist:
-                            doador = None
-                        except Doador.MultipleObjectsReturned:
-                            pass
-
-                        d = Doacao.objects.create(
-                            aniversario = aniversario,
-                            usuario = usuario,
-                            doador = doador,
-                            pagamento = pagamento
-                        )
-                        d.data = doacao.get('data')
-                        d.save(update_fields=['data'])
-                        print doacao
-
-                if aniversario.meta_atingida > 0:
-                    Transacao.objects.create(
-                        aniversario = aniversario,
-                        valor = aniversario.meta_de_direito_disponivel,
-                        data_realizacao = timezone.now()
+                if not aniversario:
+                    aniversario = Aniversario.objects.create(
+                        usuario=Usuario.objects.get(email=a.get('usuario')),
+                        missao=Missao.objects.get(slug=a.get('missao')),
+                        ano=a.get('ano'),
+                        apelo=a.get('apelo'),
+                        finalizado=a.get('finalizado')
                     )
-                print a
+
+                    for d in doacoes:
+
+                        if a.get('id') == d.get('aniversario'):
+                            doacao = None
+
+                            try:
+                                doacao = Doacao.objects.get(aniversario=aniversario, data=d.get('data'), pagamento__valor=d.get('valor'))
+                            except Doacao.DoesNotExist:
+                                pass
+
+                            if not doacao:
+                                usuario = None
+                                doador = None
+
+                                try:
+                                    usuario = Usuario.objects.get(email=d.get('usuario'))
+                                except Usuario.DoesNotExist:
+                                    pass
+
+                                try:
+                                    doador = Doador.objects.get(email=d.get('doador_email'), nome=d.get('doador_nome'))
+                                except Doador.DoesNotExist:
+                                    pass
+
+                                status_dict = {
+                                    0: 'em_analise',
+                                    1: 'aguardando',
+                                    2: 'disponivel',
+                                    3: 'disponivel',
+                                    4: 'em_disputa',
+                                    5: 'devolvido',
+                                    6: 'cancelado',
+                                }
+                                pagamento = Pagamento.objects.create(
+                                    valor=d.get('valor'),
+                                    status=status_dict[d.get('status')]
+                                )
+
+                                do = Doacao.objects.create(
+                                    aniversario = aniversario,
+                                    usuario = usuario,
+                                    doador = doador,
+                                    pagamento = pagamento
+                                )
+                                do.data = d.get('data')
+                                do.save(update_fields=['data'])
+                                print d
+
+                    if aniversario.meta_atingida > 0:
+                        t = Transacao.objects.create(
+                            aniversario=aniversario,
+                            data_realizacao=timezone.now(),
+                            taxa_atual=TAXA_ANTIGA,
+                            valor=aniversario._meta_de_direito_disponivel(taxa=TAXA_ANTIGA)
+                        )
+                    print a
 
         for me in medias:
             missao = Missao.objects.get(slug=me.get('missao'))

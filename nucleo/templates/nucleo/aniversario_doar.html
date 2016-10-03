@@ -20,6 +20,8 @@
     <meta name="twitter:image" content="{{ aniversario.get_imagem_divulgacao_fb_url }}">
 {% endblock %}
 
+{% block nav-links-right-btns %}{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">
@@ -28,29 +30,29 @@
                     <div class="panel-body">
                         <p><strong>Aniversariante:</strong> {{ aniversario.usuario.nome }}</p>
                         <h3>Missão:</h3>
-                        <p><strong>{{ aniversario.missao.titulo }}</strong></p>
+                        <p>{{ aniversario.missao.titulo }}</p>
                         <p><strong>DESCRIÇÃO:</strong><br>{{ aniversario.missao.descricao }}</p>
                     </div>
                 </div>
-                <div class="well well-sm">
-                    <h2 class="no-margin-top">Escolha um valor</h2>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-btn">
-                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="25">R$25</button>
-                                <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="50">R$50</button>
-                                <button class="btn btn-lg btn-default hidden-sm hidden-xs" type="button" data-btn-valor-docao="100">R$100</button>
-                            </div>
-                            <div class="input-group-addon">R$</div>
-                            <input type="text" class="form-control input-lg outro-valor" placeholder="Outro Valor">
+                <p>&nbsp;</p>
+                <h2 class="no-margin-top">Escolha um valor</h2>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="25">R$25</button>
+                            <button class="btn btn-lg btn-default" type="button" data-btn-valor-docao="50">R$50</button>
+                            <button class="btn btn-lg btn-default hidden-sm hidden-xs" type="button" data-btn-valor-docao="100">R$100</button>
                         </div>
+                        <div class="input-group-addon">R$</div>
+                        <input type="text" class="form-control input-lg outro-valor" placeholder="Outro Valor">
                     </div>
-                    <form method="get">
-                        <input class="valor-doacao" type="hidden" name="valor">
-                        <p class="text-center"><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
-                    </form>
                 </div>
-                <p><a class="btn btn-block btn-info" href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}"><i class="fa fa-fw fa-arrow-left"></i> Voltar para a página do Aniversário Solidário</a></p>
+                <form method="get">
+                    <input class="valor-doacao" type="hidden" name="valor">
+                    <p class="text-center"><button type="submit" class="btn btn-lg btn-primary">Doar <i class="fa fa-fw fa-check"></i></button></p>
+                </form>
+                <p>&nbsp;</p>
+                <p class="text-center"><a class="btn btn-info" href="{% url 'aniversario:index' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}"><i class="fa fa-fw fa-arrow-left"></i> Voltar para a página do Aniversário Solidário</a></p>
             </div>
         </div>
     </div>

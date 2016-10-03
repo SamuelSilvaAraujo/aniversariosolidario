@@ -151,14 +151,17 @@ class Aniversario(models.Model):
 
     @property
     def meta_de_direito_disponivel(self):
+        return self._meta_de_direito_disponivel()
+
+    def _meta_de_direito_disponivel(self, taxa=settings.TAXA):
         n = 0
         for t in self.transacoes.all():
-            n += (float(t.valor)/(1 - t.taxa_atual)) * (1 - settings.TAXA)
+            n += (float(t.valor)/(1 - t.taxa_atual)) * (1 - taxa)
         return (self.doacoes.filter(
             pagamento__status__in=['disponivel']
         ).aggregate(
             Sum('pagamento__valor')
-        ).get('pagamento__valor__sum') or 0)*(1-settings.TAXA) - n
+        ).get('pagamento__valor__sum') or 0)*(1-taxa) - n
 
     def enviar_email_iniciado(self):
         email = Email.objects.create(

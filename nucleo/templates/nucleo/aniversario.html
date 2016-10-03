@@ -25,124 +25,136 @@
 
 {% block iniciar-aniversario %}{% endblock %}
 
+{% block nav-links-right-btns %}
+    {% if aniversario.finalizado %}
+        {% if not user.is_authenticated or not user.aniversario_solidario %}
+            <li><p class="navbar-btn hidden-xs hidden-sm"><a class="btn btn-primary" href="{% url 'nucleo:iniciar_aniversario' %}">Faça um Aniversário Solidário também</a></p></li>
+        {% endif %}
+    {% else %}
+        <li><p class="navbar-btn hidden-xs hidden-sm"><a class="btn btn-primary" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">Fazer DOAÇÃO</a></p></li>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <div class="container">
-        <div class="col-md-3" id="barra-estatisticas">
-            <div class="panel panel-default">
-                <div class="hidden-xs hidden-sm"><img src="{{ aniversario.usuario.foto_lg_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-responsive" /></div>
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-left hidden-md hidden-lg"><img src="{{ aniversario.usuario.foto_xs_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-circle" /></div>
-                        <div class="media-body"><h4>{{ aniversario.usuario.nome }}<br><small>faz aniversário dia {{ aniversario.usuario_proximo_aniversario|date:'d/m/Y' }}</small></h4></div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
-                    <p class="text-center">R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
-                    <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
-                </div>
-            </div>
-            {% if not aniversario.finalizado %}
+        <div class="row">
+            <div class="col-md-3" id="barra-estatisticas">
                 <div class="panel panel-default">
+                    <div class="hidden-xs hidden-sm"><img src="{{ aniversario.usuario.foto_lg_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-responsive" /></div>
                     <div class="panel-body">
-                        <h4 class="text-center">Doe e ajude!</h4>
-                        <p class="text-center">
-                            <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=25">R$25</a>
-                            <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=50">R$50</a>
-                            <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=75">R$75</a>
-                        </p>
-                        <p class="text-center"><a class="btn btn-sm btn-default" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">Outro Valor</a></p>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h4 class="text-center">Compartilhe!</h4>
-                        <P class="text-center">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
-                            <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
-                            <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-google"><span class="fa fa-google-plus"></span></a>
-                        </P>
-                        <p class="input-group">
-                            <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
-                            <input type="text" value="{{ aniversario.full_url }}" class="form-control" id="link-compartilhar">
-                            <span class="input-group-btn"><button class="btn btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
-                        </p>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-        <div class="col-md-9">
-            {% if aniversario.apelo %}
-                <div class="row">
-                    <div class="col-xs-3 hidden-md hidden-lg">
-                        <img src="{{ aniversario.usuario.foto_md_url }}" alt="" class="img-responsive img-circle">
-                    </div>
-                    <div class="col-md-12 col-xs-9">
-                        <div class="panel panel-default panel-comment">
-                            <div class="panel-body">
-                                <h4 class="text-justify"><i>{{ aniversario.apelo }}</i></h4>
-                            </div>
+                        <div class="media">
+                            <div class="media-left hidden-md hidden-lg"><img src="{{ aniversario.usuario.foto_xs_url }}" alt="Foto do perfil de {{ aniversario.usuario.nome }}" class="img-circle" /></div>
+                            <div class="media-body"><h4>{{ aniversario.usuario.nome }}<br><small>faz aniversário dia {{ aniversario.usuario_proximo_aniversario|date:'d/m/Y' }}</small></h4></div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
-            {% if aniversario.finalizado %}
-                <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
-            {% endif %}
-            {% with aniversario_media_0=aniversario.missao.medias.all.0 %}
-                {% if aniversario_media_0 %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <img src="{{ aniversario_media_0.arquivo_container_url }}" alt="{{ aniversario_media_0.descricao|default:'Capa' }}" class="img-responsive" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ aniversario_media_0.arquivo.url }}">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="progress"><div class="progress-bar progress-bar-success" style="width: {{ aniversario.meta_atingida_por }}%;"></div></div>
+                        <p class="text-center">R${{ aniversario.meta_atingida }} arrecados de R${{ aniversario.missao.meta }}</p>
+                        <p><strong>{{ aniversario.usuario.nome_curto }}</strong><br>atingiu {{ aniversario.meta_atingida_por }}% da sua meta</p>
+                    </div>
+                </div>
+                {% if not aniversario.finalizado %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-center">Doe e ajude!</h4>
+                            <p class="text-center">
+                                <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=25">R$25</a>
+                                <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=50">R$50</a>
+                                <a class="btn btn-sm btn-info" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}?valor=75">R$75</a>
+                            </p>
+                            <p class="text-center"><a class="btn btn-sm btn-default" href="{% url 'aniversario:doar' slug_usuario=aniversario.usuario.slug slug_missao=aniversario.missao.slug %}">Outro Valor</a></p>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4 class="text-center">Compartilhe!</h4>
+                            <P class="text-center">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-facebook"><span class="fa fa-facebook"></span></a>
+                                <a href="https://twitter.com/home?status={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-twitter"><span class="fa fa-twitter"></span></a>
+                                <a href="https://plus.google.com/share?url={{ aniversario.full_url|urlencode }}" target="_blank" class="btn btn-lg btn-social btn-social-icon btn-google"><span class="fa fa-google-plus"></span></a>
+                            </P>
+                            <p class="input-group">
+                                <label for="link-compartilhar" class="input-group-addon" id="sizing-addon2">URL</label>
+                                <input type="text" value="{{ aniversario.full_url }}" class="form-control" id="link-compartilhar">
+                                <span class="input-group-btn"><button class="btn btn-default" type="button" data-clipboard-target="#link-compartilhar">Copiar</button></span>
+                            </p>
                         </div>
                     </div>
                 {% endif %}
-            {% endwith %}
-
-            <h4>&nbsp;</h4>
-            <div class="panel panel-default">
-                <div class="panel-heading"><h4>{{ aniversario.missao.titulo }}</h4></div>
-                <div class="panel-body">{{ aniversario.missao.descricao }}</div>
             </div>
-
-            {% with pagas=aniversario.doacoes.pagas %}
-                {% if pagas %}
-                    <h2>Quem já ajudou</h2>
+            <div class="col-md-9">
+                {% if aniversario.apelo %}
                     <div class="row">
-                        {% for doacao in pagas %}
-                            <div class="col-md-4">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
-                                        <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
+                        <div class="col-xs-3 hidden-md hidden-lg">
+                            <img src="{{ aniversario.usuario.foto_md_url }}" alt="" class="img-responsive img-circle">
+                        </div>
+                        <div class="col-md-12 col-xs-9">
+                            <div class="panel panel-default panel-comment">
+                                <div class="panel-body">
+                                    <h4 class="text-justify"><i>{{ aniversario.apelo }}</i></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if aniversario.finalizado %}
+                    <div class="alert alert-success" role="alert">Aniversário Solidário finalizado! Fica apenas os agradecimentos a todos que colaborarão com doações e divulgação!</div>
+                {% endif %}
+                {% with aniversario_media_0=aniversario.missao.medias.all.0 %}
+                    {% if aniversario_media_0 %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="{{ aniversario_media_0.arquivo_container_url }}" alt="{{ aniversario_media_0.descricao|default:'Capa' }}" class="img-responsive" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ aniversario_media_0.arquivo.url }}">
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <h4>&nbsp;</h4>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4>{{ aniversario.missao.titulo }}</h4></div>
+                    <div class="panel-body">{{ aniversario.missao.descricao }}</div>
+                </div>
+
+                {% with pagas=aniversario.doacoes.pagas %}
+                    {% if pagas %}
+                        <h2>Quem já ajudou</h2>
+                        <div class="row">
+                            {% for doacao in pagas %}
+                                <div class="col-md-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="media-left"><img src="{{ doacao.usuario_foto_url }}" alt="Doador {{ doacao.usuario_nome }}" class="img-circle"></div>
+                                            <div class="media-right"><strong>{{ doacao.usuario_nome }}</strong><br><small>{{ doacao.data|naturaltime }}</small></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
 
-            {% with medias=aniversario.missao.medias.all|slice:"1:" %}
-                {% if medias %}
-                    <h2>Fotos</h2>
-                    <div class="row">
-                        {% for media in medias %}
-                            <div class="col-md-4 col-xs-6">
-                                <div class="thumbnail">
-                                    <img src="{{ media.arquivo_lg_url }}" alt="{{ media.descricao|default:'Mídia' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
-                                    {% if media.descricao %}<div class="caption">{{ media.descricao }}</div>{% endif %}
+                {% with medias=aniversario.missao.medias.all|slice:"1:" %}
+                    {% if medias %}
+                        <h2>Fotos</h2>
+                        <div class="row">
+                            {% for media in medias %}
+                                <div class="col-md-4 col-xs-6">
+                                    <div class="thumbnail">
+                                        <img src="{{ media.arquivo_lg_url }}" alt="{{ media.descricao|default:'Mídia' }}" class="img-responsive clickable" data-toggle="modal" data-target="#abrirImagemModel" data-image="{{ media.arquivo.url }}">
+                                        {% if media.descricao %}<div class="caption">{{ media.descricao }}</div>{% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
-            <div class="row">
-                <div id="fb-root"></div>
-                <div class="fb-comments" data-width="100%" data-href="{{ aniversario.full_url  }}" data-numposts="5"></div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <div class="row">
+                    <div id="fb-root"></div>
+                    <div class="fb-comments" data-width="100%" data-href="{{ aniversario.full_url  }}" data-numposts="5"></div>
+                </div>
             </div>
         </div>
     </div>
